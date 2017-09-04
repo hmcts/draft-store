@@ -18,8 +18,15 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
-import static org.springframework.http.HttpStatus.*;
-import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.BAD_ARGUMENT;
+import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.INVALID_AUTH_TOKEN;
+import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.NO_RECORD_FOUND;
+import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.SERVER_ERROR;
+import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.USER_DETAILS_SERVICE_ERROR;
 import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult.Builder.errorResultBuilder;
 
 @ControllerAdvice

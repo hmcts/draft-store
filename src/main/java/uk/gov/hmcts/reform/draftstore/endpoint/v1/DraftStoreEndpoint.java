@@ -16,9 +16,13 @@ import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 import uk.gov.hmcts.reform.draftstore.service.ValidJson;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Updated;
 
 @RestController("v1/DraftStoreEndpoint")

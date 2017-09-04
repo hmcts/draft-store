@@ -23,6 +23,9 @@ public class UserIdentificationService {
                 return userId;
             }
         }
-        throw new AuthorizationException("Authorization token must be given in following format: '" + AUTH_TYPE + "<userId>'");
+
+        throw new AuthorizationException(
+            "Authorization token must be given in following format: '" + AUTH_TYPE + "<userId>'"
+        );
     }
 }

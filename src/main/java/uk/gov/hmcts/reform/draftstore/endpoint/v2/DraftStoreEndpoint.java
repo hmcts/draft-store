@@ -6,7 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
@@ -42,7 +46,11 @@ public class DraftStoreEndpoint {
 
     @RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE)
     @ApiOperation("Save document")
-    public ResponseEntity<String> saveDocument(@RequestHeader(AUTHORIZATION) String authToken, @PathVariable(TYPE) String type, @RequestBody @ValidJson String document) {
+    public ResponseEntity<String> saveDocument(
+        @RequestHeader(AUTHORIZATION) String authToken,
+        @PathVariable(TYPE) String type,
+        @RequestBody @ValidJson String document
+    ) {
         LOGGER.info("saving draft document");
 
         String userId = userIdService.userIdFromAuthToken(authToken);
@@ -52,7 +60,10 @@ public class DraftStoreEndpoint {
 
     @RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
     @ApiOperation("Retrieve document")
-    public ResponseEntity<String> retrieveDocument(@RequestHeader(AUTHORIZATION) String authToken, @PathVariable(TYPE) String type) {
+    public ResponseEntity<String> retrieveDocument(
+        @RequestHeader(AUTHORIZATION) String authToken,
+        @PathVariable(TYPE) String type
+    ) {
         LOGGER.info("retrieving draft document");
 
         String userId = userIdService.userIdFromAuthToken(authToken);
@@ -62,7 +73,10 @@ public class DraftStoreEndpoint {
 
     @RequestMapping(method = DELETE)
     @ApiOperation("Delete document")
-    public ResponseEntity<String> deleteDocument(@RequestHeader(AUTHORIZATION) String authToken, @PathVariable(TYPE) String type) {
+    public ResponseEntity<String> deleteDocument(
+        @RequestHeader(AUTHORIZATION) String authToken,
+        @PathVariable(TYPE) String type
+    ) {
         LOGGER.info("deleting draft document");
 
         String userId = userIdService.userIdFromAuthToken(authToken);
