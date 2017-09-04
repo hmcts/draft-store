@@ -73,3 +73,4 @@ The following properties will have to be supplied at runtime (unless using the d
 | Method      | DELETE                                                                                    |
 | Headers     | Authorization: `hmcts-id <user-id>`                                                       |
 | Example     | `curl -X DELETE -H "Authorization: hmcts-id 123546" "http://localhost:8800/api/v1/draft"` |
+
