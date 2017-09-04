@@ -2,10 +2,10 @@ package uk.gov.hmcts.reform.draftstore.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import java.io.IOException;
 import java.util.Map;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 public class JsonConstraintValidator implements ConstraintValidator<ValidJson, String> {
     private ObjectMapper objectMapper;
