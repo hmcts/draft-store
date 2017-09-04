@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
-import uk.gov.hmcts.reform.logging.filters.RequestIdLoggingFilter;
+import uk.gov.hmcts.reform.logging.filters.RequestIdsSettingFilter;
 import uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter;
 
 @Configuration
@@ -27,8 +27,8 @@ public class DraftStoreConfig {
     }
 
     @Bean
-    public RequestIdLoggingFilter requestIdLoggingFilter() {
-        return new RequestIdLoggingFilter();
+    public RequestIdsSettingFilter requestIdLoggingFilter() {
+        return new RequestIdsSettingFilter();
     }
 
     @Bean
