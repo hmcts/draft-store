@@ -1,0 +1,41 @@
+---
+version: '2.1'
+
+services:
+  draft-store-api:
+    build:
+      context: .
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    image: docker.artifactory.reform.hmcts.net/reform/draft-store
+    environment:
+      - DRAFT_STORE_DB_HOST=draft-store-database
+      - DRAFT_STORE_DB_PASSWORD
+      - ROOT_APPENDER
+      - JSON_CONSOLE_PRETTY_PRINT
+      - ROOT_LOGGING_LEVEL
+      - REFORM_SERVICE_NAME
+      - REFORM_TEAM
+      - REFORM_ENVIRONMENT
+    volumes:
+      - ./build/install/draft-store:/opt/app/
+    ports:
+      - 8800:8800
+    depends_on:
+      draft-store-database:
+        condition: service_healthy
+  draft-store-database:
+    build:
+      context: docker/database
+    image: docker.artifactory.reform.hmcts.net/reform/draft-store-database
+    environment:
+      - DRAFT_STORE_DB_PASSWORD
+    ports:
+      - 5428:5432
+    volumes:
+      - draft-store-database-data:/var/lib/postgresql/data
+
+volumes:
+  draft-store-database-data:

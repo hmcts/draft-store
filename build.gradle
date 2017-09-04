@@ -1,0 +1,131 @@
+plugins {
+    id 'application'
+    id 'checkstyle'
+    id 'findbugs'
+    id 'io.spring.dependency-management' version '1.0.3.RELEASE'
+    id 'org.springframework.boot' version '1.5.6.RELEASE'
+    id 'org.owasp.dependencycheck' version '1.4.5.1'
+    id 'com.github.ben-manes.versions' version '0.15.0'
+}
+
+group 'uk.gov.hmcts.reform'
+version '1.0.0'
+
+checkstyle.toolVersion = '7.2'
+checkstyle.configFile = new File(rootDir, "checkstyle.xml")
+
+// https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
+dependencyCheck {
+    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+    // range of 0-10 fails the build, anything greater and it doesn't fail the build
+    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
+    suppressionFile = 'dependency-check-suppressions.xml'
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    maven {
+        url 'https://artifactory.reform.hmcts.net/artifactory/libs-release'
+    }
+}
+
+sourceSets {
+    functionalTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/functionalTest/java')
+        }
+        resources.srcDir file('src/functionalTest/resources')
+    }
+}
+
+def springBootVersion = '1.5.6.RELEASE'
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
+    }
+}
+
+
+def versions = [
+        springBoot: springBootVersion,
+        jackson: dependencyManagement.importedProperties['jackson.version'],
+        springfoxSwagger: '2.7.0'
+]
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: versions.springBoot
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
+
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+
+    compile group: 'org.flywaydb', name: 'flyway-core', version: '4.1.2'
+
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
+
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
+
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.4.1.Final'
+
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '1.0.0'
+
+
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+
+    functionalTestCompile sourceSets.main.runtimeClasspath
+    functionalTestCompile('org.springframework.boot:spring-boot-starter-test',
+            'info.cukes:cucumber-java8:1.2.5',
+            'info.cukes:cucumber-junit:1.2.5',
+            'info.cukes:cucumber-spring:1.2.5',
+            'com.jayway.restassured:rest-assured:2.9.0',
+            'org.mockito:mockito-core:1.10.19',
+            'org.assertj:assertj-core:3.6.2',
+            'com.github.tomakehurst:wiremock:2.5.1')
+
+}
+
+task functionalTest(type: Test) {
+    description = "Runs Functional Tests"
+    testClassesDir sourceSets.functionalTest.output.classesDir
+    setClasspath sourceSets.functionalTest.runtimeClasspath
+}
+
+jar {
+    manifest {
+
+        attributes 'Implementation-Title': project.name,
+                'Implementation-Version': project.version
+    }
+}
+
+bootRepackage {
+    classifier 'all'
+}
+
+task printVersion {
+    doLast {
+        print project.version
+    }
+}
+
+run {
+    mainClassName = 'uk.gov.hmcts.reform.draftstore.DraftStoreApplication'
+    if (debug == 'true') {
+        jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
+    }
+}
