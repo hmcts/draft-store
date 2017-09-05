@@ -46,30 +46,3 @@ The following properties will have to be supplied at runtime (unless using the d
 | Method      | DELETE                                                                                             |
 | Headers     | Authorization: `hmcts-id <user-id>`                                                                |
 | Example     | `curl -X DELETE -H "Authorization: hmcts-id 123546" "http://localhost:8800/api/v2/draft/petition"` |
-
-### Deprecated endpoints
-  
-| Retrieve    |                                                                                                                            |
-| ---         | ---                                                                                                                        |
-| Description | retrieve a draft document                                                                                                  |
-| URL         | /api/v1/draft                                                                                                              |
-| Method      | GET                                                                                                                        |
-| Headers     | Authorization: `hmcts-id <userId>`                                                                                         |
-| Example     | `curl -X GET -H "Content-Type: application/json" -H "Authorization: hmcts-id 123546" "http://localhost:8800/api/v1/draft"` |
-
-| Save        |                                                                                                                                                              |
-| ---         | ---                                                                                                                                                          |
-| Description |  persist draft data against a user id                                                                                                                        |
-| URL         | /api/v1/draft                                                                                                                                                |
-| Method      | POST                                                                                                                                                         |
-| Headers     | Authorization: `hmcts-id <userId>`</br>Content-Type: `application/json`                                                                                      |
-| Params      | draft data as json                                                                                                                                           |
-| Example     | `curl -X POST -H "Content-Type: application/json" -H "Authorization: hmcts-id 123546" -d '{"name": "Marcus Bamforth"}' "http://localhost:8800/api/v1/draft"` |
-  
-| Delete      |                                                                                           |
-| ---         | ---                                                                                       |
-| Description | delete draft data                                                                         |
-| URL         | /api/v1/draft                                                                             |
-| Method      | DELETE                                                                                    |
-| Headers     | Authorization: `hmcts-id <user-id>`                                                       |
-| Example     | `curl -X DELETE -H "Authorization: hmcts-id 123546" "http://localhost:8800/api/v1/draft"` |
