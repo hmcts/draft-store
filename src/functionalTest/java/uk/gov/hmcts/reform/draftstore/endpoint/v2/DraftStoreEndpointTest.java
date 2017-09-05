@@ -16,41 +16,38 @@ public class DraftStoreEndpointTest extends AbstractDraftStoreEndpointTest {
 
     @Test
     public void save_shouldReturnNotFoundWhenDocumentTypeIsMissing() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .contentType(APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .content(DRAFT_DOCUMENT)
-                .when()
-                .post(endpointPathForDraftType(null))
-                .then()
-                .statusCode(SC_NOT_FOUND);
-        // @formatter:off
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .content(DRAFT_DOCUMENT)
+            .when()
+            .post(endpointPathForDraftType(null))
+            .then()
+            .statusCode(SC_NOT_FOUND);
     }
 
     @Test
     public void retrieve_shouldReturnNotFoundWhenDocumentTypeIsMissing() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .when()
-                .get(endpointPathForDraftType(null))
-                .then()
-                .statusCode(SC_NOT_FOUND);
-        // @formatter:on
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .when()
+            .get(endpointPathForDraftType(null))
+            .then()
+            .statusCode(SC_NOT_FOUND);
     }
 
     @Test
     public void delete_shouldReturnNotFoundWhenDocumentTypeIsMissing() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .when()
-                .delete(endpointPathForDraftType(null))
-                .then()
-                .statusCode(SC_NOT_FOUND);
-        // @formatter:on
+        given()
+            .port(port)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .when()
+            .delete(endpointPathForDraftType(null))
+            .then()
+            .statusCode(SC_NOT_FOUND);
     }
 
     private static String endpointPathForDraftType(String draftType) {

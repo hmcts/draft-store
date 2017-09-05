@@ -59,17 +59,17 @@ public abstract class AbstractDraftStoreEndpointTest {
 
     @Test
     public void save_shouldCreateDraftDocumentGivenAValidAuthTokenAndAValidDraftDocument() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .contentType(APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .content(DRAFT_DOCUMENT)
-                .when()
-                .post(endpointPath)
-                .then()
-                .statusCode(SC_CREATED);
-        // @formatter:off
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .content(DRAFT_DOCUMENT)
+            .when()
+            .post(endpointPath)
+            .then()
+            .statusCode(SC_CREATED);
+
         assertDraftDocument(USER_ID, DRAFT_DOCUMENT);
     }
 
@@ -77,150 +77,142 @@ public abstract class AbstractDraftStoreEndpointTest {
     public void save_shouldUpdateDraftStoreGivenAValidAuthTokenAndAValidDraftStore() throws Exception {
         dataAgent.setupDocumentForUser(USER_ID, draftType, "{\"name\": \"Lulu White\"}");
 
-        // @formatter:off
         given()
-                .port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .contentType(APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .content(DRAFT_DOCUMENT)
-                .when()
-                .post(endpointPath)
-                .then()
-                .statusCode(SC_NO_CONTENT);
-        // @formatter:off
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .content(DRAFT_DOCUMENT)
+            .when()
+            .post(endpointPath)
+            .then()
+            .statusCode(SC_NO_CONTENT);
+
         assertDraftDocument(USER_ID, DRAFT_DOCUMENT);
     }
 
     @Test
     public void save_shouldReturnBadRequestWhenNoAuthHeader() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .contentType(APPLICATION_JSON_VALUE)
-                .content(DRAFT_DOCUMENT)
-                .when()
-                .post(endpointPath)
-                .then()
-                .statusCode(SC_BAD_REQUEST)
-                .content("errorCode", is("INVALID_AUTH_TOKEN"))
-                .content("errors[0]", is("Authorization header is required."));         // @formatter:on
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE)
+            .content(DRAFT_DOCUMENT)
+            .when()
+            .post(endpointPath)
+            .then()
+            .statusCode(SC_BAD_REQUEST)
+            .content("errorCode", is("INVALID_AUTH_TOKEN"))
+            .content("errors[0]", is("Authorization header is required."));
     }
 
     @Test
     public void save_shouldReturnForbiddenWhenAuthTokenIsInvalid() throws Exception {
-        // @formatter:off
         given()
-                .port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, "not a valid auth token")
-                .contentType(APPLICATION_JSON_VALUE)
-                .content(DRAFT_DOCUMENT)
-                .when()
-                .post(endpointPath)
-                .then()
-                .statusCode(SC_FORBIDDEN)
-                .content("errorCode", is("USER_DETAILS_SERVICE_ERROR"))
-                .content("errors[0]",
-                        is("Authorization token must be given in following format: 'hmcts-id <userId>'"));
-        // @formatter:on
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .header(AUTHORIZATION, "not a valid auth token")
+            .contentType(APPLICATION_JSON_VALUE)
+            .content(DRAFT_DOCUMENT)
+            .when()
+            .post(endpointPath)
+            .then()
+            .statusCode(SC_FORBIDDEN)
+            .content("errorCode", is("USER_DETAILS_SERVICE_ERROR"))
+            .content("errors[0]",
+                is("Authorization token must be given in following format: 'hmcts-id <userId>'")
+            );
     }
 
     @Test
     public void save_shouldReturnBadRequestWhenDraftDocumentIsInvalidJson() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .contentType(APPLICATION_JSON_VALUE)
-                .content("{invalid json}")
-                .when()
-                .post(endpointPath)
-                .then()
-                .statusCode(SC_BAD_REQUEST)
-                .content("errorCode", is("BAD_ARGUMENT"))
-                .content("errors[0]", is("Invalid Json. Value given: '{invalid json}'"));
-        // @formatter:on
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .contentType(APPLICATION_JSON_VALUE)
+            .content("{invalid json}")
+            .when()
+            .post(endpointPath)
+            .then()
+            .statusCode(SC_BAD_REQUEST)
+            .content("errorCode", is("BAD_ARGUMENT"))
+            .content("errors[0]", is("Invalid Json. Value given: '{invalid json}'"));
     }
 
     @Test
     public void save_shouldReturnBadRequestWhenNoDraftDocument() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .accept(APPLICATION_JSON_VALUE)
-                .contentType(APPLICATION_JSON_VALUE)
-                .when()
-                .post(endpointPath)
-                .then()
-                .statusCode(SC_BAD_REQUEST)
-                .contentType(APPLICATION_JSON_VALUE)
-                .content("errorCode", is("BAD_ARGUMENT"))
-                .content("errors[0]", is("The draft document is required."));
-        // @formatter:on
+        given()
+            .port(port)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE)
+            .when()
+            .post(endpointPath)
+            .then()
+            .statusCode(SC_BAD_REQUEST)
+            .contentType(APPLICATION_JSON_VALUE)
+            .content("errorCode", is("BAD_ARGUMENT"))
+            .content("errors[0]", is("The draft document is required."));
     }
 
     @Test
     public void retrieve_shouldReturnADocument() throws Exception {
         dataAgent.setupDocumentForUser(USER_ID, draftType, "{\"name\": \"Lulu White\"}");
 
-        // @formatter:off
-        given().port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .when()
-                .get(endpointPath)
-                .then()
-                .statusCode(SC_OK)
-                .contentType("application/json;charset=UTF-8")
-                .content("name", is("Lulu White"));
-        // @formatter:on
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .when()
+            .get(endpointPath)
+            .then()
+            .statusCode(SC_OK)
+            .contentType("application/json;charset=UTF-8")
+            .content("name", is("Lulu White"));
     }
 
     @Test
     public void retrieve_shouldReturnNoRecordFoundError() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .when()
-                .get(endpointPath)
-                .then()
-                .statusCode(SC_NOT_FOUND)
-                .contentType("application/json;charset=UTF-8")
-                .content("errorCode", is("NO_RECORD_FOUND"));
-        // @formatter:on
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .when()
+            .get(endpointPath)
+            .then()
+            .statusCode(SC_NOT_FOUND)
+            .contentType("application/json;charset=UTF-8")
+            .content("errorCode", is("NO_RECORD_FOUND"));
     }
 
     @Test
     public void retrieve_shouldReturnBadRequestWhenNoAuthHeader() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .when()
-                .get(endpointPath)
-                .then()
-                .statusCode(SC_BAD_REQUEST)
-                .contentType("application/json;charset=UTF-8")
-                .content("errorCode", is("INVALID_AUTH_TOKEN"))
-                .content("errors[0]", is("Authorization header is required."));
-        // @formatter:on
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .when()
+            .get(endpointPath)
+            .then()
+            .statusCode(SC_BAD_REQUEST)
+            .contentType("application/json;charset=UTF-8")
+            .content("errorCode", is("INVALID_AUTH_TOKEN"))
+            .content("errors[0]", is("Authorization header is required."));
     }
 
     @Test
     public void retrieve_shouldReturnForbiddenWhenAuthTokenIsInvalid() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .accept(APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, "not a valid auth token")
-                .when()
-                .get(endpointPath)
-                .then()
-                .statusCode(SC_FORBIDDEN)
-                .contentType("application/json;charset=UTF-8")
-                .content("errorCode", is("USER_DETAILS_SERVICE_ERROR"))
-                .content("errors[0]", is("Authorization token must be given in following format: 'hmcts-id <userId>'"));
-        // @formatter:on
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .header(AUTHORIZATION, "not a valid auth token")
+            .when()
+            .get(endpointPath)
+            .then()
+            .statusCode(SC_FORBIDDEN)
+            .contentType("application/json;charset=UTF-8")
+            .content("errorCode", is("USER_DETAILS_SERVICE_ERROR"))
+            .content("errors[0]", is("Authorization token must be given in following format: 'hmcts-id <userId>'"));
     }
 
     @Test
@@ -231,14 +223,13 @@ public abstract class AbstractDraftStoreEndpointTest {
      */
     public void delete_shouldDeleteDraftDocumentGivenAValidAuthTokenAndGivenUserHasADraftDocument() throws Exception {
         dataAgent.setupDocumentForUser(USER_ID, draftType, DRAFT_DOCUMENT);
-        // @formatter:off
-        given().port(port)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .when()
-                .delete(endpointPath)
-                .then()
-                .statusCode(SC_NO_CONTENT);
-        // @formatter:on
+        given()
+            .port(port)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .when()
+            .delete(endpointPath)
+            .then()
+            .statusCode(SC_NO_CONTENT);
         assertThat(dataAgent.countForUser(USER_ID, draftType)).isEqualTo(0);
     }
 
@@ -249,45 +240,42 @@ public abstract class AbstractDraftStoreEndpointTest {
     Then an error occurs indicating that the document does not exist AND the error is logged.
     */
     public void delete_shouldReturnNotFoundWhenNoDocumentForUser() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .header(AUTHORIZATION, AUTH_TOKEN)
-                .when()
-                .delete(endpointPath)
-                .then()
-                .statusCode(SC_NOT_FOUND)
-                .contentType("application/json;charset=UTF-8")
-                .content("errorCode", is("NO_RECORD_FOUND"));
-        // @formatter:on
+        given()
+            .port(port)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .when()
+            .delete(endpointPath)
+            .then()
+            .statusCode(SC_NOT_FOUND)
+            .contentType("application/json;charset=UTF-8")
+            .content("errorCode", is("NO_RECORD_FOUND"));
     }
 
     @Test
     public void delete_shouldReturnBadRequestWhenNoAuthHeader() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .when()
-                .delete(endpointPath)
-                .then()
-                .statusCode(SC_BAD_REQUEST)
-                .contentType("application/json;charset=UTF-8")
-                .content("errorCode", is("INVALID_AUTH_TOKEN"))
-                .content("errors[0]", is("Authorization header is required."));
-        // @formatter:on
+        given()
+            .port(port)
+            .when()
+            .delete(endpointPath)
+            .then()
+            .statusCode(SC_BAD_REQUEST)
+            .contentType("application/json;charset=UTF-8")
+            .content("errorCode", is("INVALID_AUTH_TOKEN"))
+            .content("errors[0]", is("Authorization header is required."));
     }
 
     @Test
     public void delete_shouldReturnForbiddenWhenAuthTokenIsInvalid() throws Exception {
-        // @formatter:off
-        given().port(port)
-                .header(AUTHORIZATION, "not a valid auth token")
-                .when()
-                .delete(endpointPath)
-                .then()
-                .statusCode(SC_FORBIDDEN)
-                .contentType("application/json;charset=UTF-8")
-                .content("errorCode", is("USER_DETAILS_SERVICE_ERROR"))
-                .content("errors[0]", is("Authorization token must be given in following format: 'hmcts-id <userId>'"));
-        // @formatter:on
+        given()
+            .port(port)
+            .header(AUTHORIZATION, "not a valid auth token")
+            .when()
+            .delete(endpointPath)
+            .then()
+            .statusCode(SC_FORBIDDEN)
+            .contentType("application/json;charset=UTF-8")
+            .content("errorCode", is("USER_DETAILS_SERVICE_ERROR"))
+            .content("errors[0]", is("Authorization token must be given in following format: 'hmcts-id <userId>'"));
     }
 
     private void assertDraftDocument(String userId, String expectedDraftDocument) {
