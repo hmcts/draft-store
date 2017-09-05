@@ -15,9 +15,13 @@ import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -27,7 +31,6 @@ import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.INVALID_A
 import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.NO_RECORD_FOUND;
 import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.SERVER_ERROR;
 import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.USER_DETAILS_SERVICE_ERROR;
-import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult.Builder.errorResultBuilder;
 
 @ControllerAdvice
 public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
@@ -38,12 +41,14 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
             ServletRequestBindingException ex,
             HttpHeaders headers,
             HttpStatus status,
-            WebRequest request) {
+            WebRequest request
+    ) {
         log.error(ex.getMessage(), ex);
-        ErrorResult errorResult = errorResultBuilder(INVALID_AUTH_TOKEN).withError(
-                "Authorization header is required.")
-                .build();
-        return new ResponseEntity<>(errorResult, BAD_REQUEST);
+
+        return new ResponseEntity<>(
+            new ErrorResult(INVALID_AUTH_TOKEN, singletonList("Authorization header is required.")),
+            BAD_REQUEST
+        );
     }
 
     @Override
@@ -52,9 +57,11 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpStatus status,
                                                                   WebRequest request) {
         log.error(ex.getMessage(), ex);
-        ErrorResult errorResult = errorResultBuilder(BAD_ARGUMENT).withError("The draft document is required.")
-                .build();
-        return new ResponseEntity<>(errorResult, BAD_REQUEST);
+
+        return new ResponseEntity<>(
+            new ErrorResult(BAD_ARGUMENT, singletonList("The draft document is required.")),
+            BAD_REQUEST
+        );
     }
 
     @Override
@@ -71,32 +78,49 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResult> unknownConstraintViolationException(HttpServletRequest req,
                                                                            ConstraintViolationException exception) {
         log.error(exception.getMessage(), exception);
-        ErrorResult.Builder errorBuilder = errorResultBuilder(BAD_ARGUMENT).withError(exception.getMessage());
-        exception.getConstraintViolations().forEach(violation -> errorBuilder.withError(violation.getMessage()));
 
-        return new ResponseEntity<>(errorBuilder.build(), BAD_REQUEST);
+        List<String> errors =
+            exception
+                .getConstraintViolations()
+                .stream()
+                .map(violation -> violation.getMessage())
+                .collect(toList());
+
+        errors.add(exception.getMessage());
+
+        return new ResponseEntity<>(
+            new ErrorResult(BAD_ARGUMENT, errors),
+            BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(NoDraftFoundException.class)
     public ResponseEntity<ErrorResult> handleNoDocumentFoundException(HttpServletRequest req, Exception exception) {
         log.debug("no draft document found for user.");
-        return new ResponseEntity<>(errorResultBuilder(NO_RECORD_FOUND).withError(exception.getMessage())
-                .build(),
-                NOT_FOUND);
+
+        return new ResponseEntity<>(
+            new ErrorResult(NO_RECORD_FOUND, singletonList(exception.getMessage())),
+            NOT_FOUND
+        );
     }
 
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<ErrorResult> authorizationException(HttpServletRequest req, Exception exception) {
         log.error(exception.getMessage(), exception);
-        return new ResponseEntity<>(errorResultBuilder(USER_DETAILS_SERVICE_ERROR).withError(exception.getMessage())
-                .build(),
-                FORBIDDEN);
+
+        return new ResponseEntity<>(
+            new ErrorResult(USER_DETAILS_SERVICE_ERROR, singletonList(exception.getMessage())),
+            FORBIDDEN
+        );
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResult> unknownException(HttpServletRequest req, Exception exception) {
         log.error(exception.getMessage(), exception);
-        return new ResponseEntity<>(errorResultBuilder(SERVER_ERROR).build(), INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(
+            new ErrorResult(SERVER_ERROR, emptyList()),
+            INTERNAL_SERVER_ERROR
+        );
     }
 
 }
