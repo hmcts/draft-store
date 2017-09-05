@@ -40,20 +40,19 @@ public class HandleUnknownExceptionTest {
 
     @Test
     public void unhandledExceptionsShouldNotReturnExceptionDetailsToClient() throws Exception {
-        when( dao.retrieve( USER_ID, "default") )
-                .thenThrow( new RuntimeException( "do not display this message" ) {
-                } );
-        //@formatter:off
-        given().port( port )
-               .accept( APPLICATION_JSON_VALUE )
-               .header( AUTHORIZATION, AUTH_TOKEN )
-       .when()
+        when(dao.retrieve(USER_ID, "default"))
+            .thenThrow(new RuntimeException("do not display this message") { });
+
+        given()
+            .port(port)
+            .accept(APPLICATION_JSON_VALUE)
+            .header(AUTHORIZATION, AUTH_TOKEN)
+            .when()
             .get(DRAFT_URI)
-       .then()
-            .statusCode( SC_INTERNAL_SERVER_ERROR )
-            .contentType( "application/json;charset=UTF-8" )
-            .content( "errorCode", is( "SERVER_ERROR" ) )
-            .content( "errors", IsNull.nullValue() );
-        //@formatter:on
+            .then()
+            .statusCode(SC_INTERNAL_SERVER_ERROR)
+            .contentType("application/json;charset=UTF-8")
+            .content("errorCode", is("SERVER_ERROR"))
+            .content("errors", IsNull.nullValue());
     }
 }
