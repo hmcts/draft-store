@@ -34,14 +34,15 @@ import static uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorCode.USER_DETA
 
 @ControllerAdvice
 public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
+
     private static final Logger log = LoggerFactory.getLogger(EndpointExceptionHandler.class);
 
     @Override
     protected ResponseEntity<Object> handleServletRequestBindingException(
-            ServletRequestBindingException ex,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request
+        ServletRequestBindingException ex,
+        HttpHeaders headers,
+        HttpStatus status,
+        WebRequest request
     ) {
         log.error(ex.getMessage(), ex);
 
@@ -52,10 +53,12 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatus status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+        HttpMessageNotReadableException ex,
+        HttpHeaders headers,
+        HttpStatus status,
+        WebRequest request
+    ) {
         log.error(ex.getMessage(), ex);
 
         return new ResponseEntity<>(
@@ -65,18 +68,22 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex,
-                                                             Object body,
-                                                             HttpHeaders headers,
-                                                             HttpStatus status,
-                                                             WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(
+        Exception ex,
+        Object body,
+        HttpHeaders headers,
+        HttpStatus status,
+        WebRequest request
+    ) {
         log.error(ex.getMessage(), ex);
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorResult> unknownConstraintViolationException(HttpServletRequest req,
-                                                                           ConstraintViolationException exception) {
+    public ResponseEntity<ErrorResult> unknownConstraintViolationException(
+        HttpServletRequest req,
+        ConstraintViolationException exception
+    ) {
         log.error(exception.getMessage(), exception);
 
         List<String> errors =
