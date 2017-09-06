@@ -33,11 +33,6 @@ public class DraftStoreDAO {
         "DELETE FROM draft_document "
             + "WHERE user_id = :userId "
             + "AND document_type = :type";
-
-    private static final String QUERY =
-        "SELECT document FROM draft_document "
-            + "WHERE user_id = :userId "
-            + "AND document_type = :type";
     // endregion
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
