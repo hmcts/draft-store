@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
+import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 import uk.gov.hmcts.reform.draftstore.service.ValidJson;
 
@@ -67,7 +68,15 @@ public class DraftStoreEndpoint {
         LOGGER.info("retrieving draft document");
 
         String userId = userIdService.userIdFromAuthToken(authToken);
-        String document = draftStoreDao.retrieve(userId, type);
+
+        String document =
+            draftStoreDao
+                .readAll(userId, type)
+                .stream()
+                .map(draft -> draft.document)
+                .findFirst()
+                .orElseThrow(() -> new NoDraftFoundException());
+
         return new ResponseEntity<>(document, OK);
     }
 

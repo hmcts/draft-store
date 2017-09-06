@@ -9,10 +9,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Created;
@@ -97,15 +99,28 @@ public class DraftStoreDAOTest {
         dataAgent.setupDocumentForUser(USER_ID, "default", "{ \"test\":\"1234\"}");
         givenExistingDocument(ANOTHER_USER_ID, ANOTHER_PETITION);
 
-        String document = underTest.retrieve(USER_ID, "default");
+        List<Draft> drafts = underTest.readAll(USER_ID, "default");
 
-        assertThat(document).isEqualTo("{ \"test\":\"1234\"}");
+        assertThat(drafts.size()).isEqualTo(1);
+        assertThat(drafts.get(0).document).isEqualTo("{ \"test\":\"1234\"}");
         assertNoOtherUserDataHasBeenAffected();
     }
 
-    @Test(expected = NoDraftFoundException.class)
-    public void shouldThrowOnRetrieveWhenNoDocumentForUser() throws SQLException {
-        underTest.retrieve(USER_ID, "default");
+    @Test
+    public void readAll_should_return_empty_list_when_no_drafts_found() {
+        List<Draft> drafts = underTest.readAll("abc", "xyz");
+        assertThat(drafts).isEmpty();
+    }
+
+    @Test
+    public void readAll_should_return_all_matching_drafts() throws SQLException {
+        dataAgent.setupDocumentForUser("id", "t", "[1]");
+        dataAgent.setupDocumentForUser("id", "t", "[2]");
+
+        List<Draft> drafts = underTest.readAll("id", "t");
+
+        assertThat(drafts).hasSize(2);
+        assertThat(drafts).extracting("document").contains("[1]", "[2]");
     }
 
     private void givenExistingDocument(String userId, String document) {
@@ -113,6 +128,8 @@ public class DraftStoreDAOTest {
     }
 
     private void assertNoOtherUserDataHasBeenAffected() {
-        assertThat(underTest.retrieve(ANOTHER_USER_ID, "default")).isEqualTo(ANOTHER_PETITION);
+        List<Draft> otherUserDrafts = underTest.readAll(ANOTHER_USER_ID, "default");
+        assertThat(otherUserDrafts.size()).isEqualTo(1);
+        assertThat(otherUserDrafts.get(0).document).isEqualTo(ANOTHER_PETITION);
     }
 }
