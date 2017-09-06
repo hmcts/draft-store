@@ -40,7 +40,7 @@ public class HandleUnknownExceptionTest {
 
     @Test
     public void unhandledExceptionsShouldNotReturnExceptionDetailsToClient() throws Exception {
-        when(dao.retrieve(USER_ID, "default"))
+        when(dao.readAll(USER_ID, "default"))
             .thenThrow(new RuntimeException("do not display this message") { });
 
         given()

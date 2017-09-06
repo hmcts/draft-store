@@ -62,15 +62,14 @@ public class DraftStoreDAO {
         }
     }
 
-    public String retrieve(String userId, String type) {
-        MapSqlParameterSource params =
+    public List<Draft> readAll(String userId, String type) {
+        return jdbcTemplate.query(
+            "SELECT * FROM draft_document WHERE user_id = :userId AND document_type = :type",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
-                .addValue("type", type);
-
-        List<String> documents = jdbcTemplate.query(QUERY, params, (rs, rowNum) -> rs.getString(1));
-
-        return documents.stream().findFirst().orElseThrow(NoDraftFoundException::new);
+                .addValue("type", type),
+            new DraftMapper()
+        );
     }
 
     public Optional<Draft> read(int draftId) {
