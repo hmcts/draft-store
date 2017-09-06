@@ -106,6 +106,23 @@ public class DraftStoreDAOTest {
         assertNoOtherUserDataHasBeenAffected();
     }
 
+    @Test
+    public void readAll_should_return_empty_list_when_no_drafts_found() {
+        List<Draft> drafts = underTest.readAll("abc", "xyz");
+        assertThat(drafts).isEmpty();
+    }
+
+    @Test
+    public void readAll_should_return_all_matching_drafts() throws SQLException {
+        dataAgent.setupDocumentForUser("id", "t", "[1]");
+        dataAgent.setupDocumentForUser("id", "t", "[2]");
+
+        List<Draft> drafts = underTest.readAll("id", "t");
+
+        assertThat(drafts).hasSize(2);
+        assertThat(drafts).extracting("document").contains("[1]", "[2]");
+    }
+
     private void givenExistingDocument(String userId, String document) {
         underTest.insertOrUpdate(userId, "default", document);
     }
