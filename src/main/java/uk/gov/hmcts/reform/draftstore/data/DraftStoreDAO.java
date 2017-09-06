@@ -76,12 +76,11 @@ public class DraftStoreDAO {
     public Optional<Draft> read(int draftId) {
         try {
             Draft draft =
-                jdbcTemplate
-                    .queryForObject(
-                        "SELECT * FROM draft_document WHERE id = :id",
-                        new MapSqlParameterSource("id", draftId),
-                        new DraftMapper()
-                    );
+                jdbcTemplate.queryForObject(
+                    "SELECT * FROM draft_document WHERE id = :id",
+                    new MapSqlParameterSource("id", draftId),
+                    new DraftMapper()
+                );
             return Optional.of(draft);
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
