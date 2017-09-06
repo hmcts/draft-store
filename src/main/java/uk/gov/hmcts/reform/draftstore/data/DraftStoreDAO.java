@@ -1,11 +1,17 @@
 package uk.gov.hmcts.reform.draftstore.data;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Created;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Updated;
@@ -67,6 +73,20 @@ public class DraftStoreDAO {
         return documents.stream().findFirst().orElseThrow(NoDraftFoundException::new);
     }
 
+    public Optional<Draft> read(int draftId) {
+        try {
+            Draft draft =
+                jdbcTemplate.queryForObject(
+                    "SELECT * FROM draft_document WHERE id = :id",
+                    new MapSqlParameterSource("id", draftId),
+                    new DraftMapper()
+                );
+            return Optional.of(draft);
+        } catch (EmptyResultDataAccessException ex) {
+            return Optional.empty();
+        }
+    }
+
     public void delete(String userId, String type) {
         int rows =
             jdbcTemplate.update(
@@ -77,6 +97,18 @@ public class DraftStoreDAO {
             );
         if (rows == 0) {
             throw new NoDraftFoundException();
+        }
+    }
+
+    private static final class DraftMapper implements RowMapper<Draft> {
+        @Override
+        public Draft mapRow(ResultSet rs, int rowNumber) throws SQLException {
+            return new Draft(
+                rs.getInt("id"),
+                rs.getString("user_id"),
+                rs.getString("document"),
+                rs.getString("document_type")
+            );
         }
     }
 }
