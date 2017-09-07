@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(DraftController.class)
-public class GetAll {
+public class GetAllTest {
 
     @Autowired
     private MockMvc mockMvc;
