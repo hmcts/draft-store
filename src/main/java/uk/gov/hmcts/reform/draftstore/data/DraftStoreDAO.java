@@ -67,6 +67,14 @@ public class DraftStoreDAO {
         );
     }
 
+    public List<Draft> readAll(String userId) {
+        return jdbcTemplate.query(
+            "SELECT * FROM draft_document WHERE user_id = :userId",
+            new MapSqlParameterSource("userId", userId),
+            new DraftMapper()
+        );
+    }
+
     public Optional<Draft> read(int draftId) {
         try {
             Draft draft =
