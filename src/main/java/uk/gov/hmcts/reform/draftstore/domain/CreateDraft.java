@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import uk.gov.hmcts.reform.draftstore.service.validation.JsonObject;
 
+import javax.validation.constraints.NotNull;
+
 public class CreateDraft {
 
     @JsonObject
     public final JsonNode document;
 
+    @NotNull
     public final String type;
 
     public CreateDraft(

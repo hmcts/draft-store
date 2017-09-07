@@ -25,6 +25,7 @@ public class Create {
     @MockBean private DraftStoreDAO draftRepo;
     @MockBean private UserIdentificationService userIdentificationService;
 
+    // region document
     @Test
     public void should_return_400_when_document_is_not_provided() throws Exception {
         send("{ \"type\": \"some_type\" }")
@@ -42,6 +43,17 @@ public class Create {
         send("{ \"type\": \"some_type\", \"document\": 123 }")
             .andExpect(status().is(400));
     }
+    // endregion document
+
+    // region type
+
+    @Test
+    public void should_return_400_when_type_is_not_provided() throws Exception {
+        send("{\"document\": {\"a\":\"b\"} }")
+            .andExpect(status().is(400));
+    }
+
+    // endregion
 
     @Test
     public void should_return_201_when_valid_draft_is_sent() throws Exception {
