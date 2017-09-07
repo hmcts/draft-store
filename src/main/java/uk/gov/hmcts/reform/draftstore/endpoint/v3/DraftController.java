@@ -18,6 +18,7 @@ import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -49,11 +50,13 @@ public class DraftController {
 
     @GetMapping
     public List<Draft> readAll(
-        @RequestParam("type") String type,
+        @RequestParam(value = "type", required = false) String type,
         @RequestHeader(AUTHORIZATION) String authHeader
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
-        return draftRepo.readAll(currentUserId, type);
+        return Optional.ofNullable(type)
+            .map(t -> draftRepo.readAll(currentUserId, t))
+            .orElseGet(() -> draftRepo.readAll(currentUserId));
     }
 
     @PostMapping

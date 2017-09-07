@@ -17,7 +17,7 @@ public class SwaggerConfiguration {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(DraftStoreApplication.BASE_PACKAGE_NAME + ".controllers"))
+                .apis(RequestHandlerSelectors.basePackage(DraftStoreApplication.BASE_PACKAGE_NAME + ".endpoint.v2"))
                 .paths(PathSelectors.any())
                 .build();
     }

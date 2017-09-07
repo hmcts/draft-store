@@ -20,29 +20,6 @@ The following properties will have to be supplied at runtime (unless using the d
 | DRAFT_STORE_DB_PASSWORD    | draftstore                                  |
 
 
-### Endpoints
-  
-| Retrieve    |                                                                                                                                     |
-| ---         | ---                                                                                                                                 |
-| Description | retrieve a draft document of given type                                                                                             |
-| URL         | /api/v2/draft/`<draftType>`                                                                                                         |
-| Method      | GET                                                                                                                                 |
-| Headers     | Authorization: `hmcts-id <userId>`                                                                                                  |
-| Example     | `curl -X GET -H "Content-Type: application/json" -H "Authorization: hmcts-id 123546" "http://localhost:8800/api/v2/draft/petition"` |
-
-| Save        |                                                                                                                                                                       |
-| ---         | ---                                                                                                                                                                   |
-| Description |  persist draft data of given type against a user                                                                                                                      |
-| URL         | /api/v2/draft/`<draftType>`                                                                                                                                           |
-| Method      | POST                                                                                                                                                                  |
-| Headers     | Authorization: `hmcts-id <userId>`</br>Content-Type: `application/json`                                                                                               |
-| Params      | draft data as json                                                                                                                                                    |
-| Example     | `curl -X POST -H "Content-Type: application/json" -H "Authorization: hmcts-id 123546" -d '{"name": "Marcus Bamforth"}' "http://localhost:8800/api/v2/draft/petition"` |
-  
-| Delete      |                                                                                                    |
-| ---         | ---                                                                                                |
-| Description | delete draft data of given type                                                                    |
-| URL         | /api/v2/draft/`<draftType>`                                                                        |
-| Method      | DELETE                                                                                             |
-| Headers     | Authorization: `hmcts-id <user-id>`                                                                |
-| Example     | `curl -X DELETE -H "Authorization: hmcts-id 123546" "http://localhost:8800/api/v2/draft/petition"` |
+## API documentation
+API documentation is provided with Swagger.
+After starting the service go to [http://localhost:8800/v2/api-docs](http://localhost:8800/v2/api-docs)
