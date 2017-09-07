@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(DraftController.class)
-public class GetById {
+public class GetByIdTest {
 
     @Autowired private MockMvc mockMvc;
 

@@ -4,6 +4,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
@@ -55,6 +56,16 @@ public class DraftStoreDAO {
             jdbcTemplate.update(INSERT, params);
             return Created;
         }
+    }
+
+    public void insert(String userId, CreateDraft newDraft) {
+        jdbcTemplate.update(
+            "INSERT INTO draft_document (user_id, document, document_type) VALUES (:userId, cast(:doc AS JSON), :type)",
+            new MapSqlParameterSource()
+                .addValue("userId", userId)
+                .addValue("doc", newDraft.document.toString())
+                .addValue("type", newDraft.type)
+        );
     }
 
     public List<Draft> readAll(String userId, String type) {
