@@ -55,9 +55,9 @@ public class UpdateTest {
     }
 
     @Test
-    public void should_return_404_when_trying_to_update_somebody_elses_draft() throws Exception {
+    public void should_return_403_when_trying_to_update_somebody_elses_draft() throws Exception {
         update(existingDraft.id, "villain")
-            .andExpect(status().isNotFound());
+            .andExpect(status().isForbidden());
     }
 
     @Test

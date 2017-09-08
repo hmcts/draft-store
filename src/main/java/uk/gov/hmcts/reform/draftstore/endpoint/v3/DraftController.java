@@ -83,11 +83,18 @@ public class DraftController {
 
         return draftRepo
             .read(id)
-            .filter(d -> Objects.equals(d.userId, currentUserId))
             .map(d -> {
+                assertCanEdit(d, currentUserId);
                 draftRepo.update(id, currentUserId, updatedDraft);
+
                 return status(HttpStatus.NO_CONTENT).build();
             })
-            .orElseThrow(() -> new AuthorizationException());
+            .orElseThrow(() -> new NoDraftFoundException());
+    }
+
+    private void assertCanEdit(Draft draft, String userId) {
+        if (!Objects.equals(draft.userId, userId)) {
+            throw new AuthorizationException();
+        }
     }
 }
