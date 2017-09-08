@@ -124,6 +124,13 @@ public class DraftStoreDAO {
         }
     }
 
+    public void delete(int id) {
+        jdbcTemplate.update(
+            "DELETE FROM draft_document WHERE id = :id",
+            new MapSqlParameterSource("id", id)
+        );
+    }
+
     private static final class DraftMapper implements RowMapper<Draft> {
         @Override
         public Draft mapRow(ResultSet rs, int rowNumber) throws SQLException {
