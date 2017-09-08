@@ -15,6 +15,7 @@ import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
+import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 
@@ -87,6 +88,6 @@ public class DraftController {
                 draftRepo.update(id, currentUserId, updatedDraft);
                 return status(HttpStatus.NO_CONTENT).build();
             })
-            .orElseThrow(() -> new NoDraftFoundException());
+            .orElseThrow(() -> new AuthorizationException());
     }
 }
