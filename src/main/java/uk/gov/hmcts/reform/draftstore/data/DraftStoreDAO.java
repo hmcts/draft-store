@@ -61,7 +61,7 @@ public class DraftStoreDAO {
 
     public void insert(String userId, CreateDraft newDraft) {
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, document, document_type) VALUES (:userId, cast(:doc AS JSON), :type)",
+            "INSERT INTO draft_document (user_id, document, document_type) VALUES (:userId, :doc::JSON, :type)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("doc", newDraft.document.toString())
@@ -71,7 +71,7 @@ public class DraftStoreDAO {
 
     public void update(int id, String userId, UpdateDraft draft) {
         jdbcTemplate.update(
-            "UPDATE draft_document SET document = cast(:doc AS JSON), document_type = :type WHERE id = :id",
+            "UPDATE draft_document SET document = :doc::JSON, document_type = :type WHERE id = :id",
             new MapSqlParameterSource()
                 .addValue("doc", draft.document.toString())
                 .addValue("type", draft.type)
