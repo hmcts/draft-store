@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,8 @@ import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.DraftList;
+import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
+import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 
@@ -73,5 +76,30 @@ public class DraftController {
         draftRepo.insert(currentUserId, newDraft);
 
         return status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(
+        @PathVariable int id,
+        @RequestHeader(AUTHORIZATION) String authHeader,
+        @RequestBody @Valid UpdateDraft updatedDraft
+    ) {
+        String currentUserId = userIdService.userIdFromAuthToken(authHeader);
+
+        return draftRepo
+            .read(id)
+            .map(d -> {
+                assertCanEdit(d, currentUserId);
+                draftRepo.update(id, updatedDraft);
+
+                return status(HttpStatus.NO_CONTENT).build();
+            })
+            .orElseThrow(() -> new NoDraftFoundException());
+    }
+
+    private void assertCanEdit(Draft draft, String userId) {
+        if (!Objects.equals(draft.userId, userId)) {
+            throw new AuthorizationException();
+        }
     }
 }

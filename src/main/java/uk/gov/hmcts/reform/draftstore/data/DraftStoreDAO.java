@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
+import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.sql.ResultSet;
@@ -60,11 +61,21 @@ public class DraftStoreDAO {
 
     public void insert(String userId, CreateDraft newDraft) {
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, document, document_type) VALUES (:userId, cast(:doc AS JSON), :type)",
+            "INSERT INTO draft_document (user_id, document, document_type) VALUES (:userId, :doc::JSON, :type)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("doc", newDraft.document.toString())
                 .addValue("type", newDraft.type)
+        );
+    }
+
+    public void update(int id, UpdateDraft draft) {
+        jdbcTemplate.update(
+            "UPDATE draft_document SET document = :doc::JSON, document_type = :type WHERE id = :id",
+            new MapSqlParameterSource()
+                .addValue("doc", draft.document.toString())
+                .addValue("type", draft.type)
+                .addValue("id", id)
         );
     }
 
