@@ -69,7 +69,7 @@ public class DraftStoreDAO {
         );
     }
 
-    public void update(int id, String userId, UpdateDraft draft) {
+    public void update(int id, UpdateDraft draft) {
         jdbcTemplate.update(
             "UPDATE draft_document SET document = :doc::JSON, document_type = :type WHERE id = :id",
             new MapSqlParameterSource()

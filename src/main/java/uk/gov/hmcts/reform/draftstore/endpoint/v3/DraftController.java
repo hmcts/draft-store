@@ -85,7 +85,7 @@ public class DraftController {
             .read(id)
             .map(d -> {
                 assertCanEdit(d, currentUserId);
-                draftRepo.update(id, currentUserId, updatedDraft);
+                draftRepo.update(id, updatedDraft);
 
                 return status(HttpStatus.NO_CONTENT).build();
             })
