@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.draftstore.endpoint.v3;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
@@ -95,6 +97,23 @@ public class DraftController {
                 return status(HttpStatus.NO_CONTENT).build();
             })
             .orElseThrow(() -> new NoDraftFoundException());
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(
+        @PathVariable int id,
+        @RequestHeader(AUTHORIZATION) String authHeader
+    ) {
+        String currentUserId = userIdService.userIdFromAuthToken(authHeader);
+
+        draftRepo
+            .read(id)
+            .ifPresent(d -> {
+                assertCanEdit(d, currentUserId);
+                draftRepo.delete(id);
+            });
+
+        return noContent().build();
     }
 
     private void assertCanEdit(Draft draft, String userId) {
