@@ -4,6 +4,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
@@ -59,14 +61,22 @@ public class DraftStoreDAO {
         }
     }
 
-    public void insert(String userId, CreateDraft newDraft) {
+    /**
+     * Creates a new draft.
+     * @return id of newly created draft.
+     */
+    public int insert(String userId, CreateDraft newDraft) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
             "INSERT INTO draft_document (user_id, document, document_type) VALUES (:userId, :doc::JSON, :type)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("doc", newDraft.document.toString())
-                .addValue("type", newDraft.type)
+                .addValue("type", newDraft.type),
+            keyHolder,
+            new String[] {"id"}
         );
+        return keyHolder.getKey().intValue();
     }
 
     public void update(int id, UpdateDraft draft) {

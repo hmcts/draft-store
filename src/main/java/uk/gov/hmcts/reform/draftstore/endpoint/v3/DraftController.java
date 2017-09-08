@@ -21,14 +21,17 @@ import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
 @RequestMapping("drafts")
@@ -75,9 +78,11 @@ public class DraftController {
         @RequestBody @Valid CreateDraft newDraft
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
-        draftRepo.insert(currentUserId, newDraft);
+        int id = draftRepo.insert(currentUserId, newDraft);
 
-        return status(HttpStatus.CREATED).build();
+        URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+
+        return created(newClaimUri).build();
     }
 
     @PutMapping(path = "/{id}")
