@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
+import uk.gov.hmcts.reform.draftstore.domain.DraftList;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 
@@ -49,14 +50,18 @@ public class DraftController {
     }
 
     @GetMapping
-    public List<Draft> readAll(
+    public DraftList readAll(
         @RequestParam(value = "type", required = false) String type,
         @RequestHeader(AUTHORIZATION) String authHeader
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
-        return Optional.ofNullable(type)
-            .map(t -> draftRepo.readAll(currentUserId, t))
-            .orElseGet(() -> draftRepo.readAll(currentUserId));
+
+        List<Draft> drafts =
+            Optional.ofNullable(type)
+                .map(t -> draftRepo.readAll(currentUserId, t))
+                .orElseGet(() -> draftRepo.readAll(currentUserId));
+
+        return new DraftList(drafts);
     }
 
     @PostMapping
