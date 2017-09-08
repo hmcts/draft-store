@@ -42,6 +42,6 @@ public class GetAllTest {
         mockMvc
             .perform(get("/drafts?type=default").header(AUTHORIZATION, "auth-header-value"))
             .andExpect(status().isOk())
-            .andExpect(content().json("[]"));
+            .andExpect(content().json("{ \"data\": [] }"));
     }
 }
