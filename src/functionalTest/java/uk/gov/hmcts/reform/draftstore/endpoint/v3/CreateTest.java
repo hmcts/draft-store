@@ -2,17 +2,24 @@ package uk.gov.hmcts.reform.draftstore.endpoint.v3;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,6 +66,19 @@ public class CreateTest {
     public void should_return_201_when_valid_draft_is_sent() throws Exception {
         send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }")
             .andExpect(status().is(201));
+    }
+
+    @Test
+    public void should_fill_location_header_on_successful_save() throws Exception {
+        final int newClaimId = 444;
+
+        BDDMockito
+            .given(draftRepo.insert(anyString(), any(CreateDraft.class)))
+            .willReturn(newClaimId);
+
+        MvcResult result = send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }").andReturn();
+
+        assertThat(result.getResponse().getHeader(LOCATION)).endsWith("/drafts/" + newClaimId);
     }
 
     private ResultActions send(String content) throws Exception {
