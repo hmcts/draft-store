@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.draftstore.endpoint.v3;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +32,14 @@ import javax.validation.Valid;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
-import static org.springframework.http.ResponseEntity.status;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
-@RequestMapping("drafts")
+@RequestMapping(
+    path = "drafts",
+    produces = MediaType.APPLICATION_JSON_VALUE,
+    consumes = MediaType.APPLICATION_JSON_VALUE
+)
 public class DraftController {
 
     private final DraftStoreDAO draftRepo;
@@ -46,6 +51,7 @@ public class DraftController {
     }
 
     @GetMapping(path = "/{id}")
+    @ApiOperation("Find draft by ID")
     public Draft read(
         @PathVariable int id,
         @RequestHeader(AUTHORIZATION) String authHeader
@@ -58,6 +64,7 @@ public class DraftController {
     }
 
     @GetMapping
+    @ApiOperation("Find all your drafts")
     public DraftList readAll(
         @RequestParam(value = "type", required = false) String type,
         @RequestHeader(AUTHORIZATION) String authHeader
@@ -73,7 +80,8 @@ public class DraftController {
     }
 
     @PostMapping
-    public ResponseEntity create(
+    @ApiOperation("Create a new draft")
+    public ResponseEntity<Void> create(
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
@@ -86,7 +94,8 @@ public class DraftController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(
+    @ApiOperation("Update existing draft")
+    public ResponseEntity<Void> update(
         @PathVariable int id,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
@@ -99,13 +108,14 @@ public class DraftController {
                 assertCanEdit(d, currentUserId);
                 draftRepo.update(id, updatedDraft);
 
-                return status(HttpStatus.NO_CONTENT).build();
+                return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
             })
             .orElseThrow(() -> new NoDraftFoundException());
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity delete(
+    @ApiOperation("Delete draft")
+    public ResponseEntity<Void> delete(
         @PathVariable int id,
         @RequestHeader(AUTHORIZATION) String authHeader
     ) {
