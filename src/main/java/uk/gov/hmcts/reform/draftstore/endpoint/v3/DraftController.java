@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.draftstore.endpoint.v3;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.DraftList;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
+import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
@@ -52,6 +55,10 @@ public class DraftController {
 
     @GetMapping(path = "/{id}")
     @ApiOperation("Find draft by ID")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Success"),
+        @ApiResponse(code = 404, message = "Not found", response = ErrorResult.class),
+    })
     public Draft read(
         @PathVariable int id,
         @RequestHeader(AUTHORIZATION) String authHeader
@@ -64,7 +71,10 @@ public class DraftController {
     }
 
     @GetMapping
-    @ApiOperation("Find all your drafts")
+    @ApiOperation(value = "Find all your drafts", notes = "Returns an empty array when no drafts were found")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Success"),
+    })
     public DraftList readAll(
         @RequestParam(value = "type", required = false) String type,
         @RequestHeader(AUTHORIZATION) String authHeader
@@ -81,6 +91,10 @@ public class DraftController {
 
     @PostMapping
     @ApiOperation("Create a new draft")
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "Draft successfully created"),
+        @ApiResponse(code = 400, message = "Bad request", response = ErrorResult.class),
+    })
     public ResponseEntity<Void> create(
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestBody @Valid CreateDraft newDraft
@@ -95,6 +109,11 @@ public class DraftController {
 
     @PutMapping(path = "/{id}")
     @ApiOperation("Update existing draft")
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "Draft updated"),
+        @ApiResponse(code = 400, message = "Bad request", response = ErrorResult.class),
+        @ApiResponse(code = 404, message = "Not found", response = ErrorResult.class),
+    })
     public ResponseEntity<Void> update(
         @PathVariable int id,
         @RequestHeader(AUTHORIZATION) String authHeader,
@@ -115,6 +134,9 @@ public class DraftController {
 
     @DeleteMapping(path = "/{id}")
     @ApiOperation("Delete draft")
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "Draft deleted")
+    })
     public ResponseEntity<Void> delete(
         @PathVariable int id,
         @RequestHeader(AUTHORIZATION) String authHeader

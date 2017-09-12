@@ -16,6 +16,7 @@ public class SwaggerConfiguration {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage(DraftStoreApplication.BASE_PACKAGE_NAME + ".endpoint"))
                 .paths(PathSelectors.any())
