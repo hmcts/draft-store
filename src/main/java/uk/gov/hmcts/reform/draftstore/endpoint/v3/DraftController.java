@@ -40,8 +40,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 @RestController
 @RequestMapping(
     path = "drafts",
-    produces = MediaType.APPLICATION_JSON_VALUE,
-    consumes = MediaType.APPLICATION_JSON_VALUE
+    produces = MediaType.APPLICATION_JSON_VALUE
 )
 public class DraftController {
 
@@ -89,7 +88,7 @@ public class DraftController {
         return new DraftList(drafts);
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Create a new draft")
     @ApiResponses({
         @ApiResponse(code = 201, message = "Draft successfully created"),
@@ -107,7 +106,7 @@ public class DraftController {
         return created(newClaimUri).build();
     }
 
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Update existing draft")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Draft updated"),
