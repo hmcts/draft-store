@@ -145,7 +145,7 @@ public class DraftStoreDAO {
         @Override
         public Draft mapRow(ResultSet rs, int rowNumber) throws SQLException {
             return new Draft(
-                rs.getInt("id"),
+                rs.getString("id"),
                 rs.getString("user_id"),
                 rs.getString("document"),
                 rs.getString("document_type")
