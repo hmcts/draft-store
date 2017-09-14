@@ -31,7 +31,7 @@ public class GetByIdTest {
     @MockBean private DraftStoreDAO draftRepo;
     @MockBean private UserIdentificationService userIdentificationService;
 
-    private final Draft sampleDraft = new Draft(123, "abc", "", "");
+    private final Draft sampleDraft = new Draft("123", "abc", "", "");
 
     @Test
     public void reading_not_existing_draft_returns_404() throws Exception {

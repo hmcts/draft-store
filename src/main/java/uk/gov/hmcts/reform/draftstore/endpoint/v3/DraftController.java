@@ -59,12 +59,12 @@ public class DraftController {
         @ApiResponse(code = 404, message = "Not found", response = ErrorResult.class),
     })
     public Draft read(
-        @PathVariable int id,
+        @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
         return draftRepo
-            .read(id)
+            .read(toInternalId(id))
             .filter(draft -> Objects.equals(draft.userId, currentUserId))
             .orElseThrow(() -> new NoDraftFoundException());
     }
@@ -114,17 +114,17 @@ public class DraftController {
         @ApiResponse(code = 404, message = "Not found", response = ErrorResult.class),
     })
     public ResponseEntity<Void> update(
-        @PathVariable int id,
+        @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
 
         return draftRepo
-            .read(id)
+            .read(toInternalId(id))
             .map(d -> {
                 assertCanEdit(d, currentUserId);
-                draftRepo.update(id, updatedDraft);
+                draftRepo.update(toInternalId(id), updatedDraft);
 
                 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
             })
@@ -137,16 +137,16 @@ public class DraftController {
         @ApiResponse(code = 204, message = "Draft deleted")
     })
     public ResponseEntity<Void> delete(
-        @PathVariable int id,
+        @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
 
         draftRepo
-            .read(id)
+            .read(toInternalId(id))
             .ifPresent(d -> {
                 assertCanEdit(d, currentUserId);
-                draftRepo.delete(id);
+                draftRepo.delete(toInternalId(id));
             });
 
         return noContent().build();
@@ -155,6 +155,18 @@ public class DraftController {
     private void assertCanEdit(Draft draft, String userId) {
         if (!Objects.equals(draft.userId, userId)) {
             throw new AuthorizationException();
+        }
+    }
+
+    /**
+     * Converts external API id to internally used id
+     */
+    private int toInternalId(String apiId) {
+        try {
+            // currently database ID is an int
+            return Integer.parseInt(apiId);
+        } catch (NumberFormatException exc) {
+            throw new NoDraftFoundException();
         }
     }
 }

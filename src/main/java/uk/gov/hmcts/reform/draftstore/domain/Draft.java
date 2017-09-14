@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 
 public class Draft {
 
-    public final int id;
+    public final String id;
 
     @JsonIgnore
     public final String userId;
@@ -15,7 +15,7 @@ public class Draft {
 
     public final String type;
 
-    public Draft(int id, String userId, String document, String type) {
+    public Draft(String id, String userId, String document, String type) {
         this.id = id;
         this.userId = userId;
         this.document = document;
