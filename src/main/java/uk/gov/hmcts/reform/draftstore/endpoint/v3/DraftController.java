@@ -64,7 +64,7 @@ public class DraftController {
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
         return draftRepo
-            .read(toDbId(id))
+            .read(toInternalId(id))
             .filter(draft -> Objects.equals(draft.userId, currentUserId))
             .orElseThrow(() -> new NoDraftFoundException());
     }
@@ -121,10 +121,10 @@ public class DraftController {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
 
         return draftRepo
-            .read(toDbId(id))
+            .read(toInternalId(id))
             .map(d -> {
                 assertCanEdit(d, currentUserId);
-                draftRepo.update(toDbId(id), updatedDraft);
+                draftRepo.update(toInternalId(id), updatedDraft);
 
                 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
             })
@@ -143,10 +143,10 @@ public class DraftController {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
 
         draftRepo
-            .read(toDbId(id))
+            .read(toInternalId(id))
             .ifPresent(d -> {
                 assertCanEdit(d, currentUserId);
-                draftRepo.delete(toDbId(id));
+                draftRepo.delete(toInternalId(id));
             });
 
         return noContent().build();
@@ -158,8 +158,12 @@ public class DraftController {
         }
     }
 
-    private int toDbId(String apiId) {
+    /**
+     * Converts external API id to internally used id
+     */
+    private int toInternalId(String apiId) {
         try {
+            // currently database ID is an int
             return Integer.parseInt(apiId);
         } catch (NumberFormatException exc) {
             throw new NoDraftFoundException();
