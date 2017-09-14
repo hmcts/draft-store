@@ -33,7 +33,8 @@ public class UpdateTest {
     @MockBean private DraftStoreDAO draftRepo;
     @MockBean private UserIdentificationService userIdentificationService;
 
-    private final Draft existingDraft = new Draft(123, "user", "doc", "type");
+    private static final int existingDraftId = 123;
+    private final Draft existingDraft = new Draft(Integer.toString(existingDraftId), "user", "doc", "type");
 
     @Before
     public void setUp() throws Exception {
@@ -42,7 +43,7 @@ public class UpdateTest {
             .willReturn(Optional.empty());
 
         BDDMockito
-            .given(draftRepo.read(eq(existingDraft.id)))
+            .given(draftRepo.read(eq(existingDraftId)))
             .willReturn(Optional.of(existingDraft));
 
         BDDMockito
@@ -56,19 +57,19 @@ public class UpdateTest {
 
     @Test
     public void should_return_403_when_trying_to_update_somebody_elses_draft() throws Exception {
-        update(existingDraft.id, "villain")
+        update(existingDraftId, "villain")
             .andExpect(status().isForbidden());
     }
 
     @Test
     public void should_return_204_when_updating_own_draft() throws Exception {
-        update(existingDraft.id, existingDraft.userId)
+        update(existingDraftId, existingDraft.userId)
             .andExpect(status().isNoContent());
     }
 
     @Test
     public void should_return_404_when_draft_with_given_id_doesnt_exist() throws Exception {
-        update(existingDraft.id + 123, "some_user")
+        update(existingDraftId + 123, "some_user")
             .andExpect(status().isNotFound());
     }
 
