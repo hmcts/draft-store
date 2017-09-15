@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
+import org.springframework.web.servlet.handler.MappedInterceptor;
+import uk.gov.hmcts.reform.api.deprecated.DeprecatedApiInterceptor;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 import uk.gov.hmcts.reform.logging.filters.RequestIdsSettingFilter;
@@ -22,6 +24,11 @@ public class DraftStoreConfig {
     @Bean
     public Filter etagFilter() {
         return new ShallowEtagHeaderFilter();
+    }
+
+    @Bean
+    public MappedInterceptor deprecatedApiInterceptor() {
+        return new MappedInterceptor(null, new DeprecatedApiInterceptor());
     }
 
     @Bean
