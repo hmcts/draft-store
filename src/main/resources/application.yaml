@@ -6,7 +6,7 @@ spring:
   application:
     name: HMCTS Draft Store
   datasource:
-    url: jdbc:postgresql://${DRAFT_STORE_DB_HOST:localhost}:5432/draftstore
+    url: jdbc:postgresql://${DRAFT_STORE_DB_HOST:localhost}:${DRAFT_STORE_DB_PORT:5432}/draftstore
     username: draftstore
     password: ${DRAFT_STORE_DB_PASSWORD:}
     properties:
@@ -41,12 +41,12 @@ info:
 spring:
   profiles: test
   datasource:
-    url: jdbc:postgresql://localhost:5428/draftstore
+    url: jdbc:postgresql://localhost:${DRAFT_STORE_DB_PORT:5432}/draftstore
     password: ${DRAFT_STORE_DB_PASSWORD:}
 
 ---
 spring:
   profiles: test-unhandled-exception
   datasource:
-    url: jdbc:postgresql://localhost:5428/draftstore
+    url: jdbc:postgresql://localhost:${DRAFT_STORE_DB_PORT:5432}/draftstore
     password: ${DRAFT_STORE_DB_PASSWORD:}

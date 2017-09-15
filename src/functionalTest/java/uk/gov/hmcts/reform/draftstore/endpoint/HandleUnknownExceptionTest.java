@@ -28,7 +28,7 @@ So, this test demonstrates that for all unhandled exceptions the exception messa
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test-unhandled-exception")
 public class HandleUnknownExceptionTest {
-    private static final String DRAFT_URI = "/api/v1/draft";
+    private static final String DRAFT_URI = "/drafts";
     @Autowired
     private DraftStoreDAO dao;
 
@@ -40,7 +40,7 @@ public class HandleUnknownExceptionTest {
 
     @Test
     public void unhandledExceptionsShouldNotReturnExceptionDetailsToClient() throws Exception {
-        when(dao.readAll(USER_ID, "default"))
+        when(dao.readAll(USER_ID))
             .thenThrow(new RuntimeException("do not display this message") { });
 
         given()
