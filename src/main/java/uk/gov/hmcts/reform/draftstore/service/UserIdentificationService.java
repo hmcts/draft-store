@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.draftstore.service;
 import org.springframework.util.StringUtils;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 
+import java.util.Optional;
 import javax.validation.constraints.NotNull;
 
 /*
@@ -14,6 +15,7 @@ Initially the implementation did indeed send a request to IDAM's /details endpoi
  */
 public class UserIdentificationService {
 
+    public static final String SERVICE_HEADER = "ServiceAuthorization";
     public static final String AUTH_TYPE = "hmcts-id ";
 
     public String userIdFromAuthToken(@NotNull String authToken) {
@@ -27,5 +29,13 @@ public class UserIdentificationService {
         throw new AuthorizationException(
             "Authorization token must be given in following format: '" + AUTH_TYPE + "<userId>'"
         );
+    }
+
+    public String getServiceName(@NotNull String serviceToken) {
+        // TODO: use jwt tokens
+        return Optional
+            .ofNullable(serviceToken)
+            .filter(token -> !StringUtils.isEmpty(token))
+            .orElseThrow(() -> new AuthorizationException(SERVICE_HEADER + " is required"));
     }
 }

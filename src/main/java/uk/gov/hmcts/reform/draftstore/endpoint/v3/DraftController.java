@@ -36,6 +36,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+import static uk.gov.hmcts.reform.draftstore.service.UserIdentificationService.SERVICE_HEADER;
 
 @RestController
 @RequestMapping(
@@ -60,12 +61,16 @@ public class DraftController {
     })
     public Draft read(
         @PathVariable String id,
-        @RequestHeader(AUTHORIZATION) String authHeader
+        @RequestHeader(AUTHORIZATION) String authHeader,
+        @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
+        String service = userIdService.getServiceName(serviceHeader);
+
         return draftRepo
             .read(toInternalId(id))
             .filter(draft -> Objects.equals(draft.userId, currentUserId))
+            .filter(draft -> Objects.equals(draft.service, service))
             .orElseThrow(() -> new NoDraftFoundException());
     }
 
@@ -76,14 +81,16 @@ public class DraftController {
     })
     public DraftList readAll(
         @RequestParam(value = "type", required = false) String type,
-        @RequestHeader(AUTHORIZATION) String authHeader
+        @RequestHeader(AUTHORIZATION) String authHeader,
+        @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
+        String service = userIdService.getServiceName(serviceHeader);
 
         List<Draft> drafts =
             Optional.ofNullable(type)
-                .map(t -> draftRepo.readAll(currentUserId, t))
-                .orElseGet(() -> draftRepo.readAll(currentUserId));
+                .map(t -> draftRepo.readAll(currentUserId, service, t))
+                .orElseGet(() -> draftRepo.readAll(currentUserId, service));
 
         return new DraftList(drafts);
     }
@@ -96,10 +103,13 @@ public class DraftController {
     })
     public ResponseEntity<Void> create(
         @RequestHeader(AUTHORIZATION) String authHeader,
+        @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
-        int id = draftRepo.insert(currentUserId, newDraft);
+        String service = userIdService.getServiceName(serviceHeader);
+
+        int id = draftRepo.insert(currentUserId, service, newDraft);
 
         URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
@@ -116,14 +126,16 @@ public class DraftController {
     public ResponseEntity<Void> update(
         @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader,
+        @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
+        String service = userIdService.getServiceName(serviceHeader);
 
         return draftRepo
             .read(toInternalId(id))
             .map(d -> {
-                assertCanEdit(d, currentUserId);
+                assertCanEdit(d, currentUserId, service);
                 draftRepo.update(toInternalId(id), updatedDraft);
 
                 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -138,22 +150,24 @@ public class DraftController {
     })
     public ResponseEntity<Void> delete(
         @PathVariable String id,
-        @RequestHeader(AUTHORIZATION) String authHeader
+        @RequestHeader(AUTHORIZATION) String authHeader,
+        @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
         String currentUserId = userIdService.userIdFromAuthToken(authHeader);
+        String service = userIdService.getServiceName(serviceHeader);
 
         draftRepo
             .read(toInternalId(id))
             .ifPresent(d -> {
-                assertCanEdit(d, currentUserId);
+                assertCanEdit(d, currentUserId, service);
                 draftRepo.delete(toInternalId(id));
             });
 
         return noContent().build();
     }
 
-    private void assertCanEdit(Draft draft, String userId) {
-        if (!Objects.equals(draft.userId, userId)) {
+    private void assertCanEdit(Draft draft, String userId, String service) {
+        if (!(Objects.equals(draft.userId, userId) && Objects.equals(draft.service, service))) {
             throw new AuthorizationException();
         }
     }

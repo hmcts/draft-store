@@ -45,19 +45,19 @@ public class DraftStoreDAOTest {
 
     @Test(expected = DataIntegrityViolationException.class)
     public void shouldThrowDataAccessExceptionWhenUserIdIsNull() {
-        underTest.insertOrUpdate(null, "default", PETITION);
+        underTest.insertOrUpdate(null, "defaultService", "default", PETITION);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void shouldThrowDataAccessExceptionWhenDocumentIsInvalidJson() {
-        underTest.insertOrUpdate(USER_ID, "default", "{not valid json}");
+        underTest.insertOrUpdate(USER_ID, "defaultService", "default", "{not valid json}");
     }
 
     @Test
     public void shouldCreateDraftDocument() {
         givenExistingDocument(ANOTHER_USER_ID, ANOTHER_PETITION);
 
-        SaveStatus saveStatus = underTest.insertOrUpdate(USER_ID, "default", PETITION);
+        SaveStatus saveStatus = underTest.insertOrUpdate(USER_ID, "defaultService", "default", PETITION);
 
         assertThat(saveStatus).isEqualTo(Created);
         String actual = dataAgent.documentForUser(USER_ID, "default");
@@ -70,7 +70,7 @@ public class DraftStoreDAOTest {
         givenExistingDocument(USER_ID, PETITION);
         givenExistingDocument(ANOTHER_USER_ID, ANOTHER_PETITION);
 
-        SaveStatus saveStatus = underTest.insertOrUpdate(USER_ID, "default", PETITION_UPDATE);
+        SaveStatus saveStatus = underTest.insertOrUpdate(USER_ID, "defaultService", "default", PETITION_UPDATE);
 
         assertThat(saveStatus).isEqualTo(Updated);
         String actual = dataAgent.documentForUser(USER_ID, "default");
@@ -124,7 +124,7 @@ public class DraftStoreDAOTest {
     }
 
     private void givenExistingDocument(String userId, String document) {
-        underTest.insertOrUpdate(userId, "default", document);
+        underTest.insertOrUpdate(userId, "defaultService","default", document);
     }
 
     private void assertNoOtherUserDataHasBeenAffected() {
