@@ -17,7 +17,6 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import static java.util.Collections.emptyList;
@@ -91,7 +90,7 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
             exception
                 .getConstraintViolations()
                 .stream()
-                .map(ConstraintViolation::getMessage)
+                .map(violation -> violation.getMessage())
                 .collect(toList());
 
         errors.add(exception.getMessage());
