@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hmcts.reform.api.deprecated.APIDeprecated;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
@@ -27,6 +28,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Updated;
 
+@APIDeprecated(
+    name = "/api/v2/draft endpoint",
+    expiryDate = "TBD",
+    docLink = "about:blank",
+    note = "Use new `/drafts` endpoint instead."
+)
 @RestController("v2/DraftStoreEndpoint")
 @RequestMapping(path = "/api/v2/draft/{type}")
 @Validated
