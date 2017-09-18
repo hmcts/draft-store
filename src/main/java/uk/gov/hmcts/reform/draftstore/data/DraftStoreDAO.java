@@ -24,13 +24,14 @@ public class DraftStoreDAO {
 
     // region queries
     private static final String INSERT =
-        "INSERT INTO draft_document (user_id, document_type, document) "
-            + "VALUES (:userId, :type, cast(:document AS JSON))";
+        "INSERT INTO draft_document (user_id, service, document_type, document) "
+            + "VALUES (:userId, :service, :type, cast(:document AS JSON))";
 
     private static final String UPDATE =
         "UPDATE draft_document "
             + "SET document = cast(:document AS JSON) "
             + "WHERE user_id = :userId "
+            + "AND service = :service "
             + "AND document_type = :type";
 
     private static final String DELETE =
@@ -45,10 +46,11 @@ public class DraftStoreDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public SaveStatus insertOrUpdate(String userId, String type, String newDocument) {
+    public SaveStatus insertOrUpdate(String userId, String service, String type, String newDocument) {
         MapSqlParameterSource params =
             new MapSqlParameterSource()
                 .addValue("userId", userId)
+                .addValue("service", service)
                 .addValue("type", type)
                 .addValue("document", newDocument);
 
@@ -65,12 +67,14 @@ public class DraftStoreDAO {
      * Creates a new draft.
      * @return id of newly created draft.
      */
-    public int insert(String userId, CreateDraft newDraft) {
+    public int insert(String userId, String service, CreateDraft newDraft) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, document, document_type) VALUES (:userId, :doc::JSON, :type)",
+            "INSERT INTO draft_document (user_id, service, document, document_type)"
+                + "VALUES (:userId, :service, :doc::JSON, :type)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
+                .addValue("service", service)
                 .addValue("doc", newDraft.document.toString())
                 .addValue("type", newDraft.type),
             keyHolder,
@@ -89,20 +93,23 @@ public class DraftStoreDAO {
         );
     }
 
-    public List<Draft> readAll(String userId, String type) {
+    public List<Draft> readAll(String userId, String service, String type) {
         return jdbcTemplate.query(
-            "SELECT * FROM draft_document WHERE user_id = :userId AND document_type = :type",
+            "SELECT * FROM draft_document WHERE user_id = :userId AND service = :service AND document_type = :type",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
+                .addValue("service", service)
                 .addValue("type", type),
             new DraftMapper()
         );
     }
 
-    public List<Draft> readAll(String userId) {
+    public List<Draft> readAll(String userId, String service) {
         return jdbcTemplate.query(
-            "SELECT * FROM draft_document WHERE user_id = :userId",
-            new MapSqlParameterSource("userId", userId),
+            "SELECT * FROM draft_document WHERE user_id = :userId AND service = :service",
+            new MapSqlParameterSource()
+                .addValue("userId", userId)
+                .addValue("service", service),
             new DraftMapper()
         );
     }
@@ -147,6 +154,7 @@ public class DraftStoreDAO {
             return new Draft(
                 rs.getString("id"),
                 rs.getString("user_id"),
+                rs.getString("service"),
                 rs.getString("document"),
                 rs.getString("document_type")
             );

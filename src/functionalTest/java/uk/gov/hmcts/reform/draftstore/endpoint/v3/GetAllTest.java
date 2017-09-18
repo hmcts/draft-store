@@ -18,6 +18,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.draftstore.service.UserIdentificationService.SERVICE_HEADER;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(DraftController.class)
@@ -40,7 +41,11 @@ public class GetAllTest {
             .willReturn("x");
 
         mockMvc
-            .perform(get("/drafts?type=default").header(AUTHORIZATION, "auth-header-value"))
+            .perform(
+                get("/drafts?type=default")
+                    .header(AUTHORIZATION, "auth-header-value")
+                    .header(SERVICE_HEADER, "some_service_name")
+            )
             .andExpect(status().isOk())
             .andExpect(content().json("{ \"data\": [] }"));
     }
