@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
-import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
+import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.ValidJson;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -38,11 +38,11 @@ public class DraftStoreEndpoint {
     private static final String TYPE = "type";
 
     private DraftStoreDAO draftStoreDao;
-    private UserIdentificationService userIdService;
+    private AuthService authService;
 
-    public DraftStoreEndpoint(DraftStoreDAO draftStoreDao, UserIdentificationService userIdService) {
+    public DraftStoreEndpoint(DraftStoreDAO draftStoreDao, AuthService authService) {
         this.draftStoreDao = draftStoreDao;
-        this.userIdService = userIdService;
+        this.authService = authService;
     }
 
     @RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE)
@@ -54,7 +54,7 @@ public class DraftStoreEndpoint {
     ) {
         LOGGER.info("saving draft document");
 
-        String userId = userIdService.userIdFromAuthToken(authToken);
+        String userId = authService.userIdFromAuthToken(authToken);
         SaveStatus saveStatus = draftStoreDao.insertOrUpdate(userId, "cmc", type, document);
         return new ResponseEntity<>(saveStatus == Updated ? NO_CONTENT : CREATED);
     }
@@ -67,7 +67,7 @@ public class DraftStoreEndpoint {
     ) {
         LOGGER.info("retrieving draft document");
 
-        String userId = userIdService.userIdFromAuthToken(authToken);
+        String userId = authService.userIdFromAuthToken(authToken);
 
         String document =
             draftStoreDao
@@ -88,7 +88,7 @@ public class DraftStoreEndpoint {
     ) {
         LOGGER.info("deleting draft document");
 
-        String userId = userIdService.userIdFromAuthToken(authToken);
+        String userId = authService.userIdFromAuthToken(authToken);
         draftStoreDao.delete(userId, type);
         return new ResponseEntity<>(NO_CONTENT);
     }
