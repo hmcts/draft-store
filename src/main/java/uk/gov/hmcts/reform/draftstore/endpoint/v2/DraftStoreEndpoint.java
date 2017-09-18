@@ -62,7 +62,7 @@ public class DraftStoreEndpoint {
         LOGGER.info("saving draft document");
 
         String userId = userIdService.userIdFromAuthToken(authToken);
-        SaveStatus saveStatus = draftStoreDao.insertOrUpdate(userId, type, document);
+        SaveStatus saveStatus = draftStoreDao.insertOrUpdate(userId, "cmc", type, document);
         return new ResponseEntity<>(saveStatus == Updated ? NO_CONTENT : CREATED);
     }
 
@@ -78,7 +78,7 @@ public class DraftStoreEndpoint {
 
         String document =
             draftStoreDao
-                .readAll(userId, type)
+                .readAll(userId, "cmc", type)
                 .stream()
                 .map(draft -> draft.document)
                 .findFirst()

@@ -22,6 +22,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.draftstore.service.UserIdentificationService.SERVICE_HEADER;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(DraftController.class)
@@ -73,7 +74,7 @@ public class CreateTest {
         final int newClaimId = 444;
 
         BDDMockito
-            .given(draftRepo.insert(anyString(), any(CreateDraft.class)))
+            .given(draftRepo.insert(anyString(), anyString(), any(CreateDraft.class)))
             .willReturn(newClaimId);
 
         MvcResult result = send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }").andReturn();
@@ -86,6 +87,7 @@ public class CreateTest {
             .perform(
                 post("/drafts")
                     .header(AUTHORIZATION, "auth-header-value")
+                    .header(SERVICE_HEADER, "some_service_name")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(content)
             );
