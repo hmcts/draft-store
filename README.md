@@ -4,22 +4,40 @@ It stores a draft json document against the userId provided.
  
 ## Getting Started
 
-Draft store is a SpringBoot application.
-* Postgres is used to persist the documents.
-* [Flyway](https://flywaydb.org/documentation/command/migrate) is used for data migration. Migration scripts are [here](./src/main/resources/db/migration). 
-* gradle is the build tool 
+### Prerequisites
+- [JDK 8](https://java.com)
 
-## Environment Specific Properties
-Currently default datasource properties are provided via [application.yaml](./application.yaml). 
-These will have to be environment specific. 
-The following properties will have to be supplied at runtime (unless using the defaults):
+### Building
+To build the project execute the following command:
+```bash
+./gradlew build
+```
 
-| Property                   | Default value                               |
-| ---                        | ---                                         |
-| DRAFT_STORE_DB_HOST        | localhost                                   |
-| DRAFT_STORE_DB_PASSWORD    | draftstore                                  |
-
+### Running
+Before you run the application you have to define `DRAFT_STORE_DB_HOST` and `DRAFT_STORE_DB_PASSWORD` environment
+variables. Run the application by executing:
+```bash
+./gradlew bootRun
+```
 
 ## API documentation
-API documentation is provided with Swagger.
-After starting the service go to [http://localhost:8800/v2/api-docs](http://localhost:8800/v2/api-docs)
+API documentation is provided with Swagger.  
+You can view the json spec here: [http://localhost:8800/v2/api-docs](http://localhost:8800/v2/api-docs)  
+Swagger UI is available here: [http://localhost:8800/swagger-ui.html](http://localhost:8800/swagger-ui.html)
+
+## Developing
+
+### Unit tests
+To run all unit tests execute the following command:
+```bash
+./gradlew test
+```
+
+### Coding style tests
+To run all checks (including unit tests) execute the following command:
+```bash
+./gradlew check
+```
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
