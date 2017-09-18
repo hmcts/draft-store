@@ -45,19 +45,19 @@ public class DraftStoreDAOTest {
 
     @Test(expected = DataIntegrityViolationException.class)
     public void shouldThrowDataAccessExceptionWhenUserIdIsNull() {
-        underTest.insertOrUpdate(null, "defaultService", "default", PETITION);
+        underTest.insertOrUpdate(null, "cmc", "default", PETITION);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void shouldThrowDataAccessExceptionWhenDocumentIsInvalidJson() {
-        underTest.insertOrUpdate(USER_ID, "defaultService", "default", "{not valid json}");
+        underTest.insertOrUpdate(USER_ID, "cmc", "default", "{not valid json}");
     }
 
     @Test
     public void shouldCreateDraftDocument() {
         givenExistingDocument(ANOTHER_USER_ID, ANOTHER_PETITION);
 
-        SaveStatus saveStatus = underTest.insertOrUpdate(USER_ID, "defaultService", "default", PETITION);
+        SaveStatus saveStatus = underTest.insertOrUpdate(USER_ID, "cmc", "default", PETITION);
 
         assertThat(saveStatus).isEqualTo(Created);
         String actual = dataAgent.documentForUser(USER_ID, "default");
@@ -70,7 +70,7 @@ public class DraftStoreDAOTest {
         givenExistingDocument(USER_ID, PETITION);
         givenExistingDocument(ANOTHER_USER_ID, ANOTHER_PETITION);
 
-        SaveStatus saveStatus = underTest.insertOrUpdate(USER_ID, "defaultService", "default", PETITION_UPDATE);
+        SaveStatus saveStatus = underTest.insertOrUpdate(USER_ID, "cmc", "default", PETITION_UPDATE);
 
         assertThat(saveStatus).isEqualTo(Updated);
         String actual = dataAgent.documentForUser(USER_ID, "default");
@@ -99,7 +99,7 @@ public class DraftStoreDAOTest {
         dataAgent.setupDocumentForUser(USER_ID, "default", "{ \"test\":\"1234\"}");
         givenExistingDocument(ANOTHER_USER_ID, ANOTHER_PETITION);
 
-        List<Draft> drafts = underTest.readAll(USER_ID, "default");
+        List<Draft> drafts = underTest.readAll(USER_ID, "cmc", "default");
 
         assertThat(drafts.size()).isEqualTo(1);
         assertThat(drafts.get(0).document).isEqualTo("{ \"test\":\"1234\"}");
@@ -108,7 +108,7 @@ public class DraftStoreDAOTest {
 
     @Test
     public void readAll_should_return_empty_list_when_no_drafts_found() {
-        List<Draft> drafts = underTest.readAll("abc", "xyz");
+        List<Draft> drafts = underTest.readAll("abc", "cmc", "xyz");
         assertThat(drafts).isEmpty();
     }
 
@@ -117,18 +117,18 @@ public class DraftStoreDAOTest {
         dataAgent.setupDocumentForUser("id", "t", "[1]");
         dataAgent.setupDocumentForUser("id", "t", "[2]");
 
-        List<Draft> drafts = underTest.readAll("id", "t");
+        List<Draft> drafts = underTest.readAll("id", "cmc", "t");
 
         assertThat(drafts).hasSize(2);
         assertThat(drafts).extracting("document").contains("[1]", "[2]");
     }
 
     private void givenExistingDocument(String userId, String document) {
-        underTest.insertOrUpdate(userId, "defaultService","default", document);
+        underTest.insertOrUpdate(userId, "cmc","default", document);
     }
 
     private void assertNoOtherUserDataHasBeenAffected() {
-        List<Draft> otherUserDrafts = underTest.readAll(ANOTHER_USER_ID, "default");
+        List<Draft> otherUserDrafts = underTest.readAll(ANOTHER_USER_ID, "cmc", "default");
         assertThat(otherUserDrafts.size()).isEqualTo(1);
         assertThat(otherUserDrafts.get(0).document).isEqualTo(ANOTHER_PETITION);
     }

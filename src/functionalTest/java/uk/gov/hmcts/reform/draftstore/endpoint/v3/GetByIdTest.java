@@ -36,21 +36,27 @@ public class GetByIdTest {
 
     @Test
     public void reading_not_existing_draft_returns_404() throws Exception {
-        testStatus("abc", null, HttpStatus.NOT_FOUND);
+        testStatus("abc", "serviceA", null, HttpStatus.NOT_FOUND);
     }
 
     @Test
     public void reading_own_existing_draft_returns_200() throws Exception {
-        testStatus("abc", sampleDraft, HttpStatus.OK);
+        testStatus("abc", "serviceA", sampleDraft, HttpStatus.OK);
     }
 
     @Test
     public void reading_somebody_elses_draft_returns_404() throws Exception {
-        testStatus("XXX", sampleDraft, HttpStatus.NOT_FOUND);
+        testStatus("XXX", "serviceA", sampleDraft, HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void reading_own_draft_from_different_service_returns_404() throws Exception {
+        testStatus("abc", "WRONG_SERVICE", sampleDraft, HttpStatus.NOT_FOUND);
     }
 
     private void testStatus(
         String userId,
+        String service,
         Draft draftInDb,
         HttpStatus expectedStatus
     ) throws Exception {
@@ -62,6 +68,10 @@ public class GetByIdTest {
         BDDMockito
             .given(userIdentificationService.userIdFromAuthToken(anyString()))
             .willReturn(userId);
+
+        BDDMockito
+            .given(userIdentificationService.getServiceName(anyString()))
+            .willReturn(service);
 
         // when
         MvcResult result =
