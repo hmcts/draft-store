@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
-import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
+import uk.gov.hmcts.reform.draftstore.service.AuthService;
 
 import java.util.Optional;
 
@@ -21,7 +21,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static uk.gov.hmcts.reform.draftstore.service.UserIdentificationService.SERVICE_HEADER;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(DraftController.class)
@@ -30,7 +30,7 @@ public class GetByIdTest {
     @Autowired private MockMvc mockMvc;
 
     @MockBean private DraftStoreDAO draftRepo;
-    @MockBean private UserIdentificationService userIdentificationService;
+    @MockBean private AuthService authService;
 
     private final Draft sampleDraft = new Draft("123", "abc", "serviceA", "", "");
 
@@ -66,11 +66,11 @@ public class GetByIdTest {
             .willReturn(Optional.ofNullable(draftInDb));
 
         BDDMockito
-            .given(userIdentificationService.userIdFromAuthToken(anyString()))
+            .given(authService.userIdFromAuthToken(anyString()))
             .willReturn(userId);
 
         BDDMockito
-            .given(userIdentificationService.getServiceName(anyString()))
+            .given(authService.getServiceName(anyString()))
             .willReturn(service);
 
         // when

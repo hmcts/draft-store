@@ -10,15 +10,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.rules.ExpectedException.none;
 
-public class UserIdentificationServiceTest {
-    private UserIdentificationService underTest;
+public class AuthServiceTest {
+    private AuthService underTest;
 
     @Rule
     public ExpectedException expected = none();
 
     @Before
     public void setUp() {
-        underTest = new UserIdentificationService();
+        underTest = new AuthService();
     }
 
     @Test

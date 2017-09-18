@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
-import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
 
 import java.util.UUID;
 
@@ -20,7 +19,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static uk.gov.hmcts.reform.draftstore.service.UserIdentificationService.SERVICE_HEADER;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 /*
 Test for DIV-881 - the exception handler was returning too much information from

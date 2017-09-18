@@ -9,7 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
-import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
+import uk.gov.hmcts.reform.draftstore.service.AuthService;
 
 import java.util.Collections;
 
@@ -18,7 +18,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.hmcts.reform.draftstore.service.UserIdentificationService.SERVICE_HEADER;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(DraftController.class)
@@ -28,7 +28,7 @@ public class GetAllTest {
     private MockMvc mockMvc;
 
     @MockBean private DraftStoreDAO draftRepo;
-    @MockBean private UserIdentificationService userIdentificationService;
+    @MockBean private AuthService authService;
 
     @Test
     public void should_return_empty_list_and_200_when_no_drafts_were_found_in_db() throws Exception {
@@ -37,7 +37,7 @@ public class GetAllTest {
             .willReturn(Collections.emptyList());
 
         BDDMockito
-            .given(userIdentificationService.userIdFromAuthToken(anyString()))
+            .given(authService.userIdFromAuthToken(anyString()))
             .willReturn("x");
 
         mockMvc

@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
-import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
+import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.logging.filters.RequestIdsSettingFilter;
 import uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter;
 
@@ -30,8 +30,8 @@ public class DraftStoreConfig {
     }
 
     @Bean
-    public UserIdentificationService userIdentificationService() {
-        return new UserIdentificationService();
+    public AuthService authService() {
+        return new AuthService();
     }
 
     @Bean

@@ -24,7 +24,7 @@ import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
-import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
+import uk.gov.hmcts.reform.draftstore.service.AuthService;
 
 import java.net.URI;
 import java.util.List;
@@ -36,7 +36,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
-import static uk.gov.hmcts.reform.draftstore.service.UserIdentificationService.SERVICE_HEADER;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 @RestController
 @RequestMapping(
@@ -46,11 +46,11 @@ import static uk.gov.hmcts.reform.draftstore.service.UserIdentificationService.S
 public class DraftController {
 
     private final DraftStoreDAO draftRepo;
-    private final UserIdentificationService userIdService;
+    private final AuthService authService;
 
-    public DraftController(DraftStoreDAO draftRepo, UserIdentificationService userIdService) {
+    public DraftController(DraftStoreDAO draftRepo, AuthService authService) {
         this.draftRepo = draftRepo;
-        this.userIdService = userIdService;
+        this.authService = authService;
     }
 
     @GetMapping(path = "/{id}")
@@ -64,8 +64,8 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        String currentUserId = userIdService.userIdFromAuthToken(authHeader);
-        String service = userIdService.getServiceName(serviceHeader);
+        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String service = authService.getServiceName(serviceHeader);
 
         return draftRepo
             .read(toInternalId(id))
@@ -84,8 +84,8 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        String currentUserId = userIdService.userIdFromAuthToken(authHeader);
-        String service = userIdService.getServiceName(serviceHeader);
+        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String service = authService.getServiceName(serviceHeader);
 
         List<Draft> drafts =
             Optional.ofNullable(type)
@@ -106,8 +106,8 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
-        String currentUserId = userIdService.userIdFromAuthToken(authHeader);
-        String service = userIdService.getServiceName(serviceHeader);
+        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String service = authService.getServiceName(serviceHeader);
 
         int id = draftRepo.insert(currentUserId, service, newDraft);
 
@@ -129,8 +129,8 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
-        String currentUserId = userIdService.userIdFromAuthToken(authHeader);
-        String service = userIdService.getServiceName(serviceHeader);
+        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String service = authService.getServiceName(serviceHeader);
 
         return draftRepo
             .read(toInternalId(id))
@@ -153,8 +153,8 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        String currentUserId = userIdService.userIdFromAuthToken(authHeader);
-        String service = userIdService.getServiceName(serviceHeader);
+        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String service = authService.getServiceName(serviceHeader);
 
         draftRepo
             .read(toInternalId(id))

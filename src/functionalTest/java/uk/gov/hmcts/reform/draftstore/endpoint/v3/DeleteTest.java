@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
-import uk.gov.hmcts.reform.draftstore.service.UserIdentificationService;
+import uk.gov.hmcts.reform.draftstore.service.AuthService;
 
 import java.util.Optional;
 
@@ -23,7 +23,7 @@ import static org.mockito.Matchers.eq;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.hmcts.reform.draftstore.service.UserIdentificationService.SERVICE_HEADER;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(DraftController.class)
@@ -32,7 +32,7 @@ public class DeleteTest {
     @Autowired private MockMvc mockMvc;
 
     @MockBean private DraftStoreDAO draftRepo;
-    @MockBean private UserIdentificationService userIdentificationService;
+    @MockBean private AuthService authService;
 
     private static final int existingDraftId = 123;
     private final Draft existingDraft = new Draft(Integer.toString(existingDraftId), "user", "serviceA", "doc", "type");
@@ -48,19 +48,19 @@ public class DeleteTest {
             .willReturn(Optional.of(existingDraft));
 
         BDDMockito
-            .given(userIdentificationService.userIdFromAuthToken(anyString()))
+            .given(authService.userIdFromAuthToken(anyString()))
             .willReturn("definitely_not_" + existingDraft.userId);
 
         BDDMockito
-            .given(userIdentificationService.userIdFromAuthToken(existingDraft.userId))
+            .given(authService.userIdFromAuthToken(existingDraft.userId))
             .willReturn(existingDraft.userId);
 
         BDDMockito
-            .given(userIdentificationService.getServiceName(anyString()))
+            .given(authService.getServiceName(anyString()))
             .willReturn("definitely_not_" + existingDraft.service);
 
         BDDMockito
-            .given(userIdentificationService.getServiceName(existingDraft.service))
+            .given(authService.getServiceName(existingDraft.service))
             .willReturn(existingDraft.service);
     }
 
