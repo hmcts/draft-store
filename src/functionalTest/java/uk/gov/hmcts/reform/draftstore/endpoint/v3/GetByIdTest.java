@@ -66,7 +66,7 @@ public class GetByIdTest {
             .willReturn(Optional.ofNullable(draftInDb));
 
         BDDMockito
-            .given(authService.userIdFromAuthToken(anyString()))
+            .given(authService.getUserId(anyString()))
             .willReturn(userId);
 
         BDDMockito

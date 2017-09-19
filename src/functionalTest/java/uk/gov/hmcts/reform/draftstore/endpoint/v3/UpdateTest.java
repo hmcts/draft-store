@@ -48,11 +48,11 @@ public class UpdateTest {
             .willReturn(Optional.of(existingDraft));
 
         BDDMockito
-            .given(authService.userIdFromAuthToken(anyString()))
+            .given(authService.getUserId(anyString()))
             .willReturn("definitely_not_" + existingDraft.userId);
 
         BDDMockito
-            .given(authService.userIdFromAuthToken(existingDraft.userId))
+            .given(authService.getUserId(existingDraft.userId))
             .willReturn(existingDraft.userId);
 
         BDDMockito
