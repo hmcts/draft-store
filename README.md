@@ -33,6 +33,12 @@ To run all unit tests execute the following command:
 ./gradlew test
 ```
 
+### Functional tests
+Run:
+```bash
+./gradlew functionalTest
+```
+
 ### Coding style tests
 To run all checks (including unit tests) execute the following command:
 ```bash
