@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.draftstore.endpoint.v3;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -15,7 +14,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
-import uk.gov.hmcts.reform.draftstore.service.idam.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
