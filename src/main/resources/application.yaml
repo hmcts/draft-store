@@ -37,6 +37,10 @@ info:
   app:
     name: ${spring.application.name}
 
+idam:
+  url: ${IDAM_URL}
+  useStub: ${IDAM_USE_STUB:false}
+
 ---
 spring:
   profiles: test
@@ -50,3 +54,5 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:${DRAFT_STORE_DB_PORT:5432}/draftstore
     password: ${DRAFT_STORE_DB_PASSWORD:}
+idam:
+  useStub: true
