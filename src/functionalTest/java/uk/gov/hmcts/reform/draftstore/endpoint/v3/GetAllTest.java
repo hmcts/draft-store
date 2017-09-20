@@ -37,7 +37,7 @@ public class GetAllTest {
             .willReturn(Collections.emptyList());
 
         BDDMockito
-            .given(authService.userIdFromAuthToken(anyString()))
+            .given(authService.getUserId(anyString()))
             .willReturn("x");
 
         mockMvc

@@ -64,7 +64,7 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String currentUserId = authService.getUserId(authHeader);
         String service = authService.getServiceName(serviceHeader);
 
         return draftRepo
@@ -84,7 +84,7 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String currentUserId = authService.getUserId(authHeader);
         String service = authService.getServiceName(serviceHeader);
 
         List<Draft> drafts =
@@ -106,7 +106,7 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
-        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String currentUserId = authService.getUserId(authHeader);
         String service = authService.getServiceName(serviceHeader);
 
         int id = draftRepo.insert(currentUserId, service, newDraft);
@@ -129,7 +129,7 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
-        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String currentUserId = authService.getUserId(authHeader);
         String service = authService.getServiceName(serviceHeader);
 
         return draftRepo
@@ -153,7 +153,7 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        String currentUserId = authService.userIdFromAuthToken(authHeader);
+        String currentUserId = authService.getUserId(authHeader);
         String service = authService.getServiceName(serviceHeader);
 
         draftRepo
