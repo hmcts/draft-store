@@ -11,6 +11,9 @@ import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClient;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientImpl;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientStub;
+import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClient;
+import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClientImpl;
+import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClientStub;
 import uk.gov.hmcts.reform.logging.filters.RequestIdsSettingFilter;
 import uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter;
 
@@ -20,6 +23,7 @@ import javax.servlet.Filter;
 public class DraftStoreConfig {
 
     @Value("${idam.url}") private String idamUrl;
+    @Value("${s2s.url}") private String s2sUrl;
 
     @Bean
     MethodValidationPostProcessor methodValidationPostProcessor() {
@@ -46,6 +50,18 @@ public class DraftStoreConfig {
     @ConditionalOnProperty(name = "idam.useStub", havingValue = "false")
     public IdamClient idamClient() {
         return new IdamClientImpl(idamUrl);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "s2s.useStub", havingValue = "false")
+    public S2sClient s2sClient() {
+        return new S2sClientImpl(s2sUrl);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "s2s.useStub", havingValue = "true")
+    public S2sClient s2sClientStub() {
+        return new S2sClientStub();
     }
 
     @Bean
