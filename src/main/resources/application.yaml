@@ -38,7 +38,7 @@ info:
     name: ${spring.application.name}
 
 idam:
-  url: ${IDAM_URL}
+  url: ${IDAM_URL:}
   useStub: ${IDAM_USE_STUB:false}
 
 ---
