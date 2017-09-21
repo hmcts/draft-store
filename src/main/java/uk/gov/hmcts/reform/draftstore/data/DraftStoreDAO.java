@@ -16,7 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -169,8 +169,8 @@ public class DraftStoreDAO {
                 rs.getString("service"),
                 rs.getString("document"),
                 rs.getString("document_type"),
-                rs.getTimestamp("created").toInstant().atZone(ZoneId.systemDefault()),
-                rs.getTimestamp("updated").toInstant().atZone(ZoneId.systemDefault())
+                rs.getTimestamp("created").toInstant().atOffset(ZoneOffset.UTC).toZonedDateTime(),
+                rs.getTimestamp("updated").toInstant().atOffset(ZoneOffset.UTC).toZonedDateTime()
             );
         }
     }
