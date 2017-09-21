@@ -14,8 +14,9 @@ To build the project execute the following command:
 ```
 
 ### Running
-Before you run the application you have to define `DRAFT_STORE_DB_HOST` and `DRAFT_STORE_DB_PASSWORD` environment
-variables. Run the application by executing:
+Before you run the application you have to define database connection.  
+You can do this be either setting environment variables or creating `application-default.yaml` file.  
+Run the application by executing:
 ```bash
 ./gradlew bootRun
 ```
