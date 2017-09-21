@@ -10,8 +10,8 @@ public class SampleData {
             id,
             "abc",
             "serviceA",
-            "",
-            "",
+            "{}",
+            "some_type",
             ZonedDateTime.now(),
             ZonedDateTime.now()
         );
