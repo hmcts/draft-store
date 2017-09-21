@@ -14,7 +14,8 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZonedDateTime;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +50,7 @@ public class DraftStoreDAO {
     }
 
     public SaveStatus insertOrUpdate(String userId, String service, String type, String newDocument) {
-        ZonedDateTime now = ZonedDateTime.now();
+        Timestamp now = Timestamp.from(Instant.now());
         MapSqlParameterSource params =
             new MapSqlParameterSource()
                 .addValue("userId", userId)
@@ -74,7 +75,7 @@ public class DraftStoreDAO {
      */
     public int insert(String userId, String service, CreateDraft newDraft) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        ZonedDateTime now = ZonedDateTime.now();
+        Timestamp now = Timestamp.from(Instant.now());
 
         jdbcTemplate.update(
             "INSERT INTO draft_document (user_id, service, document, document_type, created, updated)"
@@ -85,7 +86,7 @@ public class DraftStoreDAO {
                 .addValue("doc", newDraft.document.toString())
                 .addValue("type", newDraft.type)
                 .addValue("created", now)
-                .addValue("update", now),
+                .addValue("updated", now),
             keyHolder,
             new String[] {"id"}
         );
@@ -99,7 +100,7 @@ public class DraftStoreDAO {
             new MapSqlParameterSource()
                 .addValue("doc", draft.document.toString())
                 .addValue("type", draft.type)
-                .addValue("updated", ZonedDateTime.now())
+                .addValue("updated", Timestamp.from(Instant.now()))
                 .addValue("id", id)
         );
     }
