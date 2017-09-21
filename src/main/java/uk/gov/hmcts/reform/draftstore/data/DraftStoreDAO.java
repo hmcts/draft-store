@@ -14,7 +14,8 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class DraftStoreDAO {
     }
 
     public SaveStatus insertOrUpdate(String userId, String service, String type, String newDocument) {
-        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime now = ZonedDateTime.now();
         MapSqlParameterSource params =
             new MapSqlParameterSource()
                 .addValue("userId", userId)
@@ -73,7 +74,7 @@ public class DraftStoreDAO {
      */
     public int insert(String userId, String service, CreateDraft newDraft) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime now = ZonedDateTime.now();
 
         jdbcTemplate.update(
             "INSERT INTO draft_document (user_id, service, document, document_type, created, updated)"
@@ -98,7 +99,7 @@ public class DraftStoreDAO {
             new MapSqlParameterSource()
                 .addValue("doc", draft.document.toString())
                 .addValue("type", draft.type)
-                .addValue("updated", LocalDateTime.now())
+                .addValue("updated", ZonedDateTime.now())
                 .addValue("id", id)
         );
     }
@@ -167,8 +168,8 @@ public class DraftStoreDAO {
                 rs.getString("service"),
                 rs.getString("document"),
                 rs.getString("document_type"),
-                rs.getTimestamp("created").toLocalDateTime(),
-                rs.getTimestamp("updated").toLocalDateTime()
+                rs.getTimestamp("created").toInstant().atZone(ZoneId.systemDefault()),
+                rs.getTimestamp("updated").toInstant().atZone(ZoneId.systemDefault())
             );
         }
     }

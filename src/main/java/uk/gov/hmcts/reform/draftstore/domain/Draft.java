@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Draft {
 
@@ -20,9 +21,9 @@ public class Draft {
 
     public final String type;
 
-    public final LocalDateTime created;
+    public final ZonedDateTime created;
 
-    public final LocalDateTime updated;
+    public final ZonedDateTime updated;
 
     // region constructor
     public Draft(
@@ -31,8 +32,8 @@ public class Draft {
         String service,
         String document,
         String type,
-        LocalDateTime created,
-        LocalDateTime updated
+        ZonedDateTime created,
+        ZonedDateTime updated
     ) {
         this.id = id;
         this.userId = userId;

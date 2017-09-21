@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.draftstore.endpoint.v3.helpers;
 
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class SampleData {
     public static Draft draft(String id) {
@@ -12,8 +12,8 @@ public class SampleData {
             "serviceA",
             "",
             "",
-            LocalDateTime.now(),
-            LocalDateTime.now()
+            ZonedDateTime.now(),
+            ZonedDateTime.now()
         );
     }
 }
