@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClient;
+import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClient;
 
-import java.util.Optional;
 import javax.validation.constraints.NotNull;
 
 @Service
@@ -14,10 +14,12 @@ public class AuthService {
     public static final String SERVICE_HEADER = "ServiceAuthorization";
     public static final String AUTH_TYPE = "hmcts-id ";
 
-    public final IdamClient idamClient;
+    private final IdamClient idamClient;
+    private final S2sClient s2sClient;
 
-    public AuthService(IdamClient idamClient) {
+    public AuthService(IdamClient idamClient, S2sClient s2sClient) {
         this.idamClient = idamClient;
+        this.s2sClient = s2sClient;
     }
 
     @Deprecated
@@ -38,11 +40,7 @@ public class AuthService {
         return idamClient.getUserDetails(authHeader).id;
     }
 
-    public String getServiceName(@NotNull String serviceToken) {
-        // TODO: use jwt tokens
-        return Optional
-            .ofNullable(serviceToken)
-            .filter(token -> !StringUtils.isEmpty(token))
-            .orElseThrow(() -> new AuthorizationException(SERVICE_HEADER + " is required"));
+    public String getServiceName(@NotNull String serviceAuthHeader) {
+        return s2sClient.getServiceName(serviceAuthHeader);
     }
 }
