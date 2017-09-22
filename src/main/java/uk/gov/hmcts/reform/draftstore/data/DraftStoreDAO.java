@@ -163,6 +163,14 @@ public class DraftStoreDAO {
         );
     }
 
+    public void deleteOldDrafts() {
+        jdbcTemplate.update(
+            "DELETE FROM draft_document "
+                + "WHERE updated + interval '1 day' * max_age < now()",
+            new MapSqlParameterSource()
+        );
+    }
+
     private static final class DraftMapper implements RowMapper<Draft> {
         @Override
         public Draft mapRow(ResultSet rs, int rowNumber) throws SQLException {
