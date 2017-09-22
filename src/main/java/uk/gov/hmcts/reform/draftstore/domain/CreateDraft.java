@@ -16,17 +16,17 @@ public class CreateDraft {
     @NotNull
     public final String type;
 
-    @ApiModelProperty(name = "max_age", notes = "Max draft age, in days")
+    @ApiModelProperty(name = "max_stale_days", notes = "Number of day(s) before removing a draft that hasn't been updated")
     @Min(value = 1L)
-    public Integer maxAge;
+    public Integer maxStaleDays;
 
     public CreateDraft(
         @JsonProperty("document") JsonNode document,
         @JsonProperty("type") String type,
-        @JsonProperty("max_age") Integer maxAge
+        @JsonProperty("max_age") Integer maxStaleDays
     ) {
         this.document = document;
         this.type = type;
-        this.maxAge = maxAge;
+        this.maxStaleDays = maxStaleDays;
     }
 }

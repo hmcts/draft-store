@@ -28,7 +28,7 @@ public class DraftStoreConfig {
 
     @Value("${idam.url}") private String idamUrl;
     @Value("${s2s.url}") private String s2sUrl;
-    @Value("${maxAge.default}") private int maxAgeDefault;
+    @Value("${maxStaleDays.default}") private int maxStaleDaysDefault;
 
     @Bean
     MethodValidationPostProcessor methodValidationPostProcessor() {
@@ -42,7 +42,7 @@ public class DraftStoreConfig {
 
     @Bean
     public DraftStoreDAO draftDocumentDAO(NamedParameterJdbcTemplate jdbcTemplate) {
-        return new DraftStoreDAO(jdbcTemplate, maxAgeDefault);
+        return new DraftStoreDAO(jdbcTemplate, maxStaleDaysDefault);
     }
 
     @Bean

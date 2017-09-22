@@ -44,11 +44,11 @@ public class DraftStoreDAO {
     // endregion
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final int defaultMaxAge;
+    private final int defaultMaxStaleDays;
 
-    public DraftStoreDAO(NamedParameterJdbcTemplate jdbcTemplate, int defaultMaxAge) {
+    public DraftStoreDAO(NamedParameterJdbcTemplate jdbcTemplate, int defaultMaxStaleDays) {
         this.jdbcTemplate = jdbcTemplate;
-        this.defaultMaxAge = defaultMaxAge;
+        this.defaultMaxStaleDays = defaultMaxStaleDays;
     }
 
     public SaveStatus insertOrUpdate(String userId, String service, String type, String newDocument) {
@@ -80,14 +80,14 @@ public class DraftStoreDAO {
         Timestamp now = Timestamp.from(Instant.now());
 
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, service, document, document_type, max_age, created, updated)"
-                + "VALUES (:userId, :service, :doc::JSON, :type, :maxAge, :created, :updated)",
+            "INSERT INTO draft_document (user_id, service, document, document_type, max_stale_days, created, updated)"
+                + "VALUES (:userId, :service, :doc::JSON, :type, :maxStaleDays, :created, :updated)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("service", service)
                 .addValue("doc", newDraft.document.toString())
                 .addValue("type", newDraft.type)
-                .addValue("maxAge", Optional.ofNullable(newDraft.maxAge).orElse(defaultMaxAge))
+                .addValue("maxStaleDays", Optional.ofNullable(newDraft.maxStaleDays).orElse(defaultMaxStaleDays))
                 .addValue("created", now)
                 .addValue("updated", now),
             keyHolder,
@@ -163,10 +163,10 @@ public class DraftStoreDAO {
         );
     }
 
-    public void deleteOldDrafts() {
+    public void deleteStaleDrafts() {
         jdbcTemplate.update(
             "DELETE FROM draft_document "
-                + "WHERE updated + interval '1 day' * max_age < now()",
+                + "WHERE updated + interval '1 day' * max_stale_days < now()",
             new MapSqlParameterSource()
         );
     }

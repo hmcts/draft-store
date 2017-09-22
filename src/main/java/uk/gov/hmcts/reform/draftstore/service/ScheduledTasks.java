@@ -13,8 +13,8 @@ public class ScheduledTasks {
         this.repo = repo;
     }
 
-    @Scheduled(cron = "${maxAge.cron}")
-    public void deleteOldDrafts() {
-        repo.deleteOldDrafts();
+    @Scheduled(cron = "${maxStaleDays.cron}")
+    public void deleteStaleDrafts() {
+        repo.deleteStaleDrafts();
     }
 }

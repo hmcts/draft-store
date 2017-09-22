@@ -45,9 +45,9 @@ s2s:
   url: ${S2S_URL:}
   useStub: ${S2S_USER_STUB:false}
 
-maxAge:
-  default: ${MAX_AGE_DEFAULT:90}
-  cron: ${MAX_AGE_CRON:0 0 3 * * *}
+maxStaleDays:
+  default: ${MAX_STALE_DAYS_DEFAULT:90}
+  cron: ${MAX_STALE_DAYS_CRON:0 0 3 * * *}
 
 ---
 spring:
