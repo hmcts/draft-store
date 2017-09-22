@@ -45,6 +45,9 @@ s2s:
   url: ${S2S_URL:}
   useStub: ${S2S_USER_STUB:false}
 
+maxAge:
+  default: ${MAX_AGE_DEFAULT:14}
+
 ---
 spring:
   profiles: test
