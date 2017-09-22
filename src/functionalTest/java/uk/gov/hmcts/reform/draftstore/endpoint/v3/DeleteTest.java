@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
+import uk.gov.hmcts.reform.draftstore.endpoint.v3.helpers.SampleData;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class DeleteTest {
     @MockBean private AuthService authService;
 
     private static final int existingDraftId = 123;
-    private final Draft existingDraft = new Draft(Integer.toString(existingDraftId), "user", "serviceA", "doc", "type");
+    private final Draft existingDraft = SampleData.draft(Integer.toString(existingDraftId));
 
     @Before
     public void setUp() throws Exception {

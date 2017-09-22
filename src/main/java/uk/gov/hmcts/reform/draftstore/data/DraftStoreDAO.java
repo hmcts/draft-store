@@ -14,6 +14,9 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,12 +27,12 @@ public class DraftStoreDAO {
 
     // region queries
     private static final String INSERT =
-        "INSERT INTO draft_document (user_id, service, document_type, document) "
-            + "VALUES (:userId, :service, :type, cast(:document AS JSON))";
+        "INSERT INTO draft_document (user_id, service, document_type, document, created, updated) "
+            + "VALUES (:userId, :service, :type, cast(:document AS JSON), :created, :updated)";
 
     private static final String UPDATE =
         "UPDATE draft_document "
-            + "SET document = cast(:document AS JSON) "
+            + "SET document = cast(:document AS JSON), updated = :updated "
             + "WHERE user_id = :userId "
             + "AND service = :service "
             + "AND document_type = :type";
@@ -47,12 +50,15 @@ public class DraftStoreDAO {
     }
 
     public SaveStatus insertOrUpdate(String userId, String service, String type, String newDocument) {
+        Timestamp now = Timestamp.from(Instant.now());
         MapSqlParameterSource params =
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("service", service)
                 .addValue("type", type)
-                .addValue("document", newDocument);
+                .addValue("document", newDocument)
+                .addValue("created", now)
+                .addValue("updated", now);
 
         int rows = jdbcTemplate.update(UPDATE, params);
         if (rows == 1) {
@@ -69,14 +75,18 @@ public class DraftStoreDAO {
      */
     public int insert(String userId, String service, CreateDraft newDraft) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        Timestamp now = Timestamp.from(Instant.now());
+
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, service, document, document_type)"
-                + "VALUES (:userId, :service, :doc::JSON, :type)",
+            "INSERT INTO draft_document (user_id, service, document, document_type, created, updated)"
+                + "VALUES (:userId, :service, :doc::JSON, :type, :created, :updated)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("service", service)
                 .addValue("doc", newDraft.document.toString())
-                .addValue("type", newDraft.type),
+                .addValue("type", newDraft.type)
+                .addValue("created", now)
+                .addValue("updated", now),
             keyHolder,
             new String[] {"id"}
         );
@@ -85,10 +95,12 @@ public class DraftStoreDAO {
 
     public void update(int id, UpdateDraft draft) {
         jdbcTemplate.update(
-            "UPDATE draft_document SET document = :doc::JSON, document_type = :type WHERE id = :id",
+            "UPDATE draft_document SET document = :doc::JSON, document_type = :type, updated = :updated "
+                + "WHERE id = :id",
             new MapSqlParameterSource()
                 .addValue("doc", draft.document.toString())
                 .addValue("type", draft.type)
+                .addValue("updated", Timestamp.from(Instant.now()))
                 .addValue("id", id)
         );
     }
@@ -156,7 +168,9 @@ public class DraftStoreDAO {
                 rs.getString("user_id"),
                 rs.getString("service"),
                 rs.getString("document"),
-                rs.getString("document_type")
+                rs.getString("document_type"),
+                rs.getTimestamp("created").toInstant().atOffset(ZoneOffset.UTC).toZonedDateTime(),
+                rs.getTimestamp("updated").toInstant().atOffset(ZoneOffset.UTC).toZonedDateTime()
             );
         }
     }
