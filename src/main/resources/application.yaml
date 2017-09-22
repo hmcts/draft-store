@@ -41,6 +41,10 @@ idam:
   url: ${IDAM_URL:}
   useStub: ${IDAM_USE_STUB:false}
 
+s2s:
+  url: ${S2S_URL:}
+  useStub: ${S2S_USER_STUB:false}
+
 ---
 spring:
   profiles: test

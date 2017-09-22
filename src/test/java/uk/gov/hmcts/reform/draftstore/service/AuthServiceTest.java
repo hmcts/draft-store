@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientStub;
+import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClientStub;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -19,7 +20,7 @@ public class AuthServiceTest {
 
     @Before
     public void setUp() {
-        underTest = new AuthService(new IdamClientStub());
+        underTest = new AuthService(new IdamClientStub(), new S2sClientStub());
     }
 
     @Test
