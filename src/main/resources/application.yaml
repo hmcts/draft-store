@@ -46,7 +46,6 @@ s2s:
   useStub: ${S2S_USER_STUB:false}
 
 maxAge:
-  default: ${MAX_AGE_DEFAULT:14}
   default: ${MAX_AGE_DEFAULT:90}
   cron: ${MAX_AGE_CRON:0 0 3 * * *}
 
