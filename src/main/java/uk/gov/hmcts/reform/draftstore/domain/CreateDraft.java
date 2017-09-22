@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.annotations.ApiModelProperty;
 import uk.gov.hmcts.reform.draftstore.service.validation.JsonObject;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class CreateDraft {
@@ -16,6 +17,7 @@ public class CreateDraft {
     public final String type;
 
     @ApiModelProperty(name = "max_age", notes = "Max draft age, in days")
+    @Min(value = 1L)
     public Integer maxAge;
 
     public CreateDraft(
