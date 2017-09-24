@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/hmcts/draft-store.svg?branch=master)](https://travis-ci.org/hmcts/draft-store)
+
 # Draft store
 The Draft store micro-service provides a ’save and resume’ feature for reform applications. 
 It stores a draft json document against the userId provided.
