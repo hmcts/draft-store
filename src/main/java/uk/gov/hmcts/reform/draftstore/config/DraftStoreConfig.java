@@ -46,7 +46,7 @@ public class DraftStoreConfig {
         return new DraftStoreDAO(
             jdbcTemplate,
             maxStaleDaysDefault,
-            Clock.systemUTC()
+            Clock.systemDefaultZone()
         );
     }
 
