@@ -15,6 +15,7 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -45,14 +46,16 @@ public class DraftStoreDAO {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final int defaultMaxStaleDays;
+    private final Clock clock;
 
-    public DraftStoreDAO(NamedParameterJdbcTemplate jdbcTemplate, int defaultMaxStaleDays) {
+    public DraftStoreDAO(NamedParameterJdbcTemplate jdbcTemplate, int defaultMaxStaleDays, Clock clock) {
         this.jdbcTemplate = jdbcTemplate;
         this.defaultMaxStaleDays = defaultMaxStaleDays;
+        this.clock = clock;
     }
 
     public SaveStatus insertOrUpdate(String userId, String service, String type, String newDocument) {
-        Timestamp now = Timestamp.from(Instant.now());
+        Timestamp now = Timestamp.from(this.clock.instant());
         MapSqlParameterSource params =
             new MapSqlParameterSource()
                 .addValue("userId", userId)
@@ -77,7 +80,7 @@ public class DraftStoreDAO {
      */
     public int insert(String userId, String service, CreateDraft newDraft) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        Timestamp now = Timestamp.from(Instant.now());
+        Timestamp now = Timestamp.from(this.clock.instant());
 
         jdbcTemplate.update(
             "INSERT INTO draft_document (user_id, service, document, document_type, max_stale_days, created, updated)"
@@ -103,7 +106,7 @@ public class DraftStoreDAO {
             new MapSqlParameterSource()
                 .addValue("doc", draft.document.toString())
                 .addValue("type", draft.type)
-                .addValue("updated", Timestamp.from(Instant.now()))
+                .addValue("updated", Timestamp.from(this.clock.instant()))
                 .addValue("id", id)
         );
     }
@@ -166,8 +169,8 @@ public class DraftStoreDAO {
     public void deleteStaleDrafts() {
         jdbcTemplate.update(
             "DELETE FROM draft_document "
-                + "WHERE updated + interval '1 day' * max_stale_days < now()",
-            new MapSqlParameterSource()
+                + "WHERE updated + interval '1 day' * max_stale_days < :now",
+            new MapSqlParameterSource("now", Timestamp.from(this.clock.instant()))
         );
     }
 

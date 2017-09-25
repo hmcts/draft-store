@@ -21,6 +21,7 @@ import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClientStub;
 import uk.gov.hmcts.reform.logging.filters.RequestIdsSettingFilter;
 import uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter;
 
+import java.time.Clock;
 import javax.servlet.Filter;
 
 @Configuration
@@ -42,7 +43,11 @@ public class DraftStoreConfig {
 
     @Bean
     public DraftStoreDAO draftDocumentDAO(NamedParameterJdbcTemplate jdbcTemplate) {
-        return new DraftStoreDAO(jdbcTemplate, maxStaleDaysDefault);
+        return new DraftStoreDAO(
+            jdbcTemplate,
+            maxStaleDaysDefault,
+            Clock.systemUTC()
+        );
     }
 
     @Bean
