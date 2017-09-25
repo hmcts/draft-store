@@ -119,12 +119,7 @@ pmd {
   ignoreFailures = true
   sourceSets = [sourceSets.main]
   reportsDir = file("$project.buildDir/reports/pmd")
-  ruleSets = [
-    "java-basic",
-    "java-braces",
-    "java-unnecessary",
-    "java-unusedcode"
-  ]
+  ruleSetFiles = files("ruleset.xml")
 }
 
 jar {
