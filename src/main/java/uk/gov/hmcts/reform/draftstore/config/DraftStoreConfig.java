@@ -21,6 +21,7 @@ import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClientStub;
 import uk.gov.hmcts.reform.logging.filters.RequestIdsSettingFilter;
 import uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter;
 
+import java.time.Clock;
 import javax.servlet.Filter;
 
 @Configuration
@@ -28,6 +29,7 @@ public class DraftStoreConfig {
 
     @Value("${idam.url}") private String idamUrl;
     @Value("${s2s.url}") private String s2sUrl;
+    @Value("${maxStaleDays.default}") private int maxStaleDaysDefault;
 
     @Bean
     MethodValidationPostProcessor methodValidationPostProcessor() {
@@ -41,7 +43,11 @@ public class DraftStoreConfig {
 
     @Bean
     public DraftStoreDAO draftDocumentDAO(NamedParameterJdbcTemplate jdbcTemplate) {
-        return new DraftStoreDAO(jdbcTemplate);
+        return new DraftStoreDAO(
+            jdbcTemplate,
+            maxStaleDaysDefault,
+            Clock.systemDefaultZone()
+        );
     }
 
     @Bean
