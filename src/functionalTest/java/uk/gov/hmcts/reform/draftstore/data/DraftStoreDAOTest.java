@@ -96,13 +96,13 @@ public class DraftStoreDAOTest {
 
     @Test
     public void shouldRetrieve() throws SQLException {
-        dataAgent.setupDocumentForUser(USER_ID, "default", "{ \"test\":\"1234\"}");
+        dataAgent.setupDocumentForUser(USER_ID, "default", "{\"test\": \"1234\"}");
         givenExistingDocument(ANOTHER_USER_ID, ANOTHER_PETITION);
 
         List<Draft> drafts = underTest.readAll(USER_ID, "cmc", "default");
 
         assertThat(drafts.size()).isEqualTo(1);
-        assertThat(drafts.get(0).document).isEqualTo("{ \"test\":\"1234\"}");
+        assertThat(drafts.get(0).document).isEqualTo("{\"test\": \"1234\"}");
         assertNoOtherUserDataHasBeenAffected();
     }
 

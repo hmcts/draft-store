@@ -28,8 +28,8 @@ import uk.gov.hmcts.reform.draftstore.service.AuthService;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -80,7 +80,7 @@ public class DraftController {
         @ApiResponse(code = 200, message = "Success"),
     })
     public DraftList readAll(
-        @RequestParam(value = "type", required = false) String type,
+        @RequestParam(required = false) Map<String, String> params,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
@@ -88,9 +88,9 @@ public class DraftController {
         String service = authService.getServiceName(serviceHeader);
 
         List<Draft> drafts =
-            Optional.ofNullable(type)
-                .map(t -> draftRepo.readAll(currentUserId, service, t))
-                .orElseGet(() -> draftRepo.readAll(currentUserId, service));
+            params.isEmpty()
+                ? draftRepo.readAll(currentUserId, service)
+                : draftRepo.readAll(currentUserId, service, params);
 
         return new DraftList(drafts);
     }
