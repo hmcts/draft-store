@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
+import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -83,6 +84,10 @@ public class CreateTest {
     }
 
     private ResultActions send(String content) throws Exception {
+        BDDMockito
+            .given(authService.authenticate(anyString(), anyString()))
+            .willReturn(new UserAndService("john", "service"));
+
         return mockMvc
             .perform(
                 post("/drafts")

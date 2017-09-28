@@ -25,6 +25,7 @@ import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
+import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.net.URI;
 import java.util.List;
@@ -64,13 +65,12 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        String currentUserId = authService.getUserId(authHeader);
-        String service = authService.getServiceName(serviceHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
         return draftRepo
             .read(toInternalId(id))
-            .filter(draft -> Objects.equals(draft.userId, currentUserId))
-            .filter(draft -> Objects.equals(draft.service, service))
+            .filter(draft -> Objects.equals(draft.userId, userAndService.userId))
+            .filter(draft -> Objects.equals(draft.service, userAndService.service))
             .orElseThrow(() -> new NoDraftFoundException());
     }
 
@@ -84,13 +84,12 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        String currentUserId = authService.getUserId(authHeader);
-        String service = authService.getServiceName(serviceHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
         List<Draft> drafts =
             params.isEmpty()
-                ? draftRepo.readAll(currentUserId, service)
-                : draftRepo.readAll(currentUserId, service, params);
+                ? draftRepo.readAll(userAndService.userId, userAndService.service)
+                : draftRepo.readAll(userAndService.userId, userAndService.service, params);
 
         return new DraftList(drafts);
     }
@@ -106,10 +105,9 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
-        String currentUserId = authService.getUserId(authHeader);
-        String service = authService.getServiceName(serviceHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
-        int id = draftRepo.insert(currentUserId, service, newDraft);
+        int id = draftRepo.insert(userAndService.userId, userAndService.service, newDraft);
 
         URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
@@ -129,13 +127,12 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
-        String currentUserId = authService.getUserId(authHeader);
-        String service = authService.getServiceName(serviceHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
         return draftRepo
             .read(toInternalId(id))
             .map(d -> {
-                assertCanEdit(d, currentUserId, service);
+                assertCanEdit(d, userAndService);
                 draftRepo.update(toInternalId(id), updatedDraft);
 
                 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -153,21 +150,20 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        String currentUserId = authService.getUserId(authHeader);
-        String service = authService.getServiceName(serviceHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
         draftRepo
             .read(toInternalId(id))
             .ifPresent(d -> {
-                assertCanEdit(d, currentUserId, service);
+                assertCanEdit(d, userAndService);
                 draftRepo.delete(toInternalId(id));
             });
 
         return noContent().build();
     }
 
-    private void assertCanEdit(Draft draft, String userId, String service) {
-        if (!(Objects.equals(draft.userId, userId) && Objects.equals(draft.service, service))) {
+    private void assertCanEdit(Draft draft, UserAndService userAndService) {
+        if (!(Objects.equals(draft.userId, userAndService.userId) && Objects.equals(draft.service, userAndService.service))) {
             throw new AuthorizationException();
         }
     }

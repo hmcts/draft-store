@@ -36,11 +36,10 @@ public class AuthService {
         );
     }
 
-    public String getUserId(@NotNull String authHeader) {
-        return idamClient.getUserDetails(authHeader).id;
-    }
-
-    public String getServiceName(@NotNull String serviceAuthHeader) {
-        return s2sClient.getServiceName(serviceAuthHeader);
+    public UserAndService authenticate(String userHeader, String serviceHeader) {
+        return new UserAndService(
+            idamClient.getUserDetails(userHeader).id,
+            s2sClient.getServiceName(serviceHeader)
+        );
     }
 }

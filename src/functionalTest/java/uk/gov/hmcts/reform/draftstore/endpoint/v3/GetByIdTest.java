@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.endpoint.v3.helpers.SampleData;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
+import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.util.Optional;
 
@@ -67,12 +68,8 @@ public class GetByIdTest {
             .willReturn(Optional.ofNullable(draftInDb));
 
         BDDMockito
-            .given(authService.getUserId(anyString()))
-            .willReturn(userId);
-
-        BDDMockito
-            .given(authService.getServiceName(anyString()))
-            .willReturn(service);
+            .given(authService.authenticate(anyString(), anyString()))
+            .willReturn(new UserAndService(userId, service));
 
         // when
         MvcResult result =
