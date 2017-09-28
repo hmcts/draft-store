@@ -163,7 +163,10 @@ public class DraftController {
     }
 
     private void assertCanEdit(Draft draft, UserAndService userAndService) {
-        if (!(Objects.equals(draft.userId, userAndService.userId) && Objects.equals(draft.service, userAndService.service))) {
+        boolean userOk = Objects.equals(draft.userId, userAndService.userId);
+        boolean serviceOk = Objects.equals(draft.service, userAndService.service);
+
+        if (!(userOk && serviceOk)) {
             throw new AuthorizationException();
         }
     }
