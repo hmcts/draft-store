@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
+import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.util.Collections;
 
@@ -37,8 +38,8 @@ public class GetAllTest {
             .willReturn(Collections.emptyList());
 
         BDDMockito
-            .given(authService.getUserId(anyString()))
-            .willReturn("x");
+            .given(authService.authenticate(anyString(), anyString()))
+            .willReturn(new UserAndService("john", "service"));
 
         mockMvc
             .perform(
