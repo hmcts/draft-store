@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
@@ -130,4 +131,12 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<ErrorResult> unknownException(HttpServletRequest req, HttpClientErrorException exc) {
+        log.warn(exc.getMessage(), exc);
+        return new ResponseEntity<>(
+            new ErrorResult(INVALID_AUTH_TOKEN, emptyList()),
+            exc.getStatusCode()
+        );
+    }
 }

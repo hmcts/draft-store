@@ -7,6 +7,7 @@ plugins {
   id 'com.github.ben-manes.versions' version '0.15.0'
   id 'org.sonarqube' version '2.5'
   id 'jacoco'
+  id 'pmd'
 }
 
 group 'uk.gov.hmcts.reform'
@@ -102,6 +103,11 @@ task functionalTest(type: Test) {
 
 jacocoTestReport {
   executionData(test, functionalTest)
+  reports {
+    xml.enabled true
+    csv.enabled false
+    xml.destination file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+  }
 }
 
 project.tasks['sonarqube'].dependsOn test, functionalTest
@@ -111,6 +117,14 @@ sonarqube {
     property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
     property "sonar.jacoco.itReportPath", "${project.buildDir}/jacoco/functionalTest.exec"
   }
+}
+
+pmd {
+  toolVersion = "5.8.1"
+  ignoreFailures = true
+  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest]
+  reportsDir = file("$project.buildDir/reports/pmd")
+  ruleSetFiles = files("ruleset.xml")
 }
 
 jar {

@@ -9,7 +9,7 @@ services:
         - http_proxy
         - https_proxy
         - no_proxy
-    image: docker.artifactory.reform.hmcts.net/reform/draft-store
+    image: docker.artifactory.reform.hmcts.net/reform/draft-store-api
     environment:
       - DRAFT_STORE_DB_HOST=draft-store-database
       - DRAFT_STORE_DB_PASSWORD
@@ -33,7 +33,7 @@ services:
     environment:
       - DRAFT_STORE_DB_PASSWORD
     ports:
-      - 5428:5432
+      - 5429:5432
     volumes:
       - draft-store-database-data:/var/lib/postgresql/data
 

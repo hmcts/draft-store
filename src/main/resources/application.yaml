@@ -37,6 +37,18 @@ info:
   app:
     name: ${spring.application.name}
 
+idam:
+  url: ${IDAM_URL:}
+  useStub: ${IDAM_USE_STUB:false}
+
+s2s:
+  url: ${S2S_URL:}
+  useStub: ${S2S_USER_STUB:false}
+
+maxStaleDays:
+  default: ${MAX_STALE_DAYS_DEFAULT:90}
+  cron: ${MAX_STALE_DAYS_CRON:0 0 3 * * *}
+
 ---
 spring:
   profiles: test
@@ -50,3 +62,5 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:${DRAFT_STORE_DB_PORT:5432}/draftstore
     password: ${DRAFT_STORE_DB_PASSWORD:}
+idam:
+  useStub: true

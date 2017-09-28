@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/hmcts/draft-store.svg?branch=master)](https://travis-ci.org/hmcts/draft-store)
+
 # Draft store
 The Draft store micro-service provides a ’save and resume’ feature for reform applications. 
 It stores a draft json document against the userId provided.
@@ -14,8 +16,9 @@ To build the project execute the following command:
 ```
 
 ### Running
-Before you run the application you have to define `DRAFT_STORE_DB_HOST` and `DRAFT_STORE_DB_PASSWORD` environment
-variables. Run the application by executing:
+Before you run the application you have to define database connection.  
+You can do this be either setting environment variables or creating `application-default.yaml` file.  
+Run the application by executing:
 ```bash
 ./gradlew bootRun
 ```

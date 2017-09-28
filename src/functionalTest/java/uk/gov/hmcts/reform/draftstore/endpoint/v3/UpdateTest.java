@@ -13,7 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
+import uk.gov.hmcts.reform.draftstore.endpoint.v3.helpers.SampleData;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
+import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.util.Optional;
 
@@ -35,7 +37,7 @@ public class UpdateTest {
     @MockBean private AuthService authService;
 
     private static final int existingDraftId = 123;
-    private final Draft existingDraft = new Draft(Integer.toString(existingDraftId), "user", "serviceA","doc", "type");
+    private final Draft existingDraft = SampleData.draft(Integer.toString(existingDraftId));
 
     @Before
     public void setUp() throws Exception {
@@ -48,20 +50,22 @@ public class UpdateTest {
             .willReturn(Optional.of(existingDraft));
 
         BDDMockito
-            .given(authService.userIdFromAuthToken(anyString()))
-            .willReturn("definitely_not_" + existingDraft.userId);
+            .given(authService.authenticate(anyString(), anyString()))
+            .willReturn(
+                new UserAndService(
+                    "definitely_not_" + existingDraft.userId,
+                    "definitely_not_" + existingDraft.service
+                )
+            );
 
         BDDMockito
-            .given(authService.userIdFromAuthToken(existingDraft.userId))
-            .willReturn(existingDraft.userId);
-
-        BDDMockito
-            .given(authService.getServiceName(anyString()))
-            .willReturn("definitely_not_" + existingDraft.service);
-
-        BDDMockito
-            .given(authService.getServiceName(existingDraft.service))
-            .willReturn(existingDraft.service);
+            .given(authService.authenticate(existingDraft.userId, existingDraft.service))
+            .willReturn(
+                new UserAndService(
+                    existingDraft.userId,
+                    existingDraft.service
+                )
+            );
     }
 
     @Test

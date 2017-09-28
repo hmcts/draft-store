@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.draftstore.data;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -10,11 +12,16 @@ import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
+import uk.gov.hmcts.reform.draftstore.exception.DraftStoreException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Clock;
+import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Created;
@@ -24,12 +31,12 @@ public class DraftStoreDAO {
 
     // region queries
     private static final String INSERT =
-        "INSERT INTO draft_document (user_id, service, document_type, document) "
-            + "VALUES (:userId, :service, :type, cast(:document AS JSON))";
+        "INSERT INTO draft_document (user_id, service, document_type, document, created, updated) "
+            + "VALUES (:userId, :service, :type, cast(:document AS JSON), :created, :updated)";
 
     private static final String UPDATE =
         "UPDATE draft_document "
-            + "SET document = cast(:document AS JSON) "
+            + "SET document = cast(:document AS JSON), updated = :updated "
             + "WHERE user_id = :userId "
             + "AND service = :service "
             + "AND document_type = :type";
@@ -41,18 +48,32 @@ public class DraftStoreDAO {
     // endregion
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final ObjectMapper objectMapper;
+    private final int defaultMaxStaleDays;
+    private final Clock clock;
 
-    public DraftStoreDAO(NamedParameterJdbcTemplate jdbcTemplate) {
+    public DraftStoreDAO(
+        NamedParameterJdbcTemplate jdbcTemplate,
+        ObjectMapper objectMapper,
+        int defaultMaxStaleDays,
+        Clock clock
+    ) {
         this.jdbcTemplate = jdbcTemplate;
+        this.objectMapper = objectMapper;
+        this.defaultMaxStaleDays = defaultMaxStaleDays;
+        this.clock = clock;
     }
 
     public SaveStatus insertOrUpdate(String userId, String service, String type, String newDocument) {
+        Timestamp now = Timestamp.from(this.clock.instant());
         MapSqlParameterSource params =
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("service", service)
                 .addValue("type", type)
-                .addValue("document", newDocument);
+                .addValue("document", newDocument)
+                .addValue("created", now)
+                .addValue("updated", now);
 
         int rows = jdbcTemplate.update(UPDATE, params);
         if (rows == 1) {
@@ -69,14 +90,19 @@ public class DraftStoreDAO {
      */
     public int insert(String userId, String service, CreateDraft newDraft) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        Timestamp now = Timestamp.from(this.clock.instant());
+
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, service, document, document_type)"
-                + "VALUES (:userId, :service, :doc::JSON, :type)",
+            "INSERT INTO draft_document (user_id, service, document, document_type, max_stale_days, created, updated)"
+                + "VALUES (:userId, :service, :doc::JSON, :type, :maxStaleDays, :created, :updated)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("service", service)
                 .addValue("doc", newDraft.document.toString())
-                .addValue("type", newDraft.type),
+                .addValue("type", newDraft.type)
+                .addValue("maxStaleDays", Optional.ofNullable(newDraft.maxStaleDays).orElse(defaultMaxStaleDays))
+                .addValue("created", now)
+                .addValue("updated", now),
             keyHolder,
             new String[] {"id"}
         );
@@ -85,10 +111,12 @@ public class DraftStoreDAO {
 
     public void update(int id, UpdateDraft draft) {
         jdbcTemplate.update(
-            "UPDATE draft_document SET document = :doc::JSON, document_type = :type WHERE id = :id",
+            "UPDATE draft_document SET document = :doc::JSON, document_type = :type, updated = :updated "
+                + "WHERE id = :id",
             new MapSqlParameterSource()
                 .addValue("doc", draft.document.toString())
                 .addValue("type", draft.type)
+                .addValue("updated", Timestamp.from(this.clock.instant()))
                 .addValue("id", id)
         );
     }
@@ -102,6 +130,24 @@ public class DraftStoreDAO {
                 .addValue("type", type),
             new DraftMapper()
         );
+    }
+
+    public List<Draft> readAll(String userId, String service, Map<String, String> documentFilterParams) {
+        try {
+            return jdbcTemplate.query(
+                "SELECT * FROM draft_document "
+                    + "WHERE user_id = :userId "
+                    + "AND service = :service "
+                    + "AND document @> :documentPart::jsonb",
+                new MapSqlParameterSource()
+                    .addValue("userId", userId)
+                    .addValue("service", service)
+                    .addValue("documentPart", objectMapper.writeValueAsString(documentFilterParams)),
+                new DraftMapper()
+            );
+        } catch (JsonProcessingException exc) {
+            throw new DraftStoreException("Failed to build a query for reading drafts", exc);
+        }
     }
 
     public List<Draft> readAll(String userId, String service) {
@@ -148,6 +194,14 @@ public class DraftStoreDAO {
         );
     }
 
+    public void deleteStaleDrafts() {
+        jdbcTemplate.update(
+            "DELETE FROM draft_document "
+                + "WHERE updated + interval '1 day' * max_stale_days < :now",
+            new MapSqlParameterSource("now", Timestamp.from(this.clock.instant()))
+        );
+    }
+
     private static final class DraftMapper implements RowMapper<Draft> {
         @Override
         public Draft mapRow(ResultSet rs, int rowNumber) throws SQLException {
@@ -156,7 +210,9 @@ public class DraftStoreDAO {
                 rs.getString("user_id"),
                 rs.getString("service"),
                 rs.getString("document"),
-                rs.getString("document_type")
+                rs.getString("document_type"),
+                rs.getTimestamp("created").toInstant().atOffset(ZoneOffset.UTC).toZonedDateTime(),
+                rs.getTimestamp("updated").toInstant().atOffset(ZoneOffset.UTC).toZonedDateTime()
             );
         }
     }

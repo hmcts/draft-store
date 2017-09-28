@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import java.sql.SQLException;
 import java.util.List;
 
+import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Created;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Updated;
@@ -96,13 +97,13 @@ public class DraftStoreDAOTest {
 
     @Test
     public void shouldRetrieve() throws SQLException {
-        dataAgent.setupDocumentForUser(USER_ID, "default", "{ \"test\":\"1234\"}");
+        dataAgent.setupDocumentForUser(USER_ID, "default", "{\"test\": \"1234\"}");
         givenExistingDocument(ANOTHER_USER_ID, ANOTHER_PETITION);
 
         List<Draft> drafts = underTest.readAll(USER_ID, "cmc", "default");
 
         assertThat(drafts.size()).isEqualTo(1);
-        assertThat(drafts.get(0).document).isEqualTo("{ \"test\":\"1234\"}");
+        assertThat(drafts.get(0).document).isEqualTo("{\"test\": \"1234\"}");
         assertNoOtherUserDataHasBeenAffected();
     }
 
@@ -121,6 +122,18 @@ public class DraftStoreDAOTest {
 
         assertThat(drafts).hasSize(2);
         assertThat(drafts).extracting("document").contains("[1]", "[2]");
+    }
+
+    @Test
+    public void readAll_should_filter_by_json_document_content() throws Exception {
+        dataAgent.setupDocumentForUser("id", "t", "{\"some_property\": \"123\"}");
+        dataAgent.setupDocumentForUser("id", "t", "{\"some_property\": 99999}");
+        dataAgent.setupDocumentForUser("id", "t", "{\"a\": 5}");
+
+        List<Draft> drafts = underTest.readAll("id", "cmc", singletonMap("some_property", "123"));
+
+        assertThat(drafts).hasSize(1);
+        assertThat(drafts).extracting("document").containsExactly("{\"some_property\": \"123\"}");
     }
 
     private void givenExistingDocument(String userId, String document) {

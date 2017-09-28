@@ -12,7 +12,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
+import uk.gov.hmcts.reform.draftstore.endpoint.v3.helpers.SampleData;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
+import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.util.Optional;
 
@@ -32,7 +34,7 @@ public class GetByIdTest {
     @MockBean private DraftStoreDAO draftRepo;
     @MockBean private AuthService authService;
 
-    private final Draft sampleDraft = new Draft("123", "abc", "serviceA", "", "");
+    private final Draft sampleDraft = SampleData.draft("123");
 
     @Test
     public void reading_not_existing_draft_returns_404() throws Exception {
@@ -66,12 +68,8 @@ public class GetByIdTest {
             .willReturn(Optional.ofNullable(draftInDb));
 
         BDDMockito
-            .given(authService.userIdFromAuthToken(anyString()))
-            .willReturn(userId);
-
-        BDDMockito
-            .given(authService.getServiceName(anyString()))
-            .willReturn(service);
+            .given(authService.authenticate(anyString(), anyString()))
+            .willReturn(new UserAndService(userId, service));
 
         // when
         MvcResult result =

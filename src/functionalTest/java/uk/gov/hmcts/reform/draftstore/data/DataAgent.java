@@ -27,8 +27,8 @@ public class DataAgent {
         jsonbObj.setValue(document);
 
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, document_type, service, document) "
-                + "VALUES (:userId, :type, 'cmc', :document)",
+            "INSERT INTO draft_document (user_id, document_type, service, document, created, updated) "
+                + "VALUES (:userId, :type, 'cmc', :document, now(), now())",
             new MapSqlParameterSource("userId", userId)
                 .addValue("type", type)
                 .addValue("document", jsonbObj)
