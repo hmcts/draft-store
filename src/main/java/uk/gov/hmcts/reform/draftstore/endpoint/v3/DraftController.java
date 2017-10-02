@@ -172,7 +172,7 @@ public class DraftController {
     }
 
     /**
-     * Converts external API id to internally used id
+     * Converts external API id to internally used id.
      */
     private int toInternalId(String apiId) {
         try {

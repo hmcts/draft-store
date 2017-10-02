@@ -16,7 +16,10 @@ public class CreateDraft {
     @NotNull
     public final String type;
 
-    @ApiModelProperty(name = "max_stale_days", notes = "Number of day(s) before removing a draft that hasn't been updated")
+    @ApiModelProperty(
+        name = "max_stale_days",
+        notes = "Number of days before removing a draft that hasn't been updated"
+    )
     @Min(value = 1L)
     public Integer maxStaleDays;
 
