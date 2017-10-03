@@ -24,6 +24,6 @@ script:
   - ./gradlew test
   - ./gradlew functionalTest
   - ./gradlew jacocoTestReport
-  - ./swagger-api-docs.sh
 after_success:
   - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
+  - bash publish-swagger-docs.sh
