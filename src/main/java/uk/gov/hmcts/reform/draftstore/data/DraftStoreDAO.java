@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.draftstore.data;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,7 +10,6 @@ import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
-import uk.gov.hmcts.reform.draftstore.exception.DraftStoreException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.sql.ResultSet;
@@ -21,7 +18,6 @@ import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Created;
@@ -48,18 +44,15 @@ public class DraftStoreDAO {
     // endregion
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final ObjectMapper objectMapper;
     private final int defaultMaxStaleDays;
     private final Clock clock;
 
     public DraftStoreDAO(
         NamedParameterJdbcTemplate jdbcTemplate,
-        ObjectMapper objectMapper,
         int defaultMaxStaleDays,
         Clock clock
     ) {
         this.jdbcTemplate = jdbcTemplate;
-        this.objectMapper = objectMapper;
         this.defaultMaxStaleDays = defaultMaxStaleDays;
         this.clock = clock;
     }
@@ -130,24 +123,6 @@ public class DraftStoreDAO {
                 .addValue("type", type),
             new DraftMapper()
         );
-    }
-
-    public List<Draft> readAll(String userId, String service, Map<String, String> documentFilterParams) {
-        try {
-            return jdbcTemplate.query(
-                "SELECT * FROM draft_document "
-                    + "WHERE user_id = :userId "
-                    + "AND service = :service "
-                    + "AND document @> :documentPart::jsonb",
-                new MapSqlParameterSource()
-                    .addValue("userId", userId)
-                    .addValue("service", service)
-                    .addValue("documentPart", objectMapper.writeValueAsString(documentFilterParams)),
-                new DraftMapper()
-            );
-        } catch (JsonProcessingException exc) {
-            throw new DraftStoreException("Failed to build a query for reading drafts", exc);
-        }
     }
 
     public List<Draft> readAll(String userId, String service) {
