@@ -42,10 +42,9 @@ public class DraftStoreConfig {
     }
 
     @Bean
-    public DraftStoreDAO draftDocumentDAO(NamedParameterJdbcTemplate jdbcTemplate, ObjectMapper objectMapper) {
+    public DraftStoreDAO draftDocumentDAO(NamedParameterJdbcTemplate jdbcTemplate) {
         return new DraftStoreDAO(
             jdbcTemplate,
-            objectMapper,
             maxStaleDaysDefault,
             Clock.systemDefaultZone()
         );

@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.draftstore.data;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OldDraftsCleanupTest {
 
     @Autowired private NamedParameterJdbcTemplate jdbcTemplate;
-    @Autowired private ObjectMapper objectMapper;
+
     private Instant now = now();
 
     @Test
@@ -68,7 +67,6 @@ public class OldDraftsCleanupTest {
     private DraftStoreDAO repoAtTime(Instant instant) {
         return new DraftStoreDAO(
             jdbcTemplate,
-            objectMapper,
             0,
             Clock.fixed(instant, ZoneId.systemDefault())
         );

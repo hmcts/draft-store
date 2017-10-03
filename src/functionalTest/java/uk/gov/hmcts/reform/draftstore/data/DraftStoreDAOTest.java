@@ -124,18 +124,6 @@ public class DraftStoreDAOTest {
         assertThat(drafts).extracting("document").contains("[1]", "[2]");
     }
 
-    @Test
-    public void readAll_should_filter_by_json_document_content() throws Exception {
-        dataAgent.setupDocumentForUser("id", "t", "{\"some_property\": \"123\"}");
-        dataAgent.setupDocumentForUser("id", "t", "{\"some_property\": 99999}");
-        dataAgent.setupDocumentForUser("id", "t", "{\"a\": 5}");
-
-        List<Draft> drafts = underTest.readAll("id", "cmc", singletonMap("some_property", "123"));
-
-        assertThat(drafts).hasSize(1);
-        assertThat(drafts).extracting("document").containsExactly("{\"some_property\": \"123\"}");
-    }
-
     private void givenExistingDocument(String userId, String document) {
         underTest.insertOrUpdate(userId, "cmc","default", document);
     }

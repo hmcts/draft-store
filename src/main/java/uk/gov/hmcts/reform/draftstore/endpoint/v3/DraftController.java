@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
@@ -29,7 +28,6 @@ import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import javax.validation.Valid;
 
@@ -80,16 +78,11 @@ public class DraftController {
         @ApiResponse(code = 200, message = "Success"),
     })
     public DraftList readAll(
-        @RequestParam(required = false) Map<String, String> params,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
-
-        List<Draft> drafts =
-            params.isEmpty()
-                ? draftRepo.readAll(userAndService.userId, userAndService.service)
-                : draftRepo.readAll(userAndService.userId, userAndService.service, params);
+        List<Draft> drafts = draftRepo.readAll(userAndService.userId, userAndService.service);
 
         return new DraftList(drafts);
     }
