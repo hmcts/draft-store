@@ -16,7 +16,7 @@ NEW_DOCS=$(curl http://localhost:8800/v2/api-docs)
 docker-compose stop
 
 if [[ "$CURRENT_DOCS" != "$NEW_DOCS" ]]; then
-    echo "Make PR to other repo..."
+    echo "Update reform-api-docs"
     mkdir swagger-staging
     cd swagger-staging
     git init
