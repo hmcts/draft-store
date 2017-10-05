@@ -16,14 +16,13 @@ cache:
 before_install:
   - sudo apt-get install jq
   - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
-  - docker build -t "draft-store-database:latest" ./docker/database/
-  - docker run --name draft-store-database -d -e DRAFT_STORE_DB_PASSWORD=$DRAFT_STORE_DB_PASSWORD -p $DRAFT_STORE_DB_PORT:5432 draft-store-database:latest
+  - docker-compose build draft-store-database
+  - docker-compose up -d draft-store-database
 script:
-  - ./gradlew installDist
   - ./gradlew build
   - ./gradlew test
   - ./gradlew functionalTest
   - ./gradlew jacocoTestReport
-  - bash publish-swagger-docs.sh
+  - ./publish-swagger-docs.sh
 after_success:
   - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
