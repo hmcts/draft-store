@@ -125,12 +125,19 @@ public class DraftStoreDAO {
         );
     }
 
-    public List<Draft> readAll(String userId, String service) {
+    public List<Draft> readAll(String userId, String service, Integer after, int limit) {
         return jdbcTemplate.query(
-            "SELECT * FROM draft_document WHERE user_id = :userId AND service = :service",
+            "SELECT * FROM draft_document "
+                + "WHERE user_id = :userId "
+                + "AND service = :service "
+                + Optional.ofNullable(after).map(a -> "AND id > :after ").orElse("")
+                + "ORDER BY id ASC "
+                + "LIMIT :limit",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
-                .addValue("service", service),
+                .addValue("service", service)
+                .addValue("after", after)
+                .addValue("limit", limit),
             new DraftMapper()
         );
     }
