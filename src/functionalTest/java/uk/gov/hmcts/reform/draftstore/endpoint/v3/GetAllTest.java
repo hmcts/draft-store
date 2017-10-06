@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.util.Collections;
 
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,7 +35,7 @@ public class GetAllTest {
     @Test
     public void should_return_empty_list_and_200_when_no_drafts_were_found_in_db() throws Exception {
         BDDMockito
-            .given(draftRepo.readAll(anyString(), anyString()))
+            .given(draftRepo.readAll(anyString(), anyString(), anyInt(), anyInt()))
             .willReturn(Collections.emptyList());
 
         BDDMockito

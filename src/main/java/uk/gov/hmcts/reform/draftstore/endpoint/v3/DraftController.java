@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
@@ -79,10 +80,12 @@ public class DraftController {
     })
     public DraftList readAll(
         @RequestHeader(AUTHORIZATION) String authHeader,
-        @RequestHeader(SERVICE_HEADER) String serviceHeader
+        @RequestHeader(SERVICE_HEADER) String serviceHeader,
+        @RequestParam(name = "after", required = false) Integer after,
+        @RequestParam(name = "limit", required = false, defaultValue = "10") int limit
     ) {
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
-        List<Draft> drafts = draftRepo.readAll(userAndService.userId, userAndService.service);
+        List<Draft> drafts = draftRepo.readAll(userAndService.userId, userAndService.service, after, limit);
 
         return new DraftList(drafts);
     }
