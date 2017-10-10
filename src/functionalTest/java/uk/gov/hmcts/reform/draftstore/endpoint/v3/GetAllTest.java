@@ -8,14 +8,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.domain.DraftList;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
+import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.util.Collections;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -29,18 +30,14 @@ public class GetAllTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean private DraftStoreDAO draftRepo;
-    @MockBean private AuthService authService;
+    @MockBean private DraftService draftService;
+    @MockBean private AuthService authService; //NOPMD
 
     @Test
     public void should_return_empty_list_and_200_when_no_drafts_were_found_in_db() throws Exception {
         BDDMockito
-            .given(draftRepo.readAll(anyString(), anyString(), anyInt(), anyInt()))
-            .willReturn(Collections.emptyList());
-
-        BDDMockito
-            .given(authService.authenticate(anyString(), anyString()))
-            .willReturn(new UserAndService("john", "service"));
+            .given(draftService.read(any(UserAndService.class), anyInt(), anyInt()))
+            .willReturn(new DraftList(Collections.emptyList()));
 
         mockMvc
             .perform(

@@ -16,20 +16,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.DraftList;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
-import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
-import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
-import uk.gov.hmcts.reform.draftstore.service.UserAndService;
+import uk.gov.hmcts.reform.draftstore.service.DraftService;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Objects;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -45,12 +40,12 @@ import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 )
 public class DraftController {
 
-    private final DraftStoreDAO draftRepo;
     private final AuthService authService;
+    private final DraftService draftService;
 
-    public DraftController(DraftStoreDAO draftRepo, AuthService authService) {
-        this.draftRepo = draftRepo;
+    public DraftController(AuthService authService, DraftService draftService) {
         this.authService = authService;
+        this.draftService = draftService;
     }
 
     @GetMapping(path = "/{id}")
@@ -64,13 +59,7 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
-
-        return draftRepo
-            .read(toInternalId(id))
-            .filter(draft -> Objects.equals(draft.userId, userAndService.userId))
-            .filter(draft -> Objects.equals(draft.service, userAndService.service))
-            .orElseThrow(() -> new NoDraftFoundException());
+        return draftService.read(id, authService.authenticate(authHeader, serviceHeader));
     }
 
     @GetMapping
@@ -84,10 +73,7 @@ public class DraftController {
         @RequestParam(name = "after", required = false) Integer after,
         @RequestParam(name = "limit", required = false, defaultValue = "10") int limit
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
-        List<Draft> drafts = draftRepo.readAll(userAndService.userId, userAndService.service, after, limit);
-
-        return new DraftList(drafts);
+        return draftService.read(authService.authenticate(authHeader, serviceHeader), after, limit);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -101,9 +87,7 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
-
-        int id = draftRepo.insert(userAndService.userId, userAndService.service, newDraft);
+        int id = draftService.create(newDraft, authService.authenticate(authHeader, serviceHeader));
 
         URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
@@ -123,17 +107,9 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        draftService.update(id, updatedDraft, authService.authenticate(authHeader, serviceHeader));
 
-        return draftRepo
-            .read(toInternalId(id))
-            .map(d -> {
-                assertCanEdit(d, userAndService);
-                draftRepo.update(toInternalId(id), updatedDraft);
-
-                return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-            })
-            .orElseThrow(() -> new NoDraftFoundException());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(path = "/{id}")
@@ -146,36 +122,8 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
-
-        draftRepo
-            .read(toInternalId(id))
-            .ifPresent(d -> {
-                assertCanEdit(d, userAndService);
-                draftRepo.delete(toInternalId(id));
-            });
+        draftService.delete(id, authService.authenticate(authHeader, serviceHeader));
 
         return noContent().build();
-    }
-
-    private void assertCanEdit(Draft draft, UserAndService userAndService) {
-        boolean userOk = Objects.equals(draft.userId, userAndService.userId);
-        boolean serviceOk = Objects.equals(draft.service, userAndService.service);
-
-        if (!(userOk && serviceOk)) {
-            throw new AuthorizationException();
-        }
-    }
-
-    /**
-     * Converts external API id to internally used id.
-     */
-    private int toInternalId(String apiId) {
-        try {
-            // currently database ID is an int
-            return Integer.parseInt(apiId);
-        } catch (NumberFormatException exc) {
-            throw new NoDraftFoundException();
-        }
     }
 }
