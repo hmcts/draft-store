@@ -79,11 +79,10 @@ public class UpdateTest extends BaseTest {
     }
 
     private void callUpdateAs(UserAndService userAndService) {
-        this.draftService
-            .update(
-                "123",
-                new UpdateDraft(new ObjectMapper().createObjectNode(), "some_type"),
-                userAndService
-            );
+        draftService.update(
+            "123",
+            new UpdateDraft(new ObjectMapper().createObjectNode(), "some_type"),
+            userAndService
+        );
     }
 }

@@ -30,6 +30,7 @@ public class DeleteTest extends BaseTest {
     }
 
     @Test
+    @SuppressWarnings("checkstyle:LineLength")
     public void should_throw_an_exception_when_trying_to_remove_draft_assigned_to_a_different_service() throws Exception {
         // given
         thereExists(
