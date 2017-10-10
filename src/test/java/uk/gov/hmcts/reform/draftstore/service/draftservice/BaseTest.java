@@ -26,8 +26,8 @@ public class BaseTest {
     Draft draftCreatedBy(UserAndService userAndService) {
         return new Draft(
             "123",
-            "abc",
-            "serviceA",
+            userAndService.userId,
+            userAndService.service,
             "{}",
             "some_type",
             ZonedDateTime.now(),

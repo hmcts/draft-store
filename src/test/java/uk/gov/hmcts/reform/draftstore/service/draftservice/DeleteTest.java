@@ -13,7 +13,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class DeleteTest extends BaseTest {
 
     @Test
-    public void should_throw_an_exception_when_trying_to_remove_somebody_elses_draft() throws Exception {
+    public void should_throw_an_exception_when_trying_to_remove_draft_assigned_to_a_different_user() throws Exception {
         // given
         thereExists(
             draftCreatedBy(new UserAndService("john", "service"))
@@ -27,6 +27,38 @@ public class DeleteTest extends BaseTest {
         // then
         assertThat(exception)
             .isInstanceOf(AuthorizationException.class);
+    }
+
+    @Test
+    public void should_throw_an_exception_when_trying_to_remove_draft_assigned_to_a_different_service() throws Exception {
+        // given
+        thereExists(
+            draftCreatedBy(new UserAndService("john", "serviceA"))
+        );
+
+        // when
+        Throwable exception = catchThrowable(() ->
+            draftService.delete("123", new UserAndService("john", "serviceBBBBBBB"))
+        );
+
+        // then
+        assertThat(exception)
+            .isInstanceOf(AuthorizationException.class);
+    }
+
+    @Test
+    public void should_NOT_throw_an_exception_when_draft_assigned_to_user_and_service_exists() {
+        // given
+        UserAndService john = new UserAndService("john", "service");
+        thereExists(
+            draftCreatedBy(john)
+        );
+
+        // when
+        Throwable exception = catchThrowable(() -> draftService.delete("123", john));
+
+        // then
+        assertThat(exception).isNull();
     }
 
     @Test
