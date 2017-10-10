@@ -73,6 +73,21 @@ public class UpdateTest extends BaseTest {
         assertThat(exception).isInstanceOf(AuthorizationException.class);
     }
 
+    @Test
+    public void should_NOT_throw_exception_when_updating_own_draft() throws Exception {
+        // given
+        UserAndService john = new UserAndService("john", "service");
+        thereExists(
+            draftCreatedBy(john)
+        );
+
+        // when
+        Throwable exception = catchThrowable(() -> callUpdateAs(john));
+
+        // then
+        assertThat(exception).isNull();
+    }
+
     private void callUpdateAs(UserAndService userAndService) {
         this.draftService
             .update(

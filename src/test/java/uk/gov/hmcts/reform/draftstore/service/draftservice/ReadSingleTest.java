@@ -58,4 +58,19 @@ public class ReadSingleTest extends BaseTest {
         assertThat(exception)
             .isInstanceOf(NoDraftFoundException.class);
     }
+
+    @Test
+    public void should_NOT_throw_exception_for_correct_user_and_service() throws Exception {
+        // given
+        UserAndService john = new UserAndService("john", "service");
+        thereExists(
+            draftCreatedBy(john)
+        );
+
+        // when
+        Throwable exception = catchThrowable(() -> draftService.read("123", john));
+
+        // then
+        assertThat(exception).isNull();
+    }
 }
