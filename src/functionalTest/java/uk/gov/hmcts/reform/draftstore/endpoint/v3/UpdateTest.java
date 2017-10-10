@@ -31,7 +31,7 @@ public class UpdateTest {
     @Autowired private MockMvc mockMvc;
 
     @MockBean private DraftService draftService;
-    @MockBean private AuthService authService; //NOPMD
+    @MockBean private AuthService authService; //NOPMD - mock declaration required
 
 
     @Test

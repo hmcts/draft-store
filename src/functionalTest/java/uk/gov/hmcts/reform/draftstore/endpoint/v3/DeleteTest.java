@@ -29,7 +29,7 @@ public class DeleteTest {
     @Autowired private MockMvc mockMvc;
 
     @MockBean private DraftService draftService;
-    @MockBean private AuthService authService; //NOPMD
+    @MockBean private AuthService authService; //NOPMD - mock declaration required
 
     @Test
     public void should_return_403_when_auth_exception_is_thrown() throws Exception {

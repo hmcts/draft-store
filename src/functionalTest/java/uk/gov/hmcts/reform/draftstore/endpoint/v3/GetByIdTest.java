@@ -29,7 +29,7 @@ public class GetByIdTest {
     @Autowired private MockMvc mockMvc;
 
     @MockBean private DraftService draftService;
-    @MockBean private AuthService authService; //NOPMD
+    @MockBean private AuthService authService; //NOPMD - mock declaration required
 
     @Test
     public void should_map_no_draft_exception_to_404() throws Exception {

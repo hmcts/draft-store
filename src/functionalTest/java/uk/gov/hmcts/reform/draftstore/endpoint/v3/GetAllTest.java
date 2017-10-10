@@ -31,7 +31,7 @@ public class GetAllTest {
     private MockMvc mockMvc;
 
     @MockBean private DraftService draftService;
-    @MockBean private AuthService authService; //NOPMD
+    @MockBean private AuthService authService; //NOPMD - mock declaration required
 
     @Test
     public void should_return_empty_list_and_200_when_no_drafts_were_found_in_db() throws Exception {
