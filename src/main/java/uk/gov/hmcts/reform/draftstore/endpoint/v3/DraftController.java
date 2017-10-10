@@ -23,6 +23,7 @@ import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
+import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.net.URI;
 import javax.validation.Valid;
@@ -73,7 +74,8 @@ public class DraftController {
         @RequestParam(name = "after", required = false) Integer after,
         @RequestParam(name = "limit", required = false, defaultValue = "10") int limit
     ) {
-        return draftService.read(authService.authenticate(authHeader, serviceHeader), after, limit);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        return draftService.read(userAndService, after, limit);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -87,7 +89,8 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
-        int id = draftService.create(newDraft, authService.authenticate(authHeader, serviceHeader));
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        int id = draftService.create(newDraft, userAndService);
 
         URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
@@ -107,7 +110,8 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
-        draftService.update(id, updatedDraft, authService.authenticate(authHeader, serviceHeader));
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        draftService.update(id, updatedDraft, userAndService);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -122,7 +126,8 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        draftService.delete(id, authService.authenticate(authHeader, serviceHeader));
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        draftService.delete(id, userAndService);
 
         return noContent().build();
     }
