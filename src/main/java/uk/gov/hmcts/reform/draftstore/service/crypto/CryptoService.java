@@ -48,7 +48,7 @@ public class CryptoService {
 
     public static String decrypt(byte[] input, String password) {
 
-        IllegalArgument.throwIf(() -> input == null, "Input can't be null");
+        IllegalArgument.throwIf(() -> input == null || input.length == 0, "Input can't be empty");
         IllegalArgument.throwIf(() -> Strings.isNullOrEmpty(password), "Password can't be empty");
 
         try {
