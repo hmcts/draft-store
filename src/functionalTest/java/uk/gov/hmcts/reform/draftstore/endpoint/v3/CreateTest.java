@@ -11,9 +11,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
+import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +31,7 @@ public class CreateTest {
 
     @Autowired private MockMvc mockMvc;
 
-    @MockBean private DraftStoreDAO draftRepo;
+    @MockBean private DraftService draftService;
     @MockBean private AuthService authService;
 
     // region document
@@ -75,7 +75,7 @@ public class CreateTest {
         final int newClaimId = 444;
 
         BDDMockito
-            .given(draftRepo.insert(anyString(), anyString(), any(CreateDraft.class)))
+            .given(draftService.create(any(CreateDraft.class), any(UserAndService.class)))
             .willReturn(newClaimId);
 
         MvcResult result = send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }").andReturn();

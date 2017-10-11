@@ -10,16 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
-import uk.gov.hmcts.reform.draftstore.domain.Draft;
-import uk.gov.hmcts.reform.draftstore.endpoint.v3.helpers.SampleData;
+import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
+import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,47 +28,29 @@ public class GetByIdTest {
 
     @Autowired private MockMvc mockMvc;
 
-    @MockBean private DraftStoreDAO draftRepo;
-    @MockBean private AuthService authService;
-
-    private final Draft sampleDraft = SampleData.draft("123");
+    @MockBean private DraftService draftService;
+    @MockBean private AuthService authService; //NOPMD - mock declaration required
 
     @Test
-    public void reading_not_existing_draft_returns_404() throws Exception {
-        testStatus("abc", "serviceA", null, HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    public void reading_own_existing_draft_returns_200() throws Exception {
-        testStatus("abc", "serviceA", sampleDraft, HttpStatus.OK);
-    }
-
-    @Test
-    public void reading_somebody_elses_draft_returns_404() throws Exception {
-        testStatus("XXX", "serviceA", sampleDraft, HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    public void reading_own_draft_from_different_service_returns_404() throws Exception {
-        testStatus("abc", "WRONG_SERVICE", sampleDraft, HttpStatus.NOT_FOUND);
-    }
-
-    private void testStatus(
-        String userId,
-        String service,
-        Draft draftInDb,
-        HttpStatus expectedStatus
-    ) throws Exception {
-        // given
+    public void should_map_no_draft_exception_to_404() throws Exception {
         BDDMockito
-            .given(draftRepo.read(anyInt()))
-            .willReturn(Optional.ofNullable(draftInDb));
+            .given(draftService.read(anyString(), any(UserAndService.class)))
+            .willThrow(new NoDraftFoundException());
 
-        BDDMockito
-            .given(authService.authenticate(anyString(), anyString()))
-            .willReturn(new UserAndService(userId, service));
+        int status = callGet();
 
-        // when
+        assertThat(status).isEqualTo(HttpStatus.NOT_FOUND.value());
+
+    }
+
+    @Test
+    public void should_return_200_if_draft_is_found() throws Exception {
+        int status = callGet();
+
+        assertThat(status).isEqualTo(HttpStatus.OK.value());
+    }
+
+    private int callGet() throws Exception {
         MvcResult result =
             mockMvc
                 .perform(
@@ -80,7 +59,6 @@ public class GetByIdTest {
                         .header(SERVICE_HEADER, "irrelevant-service-name")
                 ).andReturn();
 
-        // then
-        assertThat(result.getResponse().getStatus()).isEqualTo(expectedStatus.value());
+        return result.getResponse().getStatus();
     }
 }
