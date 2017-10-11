@@ -25,6 +25,7 @@ public class CryptoServiceTest {
             String backToPlainText = CryptoService.decrypt(encryptedBytes, "password");
 
             // then
+            assertThat(encryptedBytes).isNotEqualTo(message.getBytes());
             assertThat(backToPlainText).isEqualTo(message);
         });
     }
