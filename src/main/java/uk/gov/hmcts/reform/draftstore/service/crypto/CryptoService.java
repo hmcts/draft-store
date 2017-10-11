@@ -26,7 +26,7 @@ public class CryptoService {
     public static byte[] encrypt(String input, String secret) {
 
         IllegalArgument.throwIf(() -> input == null, "Input can't be null");
-        IllegalArgument.throwIf(() -> Strings.isNullOrEmpty(secret), "Password can't be empty");
+        IllegalArgument.throwIf(() -> Strings.isNullOrEmpty(secret), "Secret can't be empty");
 
         try {
             Cipher cipher = Cipher.getInstance(CIPHER);
@@ -49,7 +49,7 @@ public class CryptoService {
     public static String decrypt(byte[] input, String secret) {
 
         IllegalArgument.throwIf(() -> input == null || input.length == 0, "Input can't be empty");
-        IllegalArgument.throwIf(() -> Strings.isNullOrEmpty(secret), "Password can't be empty");
+        IllegalArgument.throwIf(() -> Strings.isNullOrEmpty(secret), "Secret can't be empty");
 
         try {
             byte[] iv = Arrays.copyOfRange(input, 0, IV_LENGTH.bytes());
