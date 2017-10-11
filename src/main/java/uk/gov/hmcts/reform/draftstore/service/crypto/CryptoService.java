@@ -70,8 +70,8 @@ public class CryptoService {
     }
 
     private static SecretKey deriveKey(String secret) throws NoSuchAlgorithmException {
-        byte[] hashedPassword = MessageDigest.getInstance("SHA-512").digest(secret.getBytes());
-        byte[] key = Arrays.copyOfRange(hashedPassword, 0, KEY_LENGTH.bytes());
+        byte[] hashedSecret = MessageDigest.getInstance("SHA-512").digest(secret.getBytes());
+        byte[] key = Arrays.copyOfRange(hashedSecret, 0, KEY_LENGTH.bytes());
 
         return new SecretKeySpec(key, "AES");
     }
