@@ -23,16 +23,16 @@ public class CryptoService {
     private static final Length IV_LENGTH = Length.BITS_96;
     private static final Length GMC_TAG_LENGTH = Length.BITS_128;
 
-    public static byte[] encrypt(String input, String password) {
+    public static byte[] encrypt(String input, String secret) {
 
         IllegalArgument.throwIf(() -> input == null, "Input can't be null");
-        IllegalArgument.throwIf(() -> Strings.isNullOrEmpty(password), "Password can't be empty");
+        IllegalArgument.throwIf(() -> Strings.isNullOrEmpty(secret), "Password can't be empty");
 
         try {
             Cipher cipher = Cipher.getInstance(CIPHER);
             cipher.init(
                 Cipher.ENCRYPT_MODE,
-                deriveKey(password),
+                deriveKey(secret),
                 new GCMParameterSpec(GMC_TAG_LENGTH.bits(), generateIv())
             );
 
@@ -46,10 +46,10 @@ public class CryptoService {
         }
     }
 
-    public static String decrypt(byte[] input, String password) {
+    public static String decrypt(byte[] input, String secret) {
 
         IllegalArgument.throwIf(() -> input == null || input.length == 0, "Input can't be empty");
-        IllegalArgument.throwIf(() -> Strings.isNullOrEmpty(password), "Password can't be empty");
+        IllegalArgument.throwIf(() -> Strings.isNullOrEmpty(secret), "Password can't be empty");
 
         try {
             byte[] iv = Arrays.copyOfRange(input, 0, IV_LENGTH.bytes());
@@ -58,7 +58,7 @@ public class CryptoService {
             Cipher cipher = Cipher.getInstance(CIPHER);
             cipher.init(
                 Cipher.DECRYPT_MODE,
-                deriveKey(password),
+                deriveKey(secret),
                 new GCMParameterSpec(GMC_TAG_LENGTH.bits(), iv)
             );
 
@@ -69,8 +69,8 @@ public class CryptoService {
         }
     }
 
-    private static SecretKey deriveKey(String password) throws NoSuchAlgorithmException {
-        byte[] hashedPassword = MessageDigest.getInstance("SHA-512").digest(password.getBytes());
+    private static SecretKey deriveKey(String secret) throws NoSuchAlgorithmException {
+        byte[] hashedPassword = MessageDigest.getInstance("SHA-512").digest(secret.getBytes());
         byte[] key = Arrays.copyOfRange(hashedPassword, 0, KEY_LENGTH.bytes());
 
         return new SecretKeySpec(key, "AES");

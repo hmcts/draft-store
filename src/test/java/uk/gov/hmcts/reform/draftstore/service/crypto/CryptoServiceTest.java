@@ -12,6 +12,7 @@ public class CryptoServiceTest {
 
     @Test
     public void should_decrypt_back_to_original_input() throws Exception {
+        final String secret = "afowh7f9a68efag68efowe";
         Stream.of(
             "Hello, world!",
             "{ \"abc\": 123 }",
@@ -19,10 +20,10 @@ public class CryptoServiceTest {
             ""
         ).forEach(message -> {
             // given
-            byte[] encryptedBytes = CryptoService.encrypt(message, "password");
+            byte[] encryptedBytes = CryptoService.encrypt(message, secret);
 
             // when
-            String backToPlainText = CryptoService.decrypt(encryptedBytes, "password");
+            String backToPlainText = CryptoService.decrypt(encryptedBytes, secret);
 
             // then
             assertThat(encryptedBytes).isNotEqualTo(message.getBytes());
@@ -31,12 +32,13 @@ public class CryptoServiceTest {
     }
 
     @Test
-    public void should_throw_an_exception_when_wrong_password_is_used() throws Exception {
+    public void should_throw_an_exception_when_wrong_secret_is_used() throws Exception {
         // given
-        byte[] encryptedBytes = CryptoService.encrypt("hello", "AAAAAAAAA");
+        String secret = "ha0s9fnuiaw4a7s9dhfad9agsg";
+        byte[] encryptedBytes = CryptoService.encrypt("hello", secret);
 
         // when
-        Throwable thrown = catchThrowable(() -> CryptoService.decrypt(encryptedBytes, "BBB"));
+        Throwable thrown = catchThrowable(() -> CryptoService.decrypt(encryptedBytes, "not" + secret));
 
         // then
         assertThat(thrown)
