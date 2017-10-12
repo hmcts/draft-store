@@ -6,10 +6,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
-import uk.gov.hmcts.reform.draftstore.domain.Draft;
+import uk.gov.hmcts.reform.draftstore.data.model.CreateDraft;
+import uk.gov.hmcts.reform.draftstore.data.model.Draft;
+import uk.gov.hmcts.reform.draftstore.data.model.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
-import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.sql.ResultSet;
@@ -23,6 +23,7 @@ import java.util.Optional;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Created;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Updated;
 
+@SuppressWarnings("checkstyle:LineLength")
 public class DraftStoreDAO {
 
     // region queries
@@ -86,12 +87,13 @@ public class DraftStoreDAO {
         Timestamp now = Timestamp.from(this.clock.instant());
 
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, service, document, document_type, max_stale_days, created, updated)"
-                + "VALUES (:userId, :service, :doc::JSON, :type, :maxStaleDays, :created, :updated)",
+            "INSERT INTO draft_document (user_id, service, document, encrypted_document, document_type, max_stale_days, created, updated)"
+                + "VALUES (:userId, :service, :doc::JSON, :encDoc, :type, :maxStaleDays, :created, :updated)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("service", service)
-                .addValue("doc", newDraft.document.toString())
+                .addValue("doc", newDraft.document)
+                .addValue("encDoc", newDraft.encryptedDocument)
                 .addValue("type", newDraft.type)
                 .addValue("maxStaleDays", Optional.ofNullable(newDraft.maxStaleDays).orElse(defaultMaxStaleDays))
                 .addValue("created", now)
@@ -104,10 +106,12 @@ public class DraftStoreDAO {
 
     public void update(int id, UpdateDraft draft) {
         jdbcTemplate.update(
-            "UPDATE draft_document SET document = :doc::JSON, document_type = :type, updated = :updated "
+            "UPDATE draft_document "
+                + "SET document = :doc::JSON, encrypted_document = :encDoc,  document_type = :type, updated = :updated "
                 + "WHERE id = :id",
             new MapSqlParameterSource()
-                .addValue("doc", draft.document.toString())
+                .addValue("doc", draft.document)
+                .addValue("encDoc", draft.encryptedDocument)
                 .addValue("type", draft.type)
                 .addValue("updated", Timestamp.from(this.clock.instant()))
                 .addValue("id", id)
@@ -192,6 +196,7 @@ public class DraftStoreDAO {
                 rs.getString("user_id"),
                 rs.getString("service"),
                 rs.getString("document"),
+                rs.getBytes("encrypted_document"),
                 rs.getString("document_type"),
                 rs.getTimestamp("created").toInstant().atOffset(ZoneOffset.UTC).toZonedDateTime(),
                 rs.getTimestamp("updated").toInstant().atOffset(ZoneOffset.UTC).toZonedDateTime()

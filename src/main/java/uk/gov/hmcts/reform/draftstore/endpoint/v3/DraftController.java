@@ -3,9 +3,11 @@ package uk.gov.hmcts.reform.draftstore.endpoint.v3;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,9 +34,11 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 @RestController
+@Validated
 @RequestMapping(
     path = "drafts",
     produces = MediaType.APPLICATION_JSON_VALUE
@@ -58,9 +62,10 @@ public class DraftController {
     public Draft read(
         @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader,
-        @RequestHeader(SERVICE_HEADER) String serviceHeader
+        @RequestHeader(SERVICE_HEADER) String serviceHeader,
+        @RequestHeader(name = SECRET_HEADER, required = false) String secretHeader
     ) {
-        return draftService.read(id, authService.authenticate(authHeader, serviceHeader));
+        return draftService.read(id, authService.authenticate(authHeader, serviceHeader, secretHeader));
     }
 
     @GetMapping
@@ -71,10 +76,11 @@ public class DraftController {
     public DraftList readAll(
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
+        @RequestHeader(name = SECRET_HEADER, required = false) String secretHeader,
         @RequestParam(name = "after", required = false) Integer after,
         @RequestParam(name = "limit", required = false, defaultValue = "10") int limit
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, secretHeader);
         return draftService.read(userAndService, after, limit);
     }
 
@@ -87,9 +93,10 @@ public class DraftController {
     public ResponseEntity<Void> create(
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
+        @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = 16) String secretHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, secretHeader);
         int id = draftService.create(newDraft, userAndService);
 
         URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
@@ -108,9 +115,10 @@ public class DraftController {
         @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
+        @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = 16) String secretHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, secretHeader);
         draftService.update(id, updatedDraft, userAndService);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -126,7 +134,7 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, null);
         draftService.delete(id, userAndService);
 
         return noContent().build();
