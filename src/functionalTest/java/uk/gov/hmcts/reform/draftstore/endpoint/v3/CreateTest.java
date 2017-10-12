@@ -85,7 +85,7 @@ public class CreateTest {
 
     private ResultActions send(String content) throws Exception {
         BDDMockito
-            .given(authService.authenticate(anyString(), anyString()))
+            .given(authService.authenticate(anyString(), anyString(), anyString()))
             .willReturn(new UserAndService("john", "service"));
 
         return mockMvc

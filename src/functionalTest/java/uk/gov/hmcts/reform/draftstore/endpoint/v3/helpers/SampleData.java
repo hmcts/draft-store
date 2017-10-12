@@ -1,9 +1,8 @@
 package uk.gov.hmcts.reform.draftstore.endpoint.v3.helpers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
-import uk.gov.hmcts.reform.draftstore.domain.Draft;
-import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
+import uk.gov.hmcts.reform.draftstore.data.model.CreateDraft;
+import uk.gov.hmcts.reform.draftstore.data.model.Draft;
+import uk.gov.hmcts.reform.draftstore.data.model.UpdateDraft;
 
 import java.time.ZonedDateTime;
 
@@ -14,6 +13,7 @@ public class SampleData {
             "abc",
             "serviceA",
             "{}",
+            null,
             "some_type",
             ZonedDateTime.now(),
             ZonedDateTime.now()
@@ -21,12 +21,13 @@ public class SampleData {
     }
 
     public static UpdateDraft updateDraft() {
-        return new UpdateDraft(new ObjectMapper().createObjectNode(), "some_type");
+        return new UpdateDraft("{}", null, "some_type");
     }
 
     public static CreateDraft createDraft(int maxStaleDays) {
         return new CreateDraft(
-            new ObjectMapper().createObjectNode(),
+            "{}",
+            null,
             "some_type",
             maxStaleDays
         );

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
-import uk.gov.hmcts.reform.draftstore.domain.Draft;
+import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
@@ -29,6 +29,7 @@ public class BaseTest {
             userAndService.userId,
             userAndService.service,
             "{}",
+            null,
             "some_type",
             ZonedDateTime.now(),
             ZonedDateTime.now()

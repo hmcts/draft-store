@@ -9,14 +9,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.hmcts.reform.draftstore.domain.Draft;
+import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Created;
 import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Updated;
