@@ -54,7 +54,7 @@ public class UpdateTest {
 
     @Test
     public void should_return_400_when_secret_is_not_long_enough() throws Exception {
-        sendUpdate(Strings.repeat("x", MIN_SECRET_LENGTH)).andExpect(status().isNoContent());
+        sendUpdate(Strings.repeat("x", MIN_SECRET_LENGTH - 1)).andExpect(status().isBadRequest());
     }
 
     @Test
