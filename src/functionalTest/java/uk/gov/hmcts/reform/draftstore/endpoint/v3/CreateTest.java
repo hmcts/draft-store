@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.draftstore.endpoint.v3;
 
+import com.google.common.base.Strings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
@@ -23,6 +25,8 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.draftstore.endpoint.v3.DraftController.MIN_SECRET_LENGTH;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 @RunWith(SpringRunner.class)
@@ -71,6 +75,14 @@ public class CreateTest {
     }
 
     @Test
+    public void should_return_400_when_secret_is_not_long_enough() throws Exception {
+        send(
+            "{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }",
+            Strings.repeat("x", MIN_SECRET_LENGTH - 1)
+        ).andExpect(status().is(400));
+    }
+
+    @Test
     public void should_fill_location_header_on_successful_save() throws Exception {
         final int newClaimId = 444;
 
@@ -84,17 +96,21 @@ public class CreateTest {
     }
 
     private ResultActions send(String content) throws Exception {
+        return send(content, null);
+    }
+
+    private ResultActions send(String content, String secret) throws Exception {
         BDDMockito
             .given(authService.authenticate(anyString(), anyString(), anyString()))
             .willReturn(new UserAndService("john", "service"));
 
-        return mockMvc
-            .perform(
-                post("/drafts")
-                    .header(AUTHORIZATION, "auth-header-value")
-                    .header(SERVICE_HEADER, "some_service_name")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(content)
-            );
+        MockHttpServletRequestBuilder request =
+            post("/drafts")
+                .header(AUTHORIZATION, "auth-header-value")
+                .header(SERVICE_HEADER, "some_service_name")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        return mockMvc.perform(secret == null ? request : request.header(SECRET_HEADER, secret));
     }
 }

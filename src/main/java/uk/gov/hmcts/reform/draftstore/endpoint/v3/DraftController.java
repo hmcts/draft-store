@@ -43,7 +43,9 @@ import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
     path = "drafts",
     produces = MediaType.APPLICATION_JSON_VALUE
 )
+@SuppressWarnings("checkstyle:LineLength")
 public class DraftController {
+    public static final int MIN_SECRET_LENGTH = 16;
 
     private final AuthService authService;
     private final DraftService draftService;
@@ -93,7 +95,7 @@ public class DraftController {
     public ResponseEntity<Void> create(
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
-        @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = 16) String secretHeader,
+        @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, secretHeader);
@@ -115,7 +117,7 @@ public class DraftController {
         @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
-        @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = 16) String secretHeader,
+        @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, secretHeader);
