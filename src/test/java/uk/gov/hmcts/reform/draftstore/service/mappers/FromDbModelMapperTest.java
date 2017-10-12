@@ -13,7 +13,7 @@ public class FromDbModelMapperTest {
     private uk.gov.hmcts.reform.draftstore.domain.Draft result;
 
     @Test
-    public void should_use_plaintext_document_when_it_was_not_encrypted() throws Exception {
+    public void should_use_plaintext_document_if_it_was_not_encrypted() throws Exception {
 
         result = FromDbModelMapper
             .fromDb(
@@ -25,7 +25,7 @@ public class FromDbModelMapperTest {
     }
 
     @Test
-    public void should_use_encrypted_document_when_it_is_encrypted() throws Exception {
+    public void should_use_encrypted_document_when_it_is_available() throws Exception {
 
         result = FromDbModelMapper
             .fromDb(

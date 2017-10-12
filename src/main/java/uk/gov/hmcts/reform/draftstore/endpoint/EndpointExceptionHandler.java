@@ -124,7 +124,7 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidKeyException.class)
-    public ResponseEntity<ErrorResult> cryptoException(HttpServletRequest req, Exception exception) {
+    public ResponseEntity<ErrorResult> invalidCryptoKey(HttpServletRequest req, Exception exception) {
         log.warn(exception.getMessage(), exception);
         return new ResponseEntity<>(
             new ErrorResult(BAD_ARGUMENT, singletonList(exception.getMessage())),
