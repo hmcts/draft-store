@@ -42,7 +42,6 @@ public class CryptoServiceTest {
 
         // then
         assertThat(thrown)
-            .isInstanceOf(GeneralSecurityRuntimeException.class)
-            .hasCauseInstanceOf(AEADBadTagException.class);
+            .isInstanceOf(InvalidKeyException.class);
     }
 }
