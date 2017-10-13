@@ -12,10 +12,10 @@ public class ToDbModelMapperTest {
 
     @Test
     public void should_set_only_encrypted_document_when_secret_is_passed() throws Exception {
-         result = ToDbModelMapper.toDb(createDraft(), "a98sdf8asd7f");
+        result = ToDbModelMapper.toDb(createDraft(), "a98sdf8asd7f");
 
-         assertThat(result.document).isNull();
-         assertThat(result.encryptedDocument).isNotNull();
+        assertThat(result.document).isNull();
+        assertThat(result.encryptedDocument).isNotNull();
     }
 
     @Test
