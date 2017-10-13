@@ -17,8 +17,6 @@ public class FromDbModelMapper {
 
         return new Draft(
             dbDraft.id,
-            dbDraft.userId,
-            dbDraft.service,
             documentToReturn,
             dbDraft.type,
             dbDraft.created,
