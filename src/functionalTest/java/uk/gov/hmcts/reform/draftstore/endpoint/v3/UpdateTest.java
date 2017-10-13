@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.draftstore.endpoint.v3;
 
+import com.google.common.base.Strings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
@@ -22,6 +24,8 @@ import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.draftstore.endpoint.v3.DraftController.MIN_SECRET_LENGTH;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 @RunWith(SpringRunner.class)
@@ -49,6 +53,11 @@ public class UpdateTest {
     }
 
     @Test
+    public void should_return_400_when_secret_is_not_long_enough() throws Exception {
+        sendUpdate(Strings.repeat("x", MIN_SECRET_LENGTH - 1)).andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void should_return_404_when_no_draft_found_exception_is_thrown() throws Exception {
         willThrow(new NoDraftFoundException())
             .given(draftService)
@@ -58,13 +67,17 @@ public class UpdateTest {
     }
 
     private ResultActions sendUpdate() throws Exception {
-        return mockMvc
-            .perform(
-                put("/drafts/123")
-                    .header(AUTHORIZATION, "abc")
-                    .header(SERVICE_HEADER, "xyz")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }")
-            );
+        return sendUpdate(null);
+    }
+
+    private ResultActions sendUpdate(String secret) throws Exception {
+        MockHttpServletRequestBuilder request =
+            put("/drafts/123")
+                .header(AUTHORIZATION, "abc")
+                .header(SERVICE_HEADER, "xyz")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }");
+
+        return mockMvc.perform(secret == null ? request : request.header(SECRET_HEADER, secret));
     }
 }

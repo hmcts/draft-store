@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
+import uk.gov.hmcts.reform.draftstore.service.crypto.InvalidKeyException;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -119,6 +120,15 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(
             new ErrorResult(USER_DETAILS_SERVICE_ERROR, singletonList(exception.getMessage())),
             FORBIDDEN
+        );
+    }
+
+    @ExceptionHandler(InvalidKeyException.class)
+    public ResponseEntity<ErrorResult> invalidCryptoKey(HttpServletRequest req, Exception exception) {
+        log.warn(exception.getMessage(), exception);
+        return new ResponseEntity<>(
+            new ErrorResult(BAD_ARGUMENT, singletonList(exception.getMessage())),
+            BAD_REQUEST
         );
     }
 

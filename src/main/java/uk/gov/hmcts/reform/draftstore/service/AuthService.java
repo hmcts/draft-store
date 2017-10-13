@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 public class AuthService {
 
     public static final String SERVICE_HEADER = "ServiceAuthorization";
+    public static final String SECRET_HEADER = "Secret";
     public static final String AUTH_TYPE = "hmcts-id ";
 
     private final IdamClient idamClient;
@@ -36,10 +37,11 @@ public class AuthService {
         );
     }
 
-    public UserAndService authenticate(String userHeader, String serviceHeader) {
+    public UserAndService authenticate(String userHeader, String serviceHeader, String secretHeader) {
         return new UserAndService(
             idamClient.getUserDetails(userHeader).id,
-            s2sClient.getServiceName(serviceHeader)
+            s2sClient.getServiceName(serviceHeader),
+            secretHeader
         );
     }
 }

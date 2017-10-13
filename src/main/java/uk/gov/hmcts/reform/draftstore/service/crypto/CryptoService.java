@@ -9,6 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import javax.crypto.AEADBadTagException;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
@@ -64,6 +65,8 @@ public class CryptoService {
 
             return new String(cipher.doFinal(cipherText), UTF_8);
 
+        } catch (AEADBadTagException exc) {
+            throw new InvalidKeyException("Invalid secret");
         } catch (GeneralSecurityException exc) {
             throw new GeneralSecurityRuntimeException(exc);
         }
