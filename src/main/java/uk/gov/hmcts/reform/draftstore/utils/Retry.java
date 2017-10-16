@@ -1,9 +1,13 @@
 package uk.gov.hmcts.reform.draftstore.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.function.Function;
 
 public class Retry {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Retry.class);
 
     /**
      * Retries calling passed function with passed parameters.
@@ -20,7 +24,7 @@ public class Retry {
             try {
                 return function.apply(params.get(i));
             } catch (RuntimeException exc) {
-
+                LOGGER.warn("Failed retry", exc);
             }
         }
 
