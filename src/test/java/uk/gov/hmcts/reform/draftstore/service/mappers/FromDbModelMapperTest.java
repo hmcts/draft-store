@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.draftstore.service.mappers;
 import org.junit.Test;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.service.crypto.CryptoService;
+import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 
 import java.time.ZonedDateTime;
 
@@ -18,7 +19,7 @@ public class FromDbModelMapperTest {
         result = FromDbModelMapper
             .fromDb(
                 dbDraft("hello", null),
-                "not used secret"
+                new Secrets(SampleSecret.get(), null)
             );
 
         assertThat(result.document).isEqualTo("hello");
@@ -26,11 +27,11 @@ public class FromDbModelMapperTest {
 
     @Test
     public void should_use_encrypted_document_when_it_is_available() throws Exception {
-
+        String secret = SampleSecret.get();
         result = FromDbModelMapper
             .fromDb(
-                dbDraft(null, CryptoService.encrypt("hello", "secret")),
-                "secret"
+                dbDraft(null, CryptoService.encrypt("hello", secret)),
+                new Secrets(secret, null)
             );
 
         assertThat(result.document).isEqualTo("hello");

@@ -17,6 +17,7 @@ import java.util.Collections;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -31,10 +32,14 @@ public class GetAllTest {
     private MockMvc mockMvc;
 
     @MockBean private DraftService draftService;
-    @MockBean private AuthService authService; //NOPMD - mock declaration required
+    @MockBean private AuthService authService;
 
     @Test
     public void should_return_empty_list_and_200_when_no_drafts_were_found_in_db() throws Exception {
+        BDDMockito
+            .given(authService.authenticate(anyString(), anyString()))
+            .willReturn(new UserAndService("john", "service"));
+
         BDDMockito
             .given(draftService.read(any(UserAndService.class), anyInt(), anyInt()))
             .willReturn(new DraftList(Collections.emptyList()));

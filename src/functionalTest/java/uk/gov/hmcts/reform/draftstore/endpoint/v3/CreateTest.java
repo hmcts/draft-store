@@ -101,7 +101,7 @@ public class CreateTest {
 
     private ResultActions send(String content, String secret) throws Exception {
         BDDMockito
-            .given(authService.authenticate(anyString(), anyString(), anyString()))
+            .given(authService.authenticate(anyString(), anyString()))
             .willReturn(new UserAndService("john", "service"));
 
         MockHttpServletRequestBuilder request =

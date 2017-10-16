@@ -26,6 +26,7 @@ import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
+import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 
 import java.net.URI;
 import javax.validation.Valid;
@@ -67,7 +68,10 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestHeader(name = SECRET_HEADER, required = false) String secretHeader
     ) {
-        return draftService.read(id, authService.authenticate(authHeader, serviceHeader, secretHeader));
+        Secrets secrets = Secrets.fromHeader(secretHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+
+        return draftService.read(id, userAndService.withSecrets(secrets));
     }
 
     @GetMapping
@@ -82,8 +86,10 @@ public class DraftController {
         @RequestParam(name = "after", required = false) Integer after,
         @RequestParam(name = "limit", required = false, defaultValue = "10") int limit
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, secretHeader);
-        return draftService.read(userAndService, after, limit);
+        Secrets secrets = Secrets.fromHeader(secretHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+
+        return draftService.read(userAndService.withSecrets(secrets), after, limit);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -98,8 +104,10 @@ public class DraftController {
         @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, secretHeader);
-        int id = draftService.create(newDraft, userAndService);
+        Secrets secrets = Secrets.fromHeader(secretHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+
+        int id = draftService.create(newDraft, userAndService.withSecrets(secrets));
 
         URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
@@ -120,8 +128,10 @@ public class DraftController {
         @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, secretHeader);
-        draftService.update(id, updatedDraft, userAndService);
+        Secrets secrets = Secrets.fromHeader(secretHeader);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+
+        draftService.update(id, updatedDraft, userAndService.withSecrets(secrets));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -136,7 +146,7 @@ public class DraftController {
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader
     ) {
-        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader, null);
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
         draftService.delete(id, userAndService);
 
         return noContent().build();
