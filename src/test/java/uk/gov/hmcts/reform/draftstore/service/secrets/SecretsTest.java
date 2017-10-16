@@ -39,7 +39,7 @@ public class SecretsTest {
     }
 
     @Test
-    public void should_convert_header_to_secrets_object() throws Exception {
+    public void should_convert_header_with_two_secrets_to_object() throws Exception {
         String s1 = Strings.repeat("a", Secrets.MIN_SECRET_LENGTH);
         String s2 = Strings.repeat("b", Secrets.MIN_SECRET_LENGTH);
 
@@ -47,6 +47,16 @@ public class SecretsTest {
 
         assertThat(secrets.primary).isEqualTo(s1);
         assertThat(secrets.secondary).isEqualTo(s2);
+    }
+
+    @Test
+    public void should_convert_header_with_one_secret_to_object() throws Exception {
+        String secret = Strings.repeat("x", Secrets.MIN_SECRET_LENGTH);
+
+        Secrets secrets = Secrets.fromHeader(secret);
+
+        assertThat(secrets.primary).isEqualTo(secret);
+        assertThat(secrets.secondary).isNull();
     }
 
     private static String secretOfLength(int length) {

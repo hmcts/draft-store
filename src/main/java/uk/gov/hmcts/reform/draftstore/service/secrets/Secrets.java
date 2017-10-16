@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.draftstore.service.secrets;
 
 import com.google.common.base.Strings;
+import uk.gov.hmcts.reform.draftstore.utils.Lists;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -38,7 +39,10 @@ public class Secrets {
                 if (!secrets.stream().allMatch(s -> s.length() >= MIN_SECRET_LENGTH)) {
                     throw new SecretsException("Min length for secret is " + MIN_SECRET_LENGTH);
                 } else {
-                    return new Secrets(secrets.get(0).trim(), secrets.get(1).trim());
+                    return new Secrets(
+                        secrets.get(0).trim(),
+                        Lists.safeGet(secrets, 1).map(s -> s.trim()).orElse(null)
+                    );
                 }
             }
         }
