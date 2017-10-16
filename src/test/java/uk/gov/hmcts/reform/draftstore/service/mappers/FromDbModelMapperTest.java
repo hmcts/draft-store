@@ -37,6 +37,20 @@ public class FromDbModelMapperTest {
         assertThat(result.document).isEqualTo("hello");
     }
 
+    @Test
+    public void should_use_secondary_secret_if_primary_is_invalid() throws Exception {
+        String primarySecret = "primary" + SampleSecret.get();
+        String secondarySecret = "secondary" + SampleSecret.get();
+
+        result = FromDbModelMapper
+            .fromDb(
+                dbDraft(null, CryptoService.encrypt("hello", secondarySecret)),
+                new Secrets(primarySecret, secondarySecret)
+            );
+
+        assertThat(result.document).isEqualTo("hello");
+    }
+
     private Draft dbDraft(String plaintextDoc, byte[] encryptedDoc) {
         return new Draft(
             "id",
