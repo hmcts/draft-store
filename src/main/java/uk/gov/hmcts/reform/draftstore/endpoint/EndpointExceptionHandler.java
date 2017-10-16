@@ -134,7 +134,7 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(SecretsException.class)
-    public ResponseEntity<ErrorResult> secrets(HttpServletRequest req, Exception exception) {
+    public ResponseEntity<ErrorResult> invalidSecrets(HttpServletRequest req, Exception exception) {
         log.warn(exception.getMessage(), exception);
         return new ResponseEntity<>(
             new ErrorResult(BAD_ARGUMENT, singletonList(exception.getMessage())),
