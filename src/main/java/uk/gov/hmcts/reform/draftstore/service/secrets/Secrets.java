@@ -38,7 +38,7 @@ public class Secrets {
                 if (!secrets.stream().allMatch(s -> s.length() >= MIN_SECRET_LENGTH)) {
                     throw new SecretsException("Min length for secret is " + MIN_SECRET_LENGTH);
                 } else {
-                    return new Secrets(secrets.get(0), secrets.get(1));
+                    return new Secrets(secrets.get(0).trim(), secrets.get(1).trim());
                 }
             }
         }
