@@ -38,6 +38,7 @@ import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
+import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_LENGTH;
 
 @RestController
 @Validated
@@ -47,7 +48,6 @@ import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 )
 @SuppressWarnings("checkstyle:LineLength")
 public class DraftController {
-    public static final int MIN_SECRET_LENGTH = 16;
 
     private final AuthService authService;
     private final DraftService draftService;
