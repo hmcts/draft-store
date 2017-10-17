@@ -3,11 +3,13 @@ package uk.gov.hmcts.reform.draftstore.service.mappers;
 import org.junit.Test;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.service.crypto.CryptoService;
+import uk.gov.hmcts.reform.draftstore.service.crypto.InvalidKeyException;
 import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 
 import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class FromDbModelMapperTest {
 
@@ -49,6 +51,19 @@ public class FromDbModelMapperTest {
             );
 
         assertThat(result.document).isEqualTo("hello");
+    }
+
+    @Test
+    public void should_throw_an_exception_if_both_secrets_are_invalid() throws Exception {
+        String valid = SampleSecret.get();
+        String invalid1 = SampleSecret.get() + "xxx";
+        String invalid2 = SampleSecret.get() + "yyy";
+
+        Draft draft = dbDraft(null, CryptoService.encrypt("hello", valid));
+
+        assertThatThrownBy(
+            () -> FromDbModelMapper.fromDb(draft, new Secrets(invalid1, invalid2))
+        ).isInstanceOf(InvalidKeyException.class);
     }
 
     private Draft dbDraft(String plaintextDoc, byte[] encryptedDoc) {
