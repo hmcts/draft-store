@@ -27,6 +27,7 @@ import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
+import uk.gov.hmcts.reform.draftstore.service.secrets.SecretsBuilder;
 
 import java.net.URI;
 import javax.validation.Valid;
@@ -68,7 +69,7 @@ public class DraftController {
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
         @RequestHeader(name = SECRET_HEADER, required = false) String secretHeader
     ) {
-        Secrets secrets = Secrets.fromHeader(secretHeader);
+        Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
         return draftService.read(id, userAndService.withSecrets(secrets));
@@ -86,7 +87,7 @@ public class DraftController {
         @RequestParam(name = "after", required = false) Integer after,
         @RequestParam(name = "limit", required = false, defaultValue = "10") int limit
     ) {
-        Secrets secrets = Secrets.fromHeader(secretHeader);
+        Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
         return draftService.read(userAndService.withSecrets(secrets), after, limit);
@@ -104,7 +105,7 @@ public class DraftController {
         @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
-        Secrets secrets = Secrets.fromHeader(secretHeader);
+        Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
         int id = draftService.create(newDraft, userAndService.withSecrets(secrets));
@@ -128,7 +129,7 @@ public class DraftController {
         @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
-        Secrets secrets = Secrets.fromHeader(secretHeader);
+        Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
         draftService.update(id, updatedDraft, userAndService.withSecrets(secrets));
