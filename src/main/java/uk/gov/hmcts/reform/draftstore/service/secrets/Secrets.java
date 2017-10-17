@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.draftstore.service.secrets;
 import com.google.common.base.Strings;
 import uk.gov.hmcts.reform.draftstore.utils.Lists;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -32,7 +33,12 @@ public class Secrets {
         if (Strings.isNullOrEmpty(header)) {
             return new Secrets(null, null);
         } else {
-            List<String> secrets = asList(header.split(SEPARATOR));
+            List<String> secrets =
+                Arrays
+                    .stream(header.split(SEPARATOR))
+                    .map(s -> s.trim())
+                    .collect(toList());
+
             if (secrets.size() > 2) {
                 throw new SecretsException("Too many secrets. Max number is 2");
             } else {
@@ -40,8 +46,8 @@ public class Secrets {
                     throw new SecretsException("Min length for secret is " + MIN_SECRET_LENGTH);
                 } else {
                     return new Secrets(
-                        secrets.get(0).trim(),
-                        Lists.safeGet(secrets, 1).map(s -> s.trim()).orElse(null)
+                        secrets.get(0),
+                        Lists.safeGet(secrets, 1).orElse(null)
                     );
                 }
             }
