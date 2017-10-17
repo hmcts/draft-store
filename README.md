@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/hmcts/draft-store.svg?branch=master)](https://travis-ci.org/hmcts/draft-store)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/35eb37f39906421387cfd120c35a538d)](https://www.codacy.com/app/HMCTS/draft-store)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/35eb37f39906421387cfd120c35a538d)](https://www.codacy.com/app/HMCTS/draft-store)
 
 # Draft store
 The Draft store micro-service provides a ’save and resume’ feature for reform applications. 
