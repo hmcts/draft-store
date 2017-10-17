@@ -37,11 +37,10 @@ public class AuthService {
         );
     }
 
-    public UserAndService authenticate(String userHeader, String serviceHeader, String secretHeader) {
+    public UserAndService authenticate(String userHeader, String serviceHeader) {
         return new UserAndService(
             idamClient.getUserDetails(userHeader).id,
-            s2sClient.getServiceName(serviceHeader),
-            secretHeader
+            s2sClient.getServiceName(serviceHeader)
         );
     }
 }

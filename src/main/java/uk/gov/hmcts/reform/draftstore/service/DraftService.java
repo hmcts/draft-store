@@ -30,7 +30,7 @@ public class DraftService {
             .read(toInternalId(id))
             .filter(draft -> Objects.equals(draft.userId, userAndService.userId))
             .filter(draft -> Objects.equals(draft.service, userAndService.service))
-            .map(draft -> fromDb(draft, userAndService.secret))
+            .map(draft -> fromDb(draft, userAndService.secrets))
             .orElseThrow(() -> new NoDraftFoundException());
     }
 
@@ -39,7 +39,7 @@ public class DraftService {
             draftRepo
                 .readAll(userAndService.userId, userAndService.service, after, limit)
                 .stream()
-                .map(d -> fromDb(d, userAndService.secret))
+                .map(d -> fromDb(d, userAndService.secrets))
                 .collect(toList());
 
         return new DraftList(drafts);
@@ -49,7 +49,7 @@ public class DraftService {
         return draftRepo.insert(
             userAndService.userId,
             userAndService.service,
-            toDb(newDraft, userAndService.secret)
+            toDb(newDraft, userAndService.secrets)
         );
     }
 
@@ -58,7 +58,7 @@ public class DraftService {
             .read(toInternalId(id))
             .map(d -> {
                 assertCanEdit(d, userAndService);
-                draftRepo.update(toInternalId(id), toDb(updatedDraft, userAndService.secret));
+                draftRepo.update(toInternalId(id), toDb(updatedDraft, userAndService.secrets));
                 return d;
             })
             .orElseThrow(() -> new NoDraftFoundException());

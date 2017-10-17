@@ -29,7 +29,7 @@ public class GetByIdTest {
     @Autowired private MockMvc mockMvc;
 
     @MockBean private DraftService draftService;
-    @MockBean private AuthService authService; //NOPMD - mock declaration required
+    @MockBean private AuthService authService;
 
     @Test
     public void should_map_no_draft_exception_to_404() throws Exception {
@@ -51,6 +51,10 @@ public class GetByIdTest {
     }
 
     private int callGet() throws Exception {
+        BDDMockito
+            .given(authService.authenticate(anyString(), anyString()))
+            .willReturn(new UserAndService("john", "service"));
+
         MvcResult result =
             mockMvc
                 .perform(

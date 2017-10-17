@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.draftstore.service.mappers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
+import uk.gov.hmcts.reform.draftstore.service.crypto.CryptoService;
+import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,7 +14,7 @@ public class ToDbModelMapperTest {
 
     @Test
     public void should_set_only_encrypted_document_when_secret_is_passed() throws Exception {
-        result = ToDbModelMapper.toDb(createDraft(), "a98sdf8asd7f");
+        result = ToDbModelMapper.toDb(createDraft(), new Secrets(SampleSecret.get(), null));
 
         assertThat(result.document).isNull();
         assertThat(result.encryptedDocument).isNotNull();
@@ -20,10 +22,23 @@ public class ToDbModelMapperTest {
 
     @Test
     public void should_set_only_unencrypted_document_when_secret_is_NOT_passed() throws Exception {
-        result = ToDbModelMapper.toDb(createDraft(), null);
+        result = ToDbModelMapper.toDb(createDraft(), new Secrets(null, null));
 
         assertThat(result.document).isNotNull();
         assertThat(result.encryptedDocument).isNull();
+    }
+
+    @Test
+    public void should_use_primary_secret_for_encryption() throws Exception {
+        String primarySecret = "primary" + SampleSecret.get();
+        String secondarySecret = "secondary" + SampleSecret.get();
+
+        CreateDraft draft = createDraft();
+
+        result = ToDbModelMapper.toDb(draft, new Secrets(primarySecret, secondarySecret));
+
+        assertThat(CryptoService.decrypt(result.encryptedDocument, primarySecret))
+            .isEqualTo(draft.document.toString());
     }
 
     private CreateDraft createDraft() {

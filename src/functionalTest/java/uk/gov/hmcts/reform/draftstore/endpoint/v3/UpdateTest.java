@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.draftstore.endpoint.v3;
 import com.google.common.base.Strings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,8 +36,7 @@ public class UpdateTest {
     @Autowired private MockMvc mockMvc;
 
     @MockBean private DraftService draftService;
-    @MockBean private AuthService authService; //NOPMD - mock declaration required
-
+    @MockBean private AuthService authService;
 
     @Test
     public void should_return_403_when_auth_exception_is_thrown() throws Exception {
@@ -71,6 +71,10 @@ public class UpdateTest {
     }
 
     private ResultActions sendUpdate(String secret) throws Exception {
+        BDDMockito
+            .given(authService.authenticate(anyString(), anyString()))
+            .willReturn(new UserAndService("john", "service"));
+
         MockHttpServletRequestBuilder request =
             put("/drafts/123")
                 .header(AUTHORIZATION, "abc")

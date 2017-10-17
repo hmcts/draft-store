@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.crypto.InvalidKeyException;
+import uk.gov.hmcts.reform.draftstore.service.secrets.SecretsException;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -125,6 +126,15 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidKeyException.class)
     public ResponseEntity<ErrorResult> invalidCryptoKey(HttpServletRequest req, Exception exception) {
+        log.warn(exception.getMessage(), exception);
+        return new ResponseEntity<>(
+            new ErrorResult(BAD_ARGUMENT, singletonList(exception.getMessage())),
+            BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(SecretsException.class)
+    public ResponseEntity<ErrorResult> invalidSecrets(HttpServletRequest req, Exception exception) {
         log.warn(exception.getMessage(), exception);
         return new ResponseEntity<>(
             new ErrorResult(BAD_ARGUMENT, singletonList(exception.getMessage())),
