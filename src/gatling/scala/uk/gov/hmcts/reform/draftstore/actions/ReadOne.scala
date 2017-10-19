@@ -10,5 +10,6 @@ object ReadOne {
     exec(
       http("Read created draft")
         .get(url = "/${id}")
+        .header("ServiceAuthorization", "Bearer ${service_token}")
     )
 }

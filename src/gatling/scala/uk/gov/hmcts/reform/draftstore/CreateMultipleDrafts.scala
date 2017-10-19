@@ -5,6 +5,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.reform.draftstore.actions.Create.create
 import uk.gov.hmcts.reform.draftstore.actions.ReadOne.readOne
+import uk.gov.hmcts.reform.draftstore.actions.setup.LeaseServiceToken.leaseServiceToken
 
 import scala.concurrent.duration._
 
@@ -17,12 +18,12 @@ class CreateMultipleDrafts extends Simulation {
       .baseURL(config.getString("baseUrl"))
       .contentTypeHeader("application/json")
       .headers(Map(
-        "Authorization" -> "123",
-        "ServiceAuthorization" -> "some_service"
+        "Authorization" -> "123"
       ))
 
   val scn =
     scenario("Create multiple drafts")
+      .exec(leaseServiceToken())
       .during(1.minute)(
         exec(
           create,
