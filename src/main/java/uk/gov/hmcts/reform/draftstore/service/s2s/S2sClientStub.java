@@ -13,7 +13,6 @@ public class S2sClientStub implements S2sClient {
     public String getServiceName(String authHeader) {
         return Optional
             .ofNullable(authHeader)
-            .map(token -> token.substring(0, 256))
             .filter(token -> !StringUtils.isEmpty(token))
             .orElseThrow(() -> new AuthorizationException(SERVICE_HEADER + " is required"));
     }
