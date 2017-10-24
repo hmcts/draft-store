@@ -10,7 +10,10 @@ object Create {
     exec(
       http("Create draft")
         .post(url = "")
-        .header("ServiceAuthorization", "Bearer ${service_token}")
+        .headers(Map(
+          "ServiceAuthorization" -> "Bearer ${service_token}",
+          "Authorization" -> "Bearer ${user_token}"
+        ))
         .body(
           StringBody(
             """
