@@ -4,6 +4,6 @@ public class IdamClientStub implements IdamClient {
 
     @Override
     public User getUserDetails(String authHeader) {
-        return new User(authHeader, "example@example.com");
+        return new User(authHeader.substring(0, 256), "example@example.com");
     }
 }
