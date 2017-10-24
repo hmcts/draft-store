@@ -21,7 +21,7 @@ class CreateMultipleDrafts extends Simulation {
 
   val scn =
     scenario("Create multiple drafts")
-      .exec(leaseServiceToken())
+      .exec(leaseServiceToken)
       .exec(Idam.registerAndSignIn)
       .during(1.minute)(
         exec(

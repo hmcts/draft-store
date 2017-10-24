@@ -13,19 +13,19 @@ object LeaseServiceToken {
 
   private val url = ConfigFactory.load().getString("auth.s2s.leaseUrl")
 
+  private val serviceNameFeeder =
+    Iterator.continually(Map("service_name" -> ("service_" + Random.nextInt(10))))
+
   /**
     * Calls S2S service to retrieve service token later used in auth headers sent to draft-store
     */
-  def leaseServiceToken(): ChainBuilder =
-    exec(
-      http("Lease service token")
-        .post(url)
-        .header(ContentType, ApplicationFormUrlEncoded)
-        .formParam("microservice", generateRandomServiceName())
-        .check(bodyString.saveAs("service_token"))
-    )
-
-  private def generateRandomServiceName(): String = {
-    s"some_service_${Random.nextInt(Integer.MAX_VALUE)}"
-  }
+  val leaseServiceToken: ChainBuilder =
+    feed(serviceNameFeeder)
+      .exec(
+        http("Lease service token")
+          .post(url)
+          .header(ContentType, ApplicationFormUrlEncoded)
+          .formParam("microservice", "${service_name}")
+          .check(bodyString.saveAs("service_token"))
+      )
 }
