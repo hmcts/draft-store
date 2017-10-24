@@ -11,7 +11,7 @@ import scala.util.Random
 
 object LeaseServiceToken {
 
-  private val url = ConfigFactory.load().getString("auth.s2s.leaseUrl")
+  private val s2sUrl = ConfigFactory.load().getString("auth.s2s.url")
 
   private val serviceNameFeeder =
     Iterator.continually(Map("service_name" -> ("service_" + Random.nextInt(10))))
@@ -23,7 +23,7 @@ object LeaseServiceToken {
     feed(serviceNameFeeder)
       .exec(
         http("Lease service token")
-          .post(url)
+          .post(s2sUrl + "/testing-support/lease")
           .header(ContentType, ApplicationFormUrlEncoded)
           .formParam("microservice", "${service_name}")
           .check(bodyString.saveAs("service_token"))
