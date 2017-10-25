@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.draftstore.actions.Create.create
 import uk.gov.hmcts.reform.draftstore.actions.ReadOne.readOne
 import uk.gov.hmcts.reform.draftstore.actions.setup.Idam
 import uk.gov.hmcts.reform.draftstore.actions.setup.LeaseServiceToken.leaseServiceToken
+import uk.gov.hmcts.reform.draftstore.utils.IdamTokensHolder
 
 import scala.concurrent.duration._
 
@@ -19,10 +20,20 @@ class CreateMultipleDrafts extends Simulation {
       .baseURL(config.getString("baseUrl"))
       .contentTypeHeader("application/json")
 
-  val scn =
-    scenario("Create multiple drafts")
-      .exec(leaseServiceToken)
+  val registerAndSignIn =
+    scenario("Register and sign in")
       .exec(Idam.registerAndSignIn)
+      .exec(session => {
+        IdamTokensHolder.push(session("user_token").as[String])
+        session
+      })
+
+  val createAndReadDrafts =
+    scenario("Create multiple drafts")
+      .feed(Iterator.continually(
+        Map("user_token" -> IdamTokensHolder.pop)
+      ))
+      .exec(leaseServiceToken)
       .during(1.minute)(
         exec(
           create,
@@ -31,5 +42,8 @@ class CreateMultipleDrafts extends Simulation {
         )
       )
 
-  setUp(scn.inject(rampUsers(100).over(5.seconds))).protocols(httpProtocol)
+  setUp(
+    registerAndSignIn.inject(rampUsers(100).over(10.seconds)),
+    createAndReadDrafts.inject(nothingFor(15.seconds), rampUsers(100).over(5.seconds))
+  ).protocols(httpProtocol)
 }
