@@ -5,6 +5,14 @@
 # Draft store
 The Draft store micro-service provides a ’save and resume’ feature for reform applications. 
 It stores a draft json document against the userId provided.
+
+## Encryption feature in v3
+A new version of the API has been created to meet [point 6 of the NCSC Security Design Principles: Reducing the impact 
+of compromise](https://www.ncsc.gov.uk/guidance/design-principles-reducing-impact-compromise). 
+The current API allows for both client to _optionally_ supply an encryption key. This optionality will be revoked in the 
+future to ensure all partially completed form data being stored by service teams is encrypted per user.
+
+For this reason, version 2 of the draft-store API is also now deprecated and will be removed on 31st January 2018. 
  
 ## Getting Started
 
@@ -28,7 +36,8 @@ Run the application by executing:
 ## API documentation
 API documentation is provided with Swagger.  
 You can view the json spec here: [http://localhost:8800/v2/api-docs](http://localhost:8800/v2/api-docs)  
-Swagger UI is available here: [http://localhost:8800/swagger-ui.html](http://localhost:8800/swagger-ui.html)
+Swagger UI is available here: [http://localhost:8800/swagger-ui.html](http://localhost:8800/swagger-ui.html)  
+Updates to master documentation are reflected here: [https://hmcts.github.io/reform-api-docs/swagger.html](https://hmcts.github.io/reform-api-docs/swagger.html?url=https://hmcts.github.io/reform-api-docs/specs/draft-store.json)
 
 ## Developing
 

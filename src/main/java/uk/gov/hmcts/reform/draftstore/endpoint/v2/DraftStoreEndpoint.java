@@ -30,8 +30,8 @@ import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Updated;
 
 @APIDeprecated(
     name = "/api/v2/draft endpoint",
-    expiryDate = "TBD",
-    docLink = "about:blank",
+    expiryDate = "2018-01-31",
+    docLink = "https://github.com/hmcts/draft-store#encryption-feature-in-v3",
     note = "Use new `/drafts` endpoint instead."
 )
 @RestController("v2/DraftStoreEndpoint")
