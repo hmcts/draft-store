@@ -10,7 +10,10 @@ object ReadOne {
     exec(
       http("Read created draft")
         .get(url = "/${id}")
-        .header("ServiceAuthorization", "Bearer ${service_token}")
-        .header("Authorization", "Bearer ${user_token}")
+        .headers(Map(
+          "ServiceAuthorization" -> "Bearer ${service_token}",
+          "Authorization" -> "Bearer ${user_token}",
+          "Secret" -> "${secret}"
+        ))
     )
 }
