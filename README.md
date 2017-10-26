@@ -3,8 +3,10 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/35eb37f39906421387cfd120c35a538d)](https://www.codacy.com/app/HMCTS/draft-store)
 
 # Draft store
-The Draft store micro-service provides a ’save and resume’ feature for reform applications. 
+The Draft store micro-service provides a ’save and resume’ feature for reform applications via an internal API. 
 It stores a draft json document against the userId provided.
+
+![Low Level Design](/docs/design.png)
 
 ## Encryption feature in v3
 A new version of the API has been created to meet [point 6 of the NCSC Security Design Principles: Reducing the impact 
