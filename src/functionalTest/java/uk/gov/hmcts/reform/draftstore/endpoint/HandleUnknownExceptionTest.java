@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 
@@ -29,6 +30,7 @@ So, this test demonstrates that for all unhandled exceptions the exception messa
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/database.properties")
 @ActiveProfiles("test-unhandled-exception")
 public class HandleUnknownExceptionTest {
     private static final String DRAFT_URI = "/drafts";
