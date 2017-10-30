@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
@@ -23,6 +24,7 @@ import static uk.gov.hmcts.reform.draftstore.domain.SaveStatus.Updated;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@TestPropertySource("/database.properties")
 @Transactional
 public class DraftStoreDAOTest {
     private static final String USER_ID = "a user";
