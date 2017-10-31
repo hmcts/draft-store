@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.draftstore.service.crypto;
 import org.junit.Test;
 
 import java.util.stream.Stream;
-import javax.crypto.AEADBadTagException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
