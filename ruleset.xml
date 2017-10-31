@@ -8,6 +8,9 @@
   </description>
   <rule ref="rulesets/java/basic.xml"/>
   <rule ref="rulesets/java/braces.xml"/>
+  <rule ref="rulesets/java/imports.xml">
+    <exclude name="TooManyStaticImports"/>
+  </rule>
   <rule ref="rulesets/java/unnecessary.xml"/>
   <rule ref="rulesets/java/unusedcode.xml"/>
 </ruleset>

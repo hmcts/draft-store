@@ -25,7 +25,7 @@ public class DraftService {
         this.draftRepo = draftRepo;
     }
 
-    public uk.gov.hmcts.reform.draftstore.domain.Draft read(String id, UserAndService userAndService) {
+    public Draft read(String id, UserAndService userAndService) {
         return draftRepo
             .read(toInternalId(id))
             .filter(draft -> Objects.equals(draft.userId, userAndService.userId))
