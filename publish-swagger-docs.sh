@@ -15,7 +15,9 @@ CURRENT_DOCS=$(curl https://hmcts.github.io/reform-api-docs/specs/${REPO_NAME}.j
 NEW_DOCS=$(curl http://localhost:8800/v2/api-docs)
 docker-compose stop
 
-if [[ "$CURRENT_DOCS" != "$NEW_DOCS" ]]; then
+if [ "$NEW_DOCS" == "" ]; then
+    echo "Could not retrieve new docs, aborting."
+elif [[ "$CURRENT_DOCS" != "$NEW_DOCS" ]]; then
     echo "Update reform-api-docs"
     mkdir swagger-staging
     cd swagger-staging
@@ -32,8 +34,8 @@ if [[ "$CURRENT_DOCS" != "$NEW_DOCS" ]]; then
     git add ${TARGET_SPEC}
     git commit -m "Updating spec for ${REPO_NAME} from ${TRAVIS_PULL_REQUEST_SLUG}"
     git push --set-upstream upstream master
-
-    exit 0
+else
+    echo "API Documentation is up to date."
 fi
-echo "API Documentation is up to date."
+
 exit 0
