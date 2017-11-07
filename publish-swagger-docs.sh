@@ -9,7 +9,7 @@ then
 fi
 
 docker-compose up -d
-sleep 10
+sleep 15
 REPO_NAME=$(echo ${TRAVIS_REPO_SLUG} | cut -f2- -d/)
 CURRENT_DOCS=$(curl https://hmcts.github.io/reform-api-docs/specs/${REPO_NAME}.json)
 NEW_DOCS=$(curl http://localhost:8800/v2/api-docs)
