@@ -7,7 +7,7 @@ import uk.gov.hmcts.reform.draftstore.actions.Create.create
 import uk.gov.hmcts.reform.draftstore.actions.ReadOne.readOne
 import uk.gov.hmcts.reform.draftstore.actions.setup.Idam
 import uk.gov.hmcts.reform.draftstore.actions.setup.LeaseServiceToken.leaseServiceToken
-import uk.gov.hmcts.reform.draftstore.utils.IdamTokensHolder
+import uk.gov.hmcts.reform.draftstore.utils.{IdamUserHolder, User}
 
 import scala.concurrent.duration._
 
@@ -24,15 +24,19 @@ class CreateMultipleDrafts extends Simulation {
     scenario("Register and sign in")
       .exec(Idam.registerAndSignIn)
       .exec(session => {
-        IdamTokensHolder.push(session("user_token").as[String])
+        IdamUserHolder.push(User(session("email").as[String], session("user_token").as[String]))
         session
       })
 
   val createAndReadDrafts =
     scenario("Create multiple drafts")
-      .feed(Iterator.continually(
-        Map("user_token" -> IdamTokensHolder.pop)
-      ))
+      .feed(Iterator.continually({
+        val user = IdamUserHolder.pop()
+        Map(
+          "email" -> user.email,
+          "user_token" -> user.token
+        )
+      }))
       .exec(leaseServiceToken)
       .during(1.minute)(
         exec(
@@ -41,6 +45,7 @@ class CreateMultipleDrafts extends Simulation {
           pause(2.seconds)
         )
       )
+      .exec(Idam.deleteAccount)
 
   setUp(
     registerAndSignIn.inject(rampUsers(100).over(10.seconds)),
