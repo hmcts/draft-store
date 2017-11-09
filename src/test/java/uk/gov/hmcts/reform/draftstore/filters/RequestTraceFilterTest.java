@@ -6,8 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
-import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
+import static org.assertj.core.api.Assertions.entry;
 
 public class RequestTraceFilterTest {
 
@@ -15,19 +14,24 @@ public class RequestTraceFilterTest {
     public void should_filter_out_sensitive_headers() throws Exception {
 
         Map<String, Object> headers = new HashMap<>();
-        headers.put(SECRET_HEADER, "xxx");
-        headers.put(SECRET_HEADER.toLowerCase(), "xxx");
-        headers.put(SERVICE_HEADER, "xxx");
-        headers.put(SERVICE_HEADER.toLowerCase(), "xxx");
         headers.put("a", "xxx");
         headers.put("b", "xxx");
         headers.put("c", "xxx");
+        RequestTraceFilter
+            .SENSITIVE_HEADERS
+            .forEach(h -> {
+                headers.put(h, "some_value");
+                headers.put(h.toLowerCase(), "some_value");
+                headers.put(h.toUpperCase(), "some_value");
+            });
 
-        RequestTraceFilter filter = new RequestTraceFilter(null, null);
-        filter.postProcessRequestHeaders(headers);
+        new RequestTraceFilter(null, null).postProcessRequestHeaders(headers);
 
-        assertThat(headers.keySet())
-            .as("remaining headers")
-            .containsExactly("a", "b", "c");
+        assertThat(headers)
+            .containsExactly(
+                entry("a", "xxx"),
+                entry("b", "xxx"),
+                entry("c", "xxx")
+            );
     }
 }
