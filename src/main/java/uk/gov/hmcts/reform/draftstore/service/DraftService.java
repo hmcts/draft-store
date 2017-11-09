@@ -73,6 +73,10 @@ public class DraftService {
             });
     }
 
+    public void deleteAll(UserAndService userAndService) {
+        draftRepo.deleteAll(userAndService.userId, userAndService.service);
+    }
+
     private void assertCanEdit(uk.gov.hmcts.reform.draftstore.data.model.Draft draft, UserAndService userAndService) {
         boolean userOk = Objects.equals(draft.userId, userAndService.userId);
         boolean serviceOk = Objects.equals(draft.service, userAndService.service);
