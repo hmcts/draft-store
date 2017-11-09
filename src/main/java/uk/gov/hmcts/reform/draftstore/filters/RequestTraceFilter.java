@@ -4,18 +4,18 @@ import org.springframework.boot.actuate.trace.TraceProperties;
 import org.springframework.boot.actuate.trace.TraceRepository;
 import org.springframework.boot.actuate.trace.WebRequestTraceFilter;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 public class RequestTraceFilter extends WebRequestTraceFilter {
 
-    public final static List<String> sensitiveHeaders =
-        Arrays.asList(
+    public static final List<String> SENSITIVE_HEADERS =
+        asList(
             SECRET_HEADER,
             SERVICE_HEADER
         );
@@ -35,7 +35,7 @@ public class RequestTraceFilter extends WebRequestTraceFilter {
     }
 
     private boolean shouldBeRemoved(String header) {
-        return sensitiveHeaders
+        return SENSITIVE_HEADERS
             .stream()
             .anyMatch(sensitiveHeader -> header.equalsIgnoreCase(sensitiveHeader));
     }
