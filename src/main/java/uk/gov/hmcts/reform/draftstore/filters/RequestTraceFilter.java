@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.draftstore.config;
+package uk.gov.hmcts.reform.draftstore.filters;
 
 import org.springframework.boot.actuate.trace.TraceProperties;
 import org.springframework.boot.actuate.trace.TraceRepository;
@@ -31,7 +31,7 @@ public class RequestTraceFilter extends WebRequestTraceFilter {
             .stream()
             .filter(header -> shouldBeRemoved(header))
             .collect(toSet())
-            .forEach(h -> headers.remove(h));
+            .forEach(headers::remove);
     }
 
     private boolean shouldBeRemoved(String header) {

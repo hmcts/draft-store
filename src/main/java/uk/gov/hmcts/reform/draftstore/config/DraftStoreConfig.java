@@ -16,6 +16,7 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.handler.MappedInterceptor;
 import uk.gov.hmcts.reform.api.deprecated.DeprecatedApiInterceptor;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.filters.RequestTraceFilter;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClient;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientImpl;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientStub;

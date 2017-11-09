@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.draftstore.config;
+package uk.gov.hmcts.reform.draftstore.filters;
 
 import org.junit.Test;
 
