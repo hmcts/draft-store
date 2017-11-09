@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.draftstore.config;
 import org.springframework.boot.actuate.trace.TraceProperties;
 import org.springframework.boot.actuate.trace.TraceRepository;
 import org.springframework.boot.actuate.trace.WebRequestTraceFilter;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +12,6 @@ import static java.util.stream.Collectors.toSet;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
-@Component
 public class RequestTraceFilter extends WebRequestTraceFilter {
 
     public final static List<String> sensitiveHeaders =

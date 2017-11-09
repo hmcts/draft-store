@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.trace.TraceProperties;
+import org.springframework.boot.actuate.trace.TraceRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,6 +57,11 @@ public class DraftStoreConfig {
             maxStaleDaysDefault,
             Clock.systemDefaultZone()
         );
+    }
+
+    @Bean
+    public RequestTraceFilter requestTraceFilter(TraceRepository traceRepository, TraceProperties traceProperties) {
+        return new RequestTraceFilter(traceRepository, traceProperties);
     }
 
     @Bean
