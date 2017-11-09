@@ -48,6 +48,12 @@ object Idam {
           .check(jsonPath("$['access-token']").saveAs("user_token"))
       )
 
+  val deleteAccount: ChainBuilder =
+    exec(
+      http("Delete IDAM account")
+          .delete(idamUrl + "/testing-support/accounts/${email}")
+    )
+
   def buildLoginHeader(email: String, password: String) : String = {
     "Basic " + Base64.getEncoder.encodeToString(s"$email:$password".getBytes)
   }
