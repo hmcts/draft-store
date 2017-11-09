@@ -4,6 +4,7 @@ import com.typesafe.config.ConfigFactory
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.reform.draftstore.actions.Create.create
+import uk.gov.hmcts.reform.draftstore.actions.DeleteAll.deleteAll
 import uk.gov.hmcts.reform.draftstore.actions.ReadOne.readOne
 import uk.gov.hmcts.reform.draftstore.actions.setup.Idam
 import uk.gov.hmcts.reform.draftstore.actions.setup.LeaseServiceToken.leaseServiceToken
@@ -45,6 +46,7 @@ class CreateMultipleDrafts extends Simulation {
           pause(2.seconds)
         )
       )
+      .exec(deleteAll)
       .exec(Idam.deleteAccount)
 
   setUp(
