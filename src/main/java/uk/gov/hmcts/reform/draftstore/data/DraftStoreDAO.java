@@ -180,6 +180,15 @@ public class DraftStoreDAO {
         );
     }
 
+    public void deleteAll(String userId, String service) {
+        jdbcTemplate.update(
+            "DELETE FROM draft_document WHERE user_id = :userId AND service = :service",
+            new MapSqlParameterSource()
+                .addValue("userId", userId)
+                .addValue("service", service)
+        );
+    }
+
     public void deleteStaleDrafts() {
         jdbcTemplate.update(
             "DELETE FROM draft_document "

@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.reform.draftstore.data.model.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.SaveStatus;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
@@ -89,6 +90,38 @@ public class DraftStoreDAOTest {
 
         assertThat(dataAgent.countForUser(USER_ID, "default")).isEqualTo(0);
         assertNoOtherUserDataHasBeenAffected();
+    }
+
+    @Test
+    public void deleteAll_should_delete_all_drafts_for_given_user_and_service() {
+        String draftType = "some_type";
+        CreateDraft draft = new CreateDraft("{ \"a\": 123 }", null, draftType, 123);
+        String service1 = "some_service";
+        String service2 = "a different service";
+
+        // given
+        underTest.insert(USER_ID, service1, draft);
+        underTest.insert(USER_ID, service1, draft);
+
+        underTest.insert(USER_ID, service2, draft);
+
+        underTest.insert(ANOTHER_USER_ID, service1, draft);
+
+        // when
+        underTest.deleteAll(USER_ID, service1);
+
+        // then
+        assertThat(underTest.readAll(USER_ID, service1, draftType))
+            .as("user's drafts in service")
+            .isEmpty();
+
+        assertThat(underTest.readAll(USER_ID, service2, draftType))
+            .as("user's drafts in another service")
+            .hasSize(1);
+
+        assertThat(underTest.readAll(ANOTHER_USER_ID, service1, draftType))
+            .as("another user's drafts")
+            .hasSize(1);
     }
 
     @Test(expected = NoDraftFoundException.class)

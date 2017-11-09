@@ -152,4 +152,19 @@ public class DraftController {
 
         return noContent().build();
     }
+
+    @DeleteMapping
+    @ApiOperation("Delete all drafts")
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "Drafts deleted")
+    })
+    public ResponseEntity<Void> deleteAll(
+        @RequestHeader(AUTHORIZATION) String authHeader,
+        @RequestHeader(SERVICE_HEADER) String serviceHeader
+    ) {
+        UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
+        draftService.deleteAll(userAndService);
+
+        return noContent().build();
+    }
 }
