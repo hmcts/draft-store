@@ -153,7 +153,7 @@ public class DraftController {
         return noContent().build();
     }
 
-    @DeleteMapping(path = "/")
+    @DeleteMapping
     @ApiOperation("Delete all drafts")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Drafts deleted")
