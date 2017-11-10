@@ -45,7 +45,7 @@ sourceSets {
   }
 }
 
-def springBootVersion = '1.5.7.RELEASE'
+def springBootVersion = '1.5.8.RELEASE'
 
 dependencyManagement {
   imports {
