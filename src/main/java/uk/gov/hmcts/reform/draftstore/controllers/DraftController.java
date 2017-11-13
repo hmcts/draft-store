@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +32,7 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.WARNING;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
@@ -112,7 +112,7 @@ public class DraftController {
 
         URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
-        return created(newClaimUri).build();
+        return withSecretsWarning(secrets, created(newClaimUri));
     }
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -134,7 +134,7 @@ public class DraftController {
 
         draftService.update(id, updatedDraft, userAndService.withSecrets(secrets));
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return withSecretsWarning(secrets, noContent());
     }
 
     @DeleteMapping(path = "/{id}")
@@ -166,5 +166,15 @@ public class DraftController {
         draftService.deleteAll(userAndService);
 
         return noContent().build();
+    }
+
+    private static ResponseEntity<Void> withSecretsWarning(
+        Secrets secrets,
+        ResponseEntity.HeadersBuilder<?> respBodyBuilder
+    ) {
+        String msg = "Encryption will be required soon. See https://github.com/hmcts/draft-store#encryption-feature-in-v3";
+        return secrets.primary == null
+            ? respBodyBuilder.header(WARNING, msg).build()
+            : respBodyBuilder.build();
     }
 }

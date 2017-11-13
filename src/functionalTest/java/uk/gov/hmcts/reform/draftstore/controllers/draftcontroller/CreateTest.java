@@ -24,6 +24,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
+import static org.springframework.http.HttpHeaders.WARNING;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
@@ -38,6 +39,8 @@ public class CreateTest {
 
     @MockBean private DraftService draftService;
     @MockBean private AuthService authService;
+
+    private static String validDraft = "{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }";
 
     // region document
     @Test
@@ -71,14 +74,14 @@ public class CreateTest {
 
     @Test
     public void should_return_201_when_valid_draft_is_sent() throws Exception {
-        send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }")
+        send(validDraft)
             .andExpect(status().is(201));
     }
 
     @Test
     public void should_return_400_when_secret_is_not_long_enough() throws Exception {
         send(
-            "{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }",
+            validDraft,
             Strings.repeat("x", MIN_SECRET_LENGTH - 1)
         ).andExpect(status().is(400));
     }
@@ -91,9 +94,29 @@ public class CreateTest {
             .given(draftService.create(any(CreateDraft.class), any(UserAndService.class)))
             .willReturn(newClaimId);
 
-        MvcResult result = send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }").andReturn();
+        MvcResult result = send(validDraft).andReturn();
 
         assertThat(result.getResponse().getHeader(LOCATION)).endsWith("/drafts/" + newClaimId);
+    }
+
+    @Test
+    public void should_add_warning_header_when_encryption_secret_is_not_provided() throws Exception {
+        MvcResult result = send(validDraft, null).andReturn();
+
+        assertThat(result.getResponse().getHeader(WARNING))
+            .as("Warning header")
+            .isNotBlank();
+    }
+
+    @Test
+    public void should_NOT_add_warning_header_when_encryption_secret_is_provided() throws Exception {
+        MvcResult result =
+            send(
+                validDraft,
+                Strings.repeat("x", MIN_SECRET_LENGTH)
+            ).andReturn();
+
+        assertThat(result.getResponse().getHeader(WARNING)).isNull();
     }
 
     private ResultActions send(String content) throws Exception {
