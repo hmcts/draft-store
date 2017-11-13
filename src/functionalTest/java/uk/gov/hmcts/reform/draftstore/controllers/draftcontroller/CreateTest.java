@@ -40,6 +40,8 @@ public class CreateTest {
     @MockBean private DraftService draftService;
     @MockBean private AuthService authService;
 
+    private static String validDraft = "{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }";
+
     // region document
     @Test
     public void should_return_400_when_document_is_not_provided() throws Exception {
@@ -72,14 +74,14 @@ public class CreateTest {
 
     @Test
     public void should_return_201_when_valid_draft_is_sent() throws Exception {
-        send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }")
+        send(validDraft)
             .andExpect(status().is(201));
     }
 
     @Test
     public void should_return_400_when_secret_is_not_long_enough() throws Exception {
         send(
-            "{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }",
+            validDraft,
             Strings.repeat("x", MIN_SECRET_LENGTH - 1)
         ).andExpect(status().is(400));
     }
@@ -92,14 +94,14 @@ public class CreateTest {
             .given(draftService.create(any(CreateDraft.class), any(UserAndService.class)))
             .willReturn(newClaimId);
 
-        MvcResult result = send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }").andReturn();
+        MvcResult result = send(validDraft).andReturn();
 
         assertThat(result.getResponse().getHeader(LOCATION)).endsWith("/drafts/" + newClaimId);
     }
 
     @Test
     public void should_add_warning_header_when_encryption_secret_is_not_provided() throws Exception {
-        MvcResult result = send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }", null).andReturn();
+        MvcResult result = send(validDraft, null).andReturn();
 
         assertThat(result.getResponse().getHeader(WARNING))
             .as("Warning header")
@@ -110,13 +112,11 @@ public class CreateTest {
     public void should_NOT_add_warning_header_when_encryption_secret_is_not_provided() throws Exception {
         MvcResult result =
             send(
-                "{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }",
+                validDraft,
                 Strings.repeat("x", MIN_SECRET_LENGTH)
             ).andReturn();
 
-        assertThat(result.getResponse().getHeader(WARNING))
-            .as("Warning header")
-            .isNull();
+        assertThat(result.getResponse().getHeader(WARNING)).isNull();
     }
 
     private ResultActions send(String content) throws Exception {
