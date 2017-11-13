@@ -13,14 +13,6 @@ public class DataAgent {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public String documentForUser(String userId, String type) {
-        return jdbcTemplate.queryForObject(
-            "SELECT document FROM draft_document WHERE user_id = :userId AND document_type = :type",
-            new MapSqlParameterSource("userId", userId).addValue("type", type),
-            String.class
-        );
-    }
-
     public void setupDocumentForUser(String userId, String type, String document) throws SQLException {
         PGobject jsonbObj = new PGobject();
         jsonbObj.setType("json");
@@ -35,18 +27,10 @@ public class DataAgent {
         );
     }
 
-    public void deleteDocument(String userId, String type) {
+    public void deleteDocuments(String userId) {
         jdbcTemplate.update(
-            "DELETE FROM draft_document WHERE user_id = :userId AND document_type = :type",
-            new MapSqlParameterSource("userId", userId).addValue("type", type)
-        );
-    }
-
-    public Integer countForUser(String userId, String type) {
-        return jdbcTemplate.queryForObject(
-            "SELECT COUNT(*) FROM draft_document WHERE user_id = :userId AND document_type = :type",
-            new MapSqlParameterSource("userId", userId).addValue("type", type),
-            Integer.class
+            "DELETE FROM draft_document WHERE user_id = :userId",
+            new MapSqlParameterSource("userId", userId)
         );
     }
 }
