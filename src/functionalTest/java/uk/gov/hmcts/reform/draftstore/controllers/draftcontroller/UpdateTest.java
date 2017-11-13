@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
+import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,8 +24,12 @@ import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.isNull;
+import static org.mockito.internal.matchers.Null.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.WARNING;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
@@ -65,6 +70,19 @@ public class UpdateTest {
             .update(anyString(), any(UpdateDraft.class), any(UserAndService.class));
 
         sendUpdate().andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void should_set_warning_header_when_encryption_header_is_not_provided() throws Exception {
+        sendUpdate()
+            .andExpect(header().string(WARNING, NULL));
+    }
+
+    @Test
+    public void should_NOT_set_warning_header_when_encryption_header_is_provided() throws Exception {
+        sendUpdate(Strings.repeat("?", MIN_SECRET_LENGTH))
+            .andExpect(status().isBadRequest());
+
     }
 
     private ResultActions sendUpdate() throws Exception {

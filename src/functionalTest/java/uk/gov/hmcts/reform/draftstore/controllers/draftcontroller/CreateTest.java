@@ -24,6 +24,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
+import static org.springframework.http.HttpHeaders.WARNING;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
@@ -94,6 +95,28 @@ public class CreateTest {
         MvcResult result = send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }").andReturn();
 
         assertThat(result.getResponse().getHeader(LOCATION)).endsWith("/drafts/" + newClaimId);
+    }
+
+    @Test
+    public void should_add_warning_header_when_encryption_secret_is_not_provided() throws Exception {
+        MvcResult result = send("{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }", null).andReturn();
+
+        assertThat(result.getResponse().getHeader(WARNING))
+            .as("Warning header")
+            .isNotBlank();
+    }
+
+    @Test
+    public void should_NOT_add_warning_header_when_encryption_secret_is_not_provided() throws Exception {
+        MvcResult result =
+            send(
+                "{ \"type\": \"some_type\", \"document\": {\"a\":\"b\"} }",
+                Strings.repeat("x", MIN_SECRET_LENGTH)
+            ).andReturn();
+
+        assertThat(result.getResponse().getHeader(WARNING))
+            .as("Warning header")
+            .isNull();
     }
 
     private ResultActions send(String content) throws Exception {
