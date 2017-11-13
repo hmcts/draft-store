@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.draftstore.endpoint.v3;
+package uk.gov.hmcts.reform.draftstore.controllers.draftcontroller;
 
 import com.google.common.base.Strings;
 import org.junit.Test;
@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import uk.gov.hmcts.reform.draftstore.controllers.DraftController;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;

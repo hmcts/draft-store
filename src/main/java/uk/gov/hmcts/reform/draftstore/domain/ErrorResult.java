@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.draftstore.endpoint.domain;
+package uk.gov.hmcts.reform.draftstore.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

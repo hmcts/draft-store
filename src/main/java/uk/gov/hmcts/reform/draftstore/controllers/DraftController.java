@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.draftstore.endpoint.v3;
+package uk.gov.hmcts.reform.draftstore.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.DraftList;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
-import uk.gov.hmcts.reform.draftstore.endpoint.domain.ErrorResult;
+import uk.gov.hmcts.reform.draftstore.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;

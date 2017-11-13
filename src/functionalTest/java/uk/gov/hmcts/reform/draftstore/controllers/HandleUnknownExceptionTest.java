@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.draftstore.endpoint;
+package uk.gov.hmcts.reform.draftstore.controllers;
 
 import org.hamcrest.core.IsNull;
 import org.junit.Test;

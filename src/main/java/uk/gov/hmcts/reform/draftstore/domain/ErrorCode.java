@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.draftstore.endpoint.domain;
+package uk.gov.hmcts.reform.draftstore.domain;
 
 public enum ErrorCode {
     INVALID_AUTH_TOKEN,

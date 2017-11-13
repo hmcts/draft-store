@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.draftstore.endpoint.v3.helpers;
+package uk.gov.hmcts.reform.draftstore.controllers.helpers;
 
 import uk.gov.hmcts.reform.draftstore.data.model.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;

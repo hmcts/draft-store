@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.gov.hmcts.reform.draftstore.endpoint.v3.helpers.SampleData;
+import uk.gov.hmcts.reform.draftstore.controllers.helpers.SampleData;
 
 import java.time.Clock;
 import java.time.Duration;

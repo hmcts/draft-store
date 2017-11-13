@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.draftstore.endpoint.v3;
+package uk.gov.hmcts.reform.draftstore.controllers.draftcontroller;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.hmcts.reform.draftstore.controllers.DraftController;
 import uk.gov.hmcts.reform.draftstore.domain.DraftList;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
