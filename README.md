@@ -13,8 +13,6 @@ A new version of the API has been created to meet [point 6 of the NCSC Security 
 of compromise](https://www.ncsc.gov.uk/guidance/design-principles-reducing-impact-compromise). 
 The current API allows for both client to _optionally_ supply an encryption key. This optionality will be revoked in the 
 future to ensure all partially completed form data being stored by service teams is encrypted per user.
-
-For this reason, version 2 of the draft-store API is also now deprecated and will be removed on 31st January 2018. 
  
 ## Getting Started
 
