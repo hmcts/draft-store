@@ -109,7 +109,7 @@ public class CreateTest {
     }
 
     @Test
-    public void should_NOT_add_warning_header_when_encryption_secret_is_not_provided() throws Exception {
+    public void should_NOT_add_warning_header_when_encryption_secret_is_provided() throws Exception {
         MvcResult result =
             send(
                 validDraft,
