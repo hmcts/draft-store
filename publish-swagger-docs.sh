@@ -8,6 +8,7 @@ then
   exit 0
 fi
 
+./gradlew clean installDist
 docker-compose up -d
 sleep 15
 REPO_NAME=$(echo ${TRAVIS_REPO_SLUG} | cut -f2- -d/)
