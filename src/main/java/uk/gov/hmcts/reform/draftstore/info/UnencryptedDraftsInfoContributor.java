@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
 
@@ -36,6 +35,6 @@ public class UnencryptedDraftsInfoContributor implements InfoContributor {
     }
 
     private boolean shouldRefresh() {
-        return lastCheckDate == null || lastCheckDate.plusMinutes(1).isBefore(now());
+        return lastCheckDate == null || now().isAfter(lastCheckDate.plusMinutes(1));
     }
 }
