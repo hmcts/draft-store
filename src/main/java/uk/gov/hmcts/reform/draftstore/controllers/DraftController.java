@@ -44,10 +44,12 @@ import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_
 @Validated
 @RequestMapping(
     path = "drafts",
-    produces = MediaType.APPLICATION_JSON_VALUE
+    produces = DraftController.MEDIA_TYPE
 )
 @SuppressWarnings("checkstyle:LineLength")
 public class DraftController {
+
+    static final String MEDIA_TYPE = "application/vnd.uk.gov.hmcts.draft-store+json;version=3";
 
     private final AuthService authService;
     private final DraftService draftService;
