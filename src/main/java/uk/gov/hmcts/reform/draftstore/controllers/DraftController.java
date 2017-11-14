@@ -44,10 +44,12 @@ import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_
 @Validated
 @RequestMapping(
     path = "drafts",
-    produces = MediaType.APPLICATION_JSON_VALUE
+    produces = { DraftController.MEDIA_TYPE, MediaType.APPLICATION_JSON_VALUE }
 )
 @SuppressWarnings("checkstyle:LineLength")
 public class DraftController {
+
+    static final String MEDIA_TYPE = "application/vnd.uk.gov.hmcts.draft-store.v3+json";
 
     private final AuthService authService;
     private final DraftService draftService;
@@ -93,7 +95,7 @@ public class DraftController {
         return draftService.read(userAndService.withSecrets(secrets), after, limit);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = { MEDIA_TYPE, MediaType.APPLICATION_JSON_VALUE })
     @ApiOperation("Create a new draft")
     @ApiResponses({
         @ApiResponse(code = 201, message = "Draft successfully created"),
@@ -115,7 +117,7 @@ public class DraftController {
         return withSecretsWarning(secrets, created(newClaimUri));
     }
 
-    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}", consumes = { MEDIA_TYPE, MediaType.APPLICATION_JSON_VALUE })
     @ApiOperation("Update existing draft")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Draft updated"),
