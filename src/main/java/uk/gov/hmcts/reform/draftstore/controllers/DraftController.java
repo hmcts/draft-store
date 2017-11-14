@@ -49,7 +49,7 @@ import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_
 @SuppressWarnings("checkstyle:LineLength")
 public class DraftController {
 
-    static final String MEDIA_TYPE = "application/vnd.uk.gov.hmcts.draft-store+json;version=3";
+    static final String MEDIA_TYPE = "application/vnd.uk.gov.hmcts.draft-store.v3+json";
 
     private final AuthService authService;
     private final DraftService draftService;
