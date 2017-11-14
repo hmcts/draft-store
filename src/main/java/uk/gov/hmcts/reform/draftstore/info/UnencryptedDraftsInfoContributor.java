@@ -5,6 +5,7 @@ import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +27,11 @@ public class UnencryptedDraftsInfoContributor implements InfoContributor {
 
     @Override
     public void contribute(Info.Builder builder) {
-        if (lastResult.isEmpty() || shouldRefresh()) {
+        if (lastCheckDate == null || Duration.between(lastCheckDate, now()).getSeconds() >= 60) {
             this.lastResult = repo.getUnencryptedDrafts();
             this.lastCheckDate = now();
         }
 
         builder.withDetail("unencrypted_drafts", this.lastResult);
-    }
-
-    private boolean shouldRefresh() {
-        return lastCheckDate == null || now().isAfter(lastCheckDate.plusMinutes(1));
     }
 }
