@@ -36,9 +36,6 @@ public class UnencryptedDraftsInfoContributor implements InfoContributor {
     }
 
     private boolean shouldRefresh() {
-        return Optional
-            .ofNullable(lastCheckDate)
-            .map(x -> x.plusMinutes(1).isBefore(now()))
-            .orElse(true);
+        return lastCheckDate == null || lastCheckDate.plusMinutes(1).isBefore(now());
     }
 }
