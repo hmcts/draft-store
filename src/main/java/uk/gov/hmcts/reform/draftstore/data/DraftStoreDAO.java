@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -128,6 +129,13 @@ public class DraftStoreDAO {
             "DELETE FROM draft_document "
                 + "WHERE updated + interval '1 day' * max_stale_days < :now",
             new MapSqlParameterSource("now", Timestamp.from(this.clock.instant()))
+        );
+    }
+
+    public List<Map<String, Object>> getUnencryptedDrafts() {
+        return jdbcTemplate.queryForList(
+            "SELECT service, created, updated FROM draft_document WHERE encrypted_document IS NULL",
+            new MapSqlParameterSource()
         );
     }
 
