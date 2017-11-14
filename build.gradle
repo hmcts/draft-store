@@ -95,8 +95,8 @@ dependencies {
 
 task functionalTest(type: Test) {
   description = "Runs Functional Tests"
-  testClassesDir sourceSets.functionalTest.output.classesDir
-  setClasspath sourceSets.functionalTest.runtimeClasspath
+  testClassesDirs = sourceSets.functionalTest.output.classesDirs
+  classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
 jacocoTestReport {
