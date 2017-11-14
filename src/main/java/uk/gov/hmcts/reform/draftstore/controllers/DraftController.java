@@ -44,7 +44,7 @@ import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_
 @Validated
 @RequestMapping(
     path = "drafts",
-    produces = DraftController.MEDIA_TYPE
+    produces = { DraftController.MEDIA_TYPE, MediaType.APPLICATION_JSON_VALUE }
 )
 @SuppressWarnings("checkstyle:LineLength")
 public class DraftController {
