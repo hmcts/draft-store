@@ -18,6 +18,7 @@ docker-compose stop
 
 if [ "$NEW_DOCS" == "" ]; then
     echo "Could not retrieve new docs, aborting."
+    docker-compose logs
 elif [[ "$CURRENT_DOCS" != "$NEW_DOCS" ]]; then
     echo "Update reform-api-docs"
     mkdir swagger-staging
