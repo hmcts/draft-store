@@ -18,7 +18,7 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(DraftStoreApplication.BASE_PACKAGE_NAME + ".endpoint"))
+                .apis(RequestHandlerSelectors.basePackage(DraftStoreApplication.BASE_PACKAGE_NAME + ".controllers"))
                 .paths(PathSelectors.any())
                 .build();
     }
