@@ -53,10 +53,11 @@ To run all functional tests execute the following command:
 ./gradlew functionalTest
 ```
 
-### Coding style tests
-To run all checks (including unit tests) execute the following command:
+### Code quality checks
+We use [checkstyle](http://checkstyle.sourceforge.net/) and [PMD](https://pmd.github.io/).  
+To run all checks execute the following command:
 ```bash
-./gradlew check
+./lint.sh
 ```
 
 ## License
