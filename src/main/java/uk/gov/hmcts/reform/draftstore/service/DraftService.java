@@ -94,7 +94,7 @@ public class DraftService {
             // currently database ID is an int
             return Integer.parseInt(apiId);
         } catch (NumberFormatException exc) {
-            throw new NoDraftFoundException();
+            throw new NoDraftFoundException(); //NOPMD
         }
     }
 
