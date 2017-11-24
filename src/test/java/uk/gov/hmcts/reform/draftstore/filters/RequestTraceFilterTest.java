@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.draftstore.filters;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,8 +22,8 @@ public class RequestTraceFilterTest {
             .SENSITIVE_HEADERS
             .forEach(h -> {
                 headers.put(h, "some_value");
-                headers.put(h.toLowerCase(), "some_value");
-                headers.put(h.toUpperCase(), "some_value");
+                headers.put(h.toLowerCase(Locale.ENGLISH), "some_value");
+                headers.put(h.toUpperCase(Locale.ENGLISH), "some_value");
             });
 
         new RequestTraceFilter(null, null).postProcessRequestHeaders(headers);

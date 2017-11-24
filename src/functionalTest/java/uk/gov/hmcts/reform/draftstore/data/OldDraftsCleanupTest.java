@@ -28,7 +28,7 @@ public class OldDraftsCleanupTest {
 
     @Autowired private NamedParameterJdbcTemplate jdbcTemplate;
 
-    private Instant now = now();
+    private final Instant now = now();
 
     @Test
     public void should_remove_stale_drafts() throws Exception {
