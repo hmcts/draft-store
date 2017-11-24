@@ -32,7 +32,6 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpHeaders.WARNING;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
@@ -69,7 +68,7 @@ public class DraftController {
         @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
-        @RequestHeader(name = SECRET_HEADER, required = false) String secretHeader
+        @RequestHeader(SECRET_HEADER) String secretHeader
     ) {
         Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
@@ -85,7 +84,7 @@ public class DraftController {
     public DraftList readAll(
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
-        @RequestHeader(name = SECRET_HEADER, required = false) String secretHeader,
+        @RequestHeader(SECRET_HEADER) String secretHeader,
         @RequestParam(name = "after", required = false) Integer after,
         @RequestParam(name = "limit", required = false, defaultValue = "10") int limit
     ) {
@@ -104,7 +103,7 @@ public class DraftController {
     public ResponseEntity<Void> create(
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
-        @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
+        @RequestHeader(SECRET_HEADER) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
         Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
@@ -114,7 +113,7 @@ public class DraftController {
 
         URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
-        return withSecretsWarning(secrets, created(newClaimUri));
+        return created(newClaimUri).build();
     }
 
     @PutMapping(path = "/{id}", consumes = { MEDIA_TYPE, MediaType.APPLICATION_JSON_VALUE })
@@ -128,7 +127,7 @@ public class DraftController {
         @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
-        @RequestHeader(name = SECRET_HEADER, required = false) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
+        @RequestHeader(SECRET_HEADER) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
         Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
@@ -136,7 +135,7 @@ public class DraftController {
 
         draftService.update(id, updatedDraft, userAndService.withSecrets(secrets));
 
-        return withSecretsWarning(secrets, noContent());
+        return noContent().build();
     }
 
     @DeleteMapping(path = "/{id}")
@@ -168,15 +167,5 @@ public class DraftController {
         draftService.deleteAll(userAndService);
 
         return noContent().build();
-    }
-
-    private static ResponseEntity<Void> withSecretsWarning(
-        Secrets secrets,
-        ResponseEntity.HeadersBuilder<?> respBodyBuilder
-    ) {
-        String msg = "Encryption will be required soon. See https://github.com/hmcts/draft-store#encryption-feature-in-v3";
-        return secrets.primary == null
-            ? respBodyBuilder.header(WARNING, msg).build()
-            : respBodyBuilder.build();
     }
 }

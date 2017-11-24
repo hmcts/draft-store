@@ -13,19 +13,11 @@ public class ToDbModelMapperTest {
     private uk.gov.hmcts.reform.draftstore.data.model.CreateDraft result;
 
     @Test
-    public void should_set_only_encrypted_document_when_secret_is_passed() throws Exception {
+    public void should_set_only_encrypted_document() throws Exception {
         result = ToDbModelMapper.toDb(createDraft(), new Secrets(SampleSecret.get(), null));
 
         assertThat(result.document).isNull();
         assertThat(result.encryptedDocument).isNotNull();
-    }
-
-    @Test
-    public void should_set_only_unencrypted_document_when_secret_is_NOT_passed() throws Exception {
-        result = ToDbModelMapper.toDb(createDraft(), new Secrets(null, null));
-
-        assertThat(result.document).isNotNull();
-        assertThat(result.encryptedDocument).isNull();
     }
 
     @Test

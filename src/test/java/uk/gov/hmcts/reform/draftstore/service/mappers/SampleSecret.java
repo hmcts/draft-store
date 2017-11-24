@@ -7,4 +7,8 @@ public class SampleSecret {
     public static String get() {
         return Strings.repeat("x", Secrets.MIN_SECRET_LENGTH);
     }
+
+    public static Secrets getObject() {
+        return new Secrets(get(), null);
+    }
 }

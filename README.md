@@ -8,12 +8,6 @@ It stores a draft json document against the userId provided.
 
 ![Low Level Design](/docs/design.png)
 
-## Encryption feature in v3
-A new version of the API has been created to meet [point 6 of the NCSC Security Design Principles: Reducing the impact 
-of compromise](https://www.ncsc.gov.uk/guidance/design-principles-reducing-impact-compromise). 
-The current API allows for both client to _optionally_ supply an encryption key. This optionality will be revoked in the 
-future to ensure all partially completed form data being stored by service teams is encrypted per user.
- 
 ## Getting Started
 
 ### Prerequisites
