@@ -45,7 +45,6 @@ import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_
     path = "drafts",
     produces = { DraftController.MEDIA_TYPE, MediaType.APPLICATION_JSON_VALUE }
 )
-@SuppressWarnings("checkstyle:LineLength")
 public class DraftController {
 
     static final String MEDIA_TYPE = "application/vnd.uk.gov.hmcts.draft-store.v3+json";
