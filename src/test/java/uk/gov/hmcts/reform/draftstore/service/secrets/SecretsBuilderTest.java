@@ -22,10 +22,8 @@ public class SecretsBuilderTest {
 
     @Test
     public void should_handle_null_header() throws Exception {
-        Secrets secrets = SecretsBuilder.fromHeader(null);
-
-        assertThat(secrets.primary).isNull();
-        assertThat(secrets.secondary).isNull();
+        assertThatThrownBy(() -> SecretsBuilder.fromHeader(null))
+            .isInstanceOf(SecretsException.class);
     }
 
     @Test

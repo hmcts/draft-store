@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.draftstore.controllers.helpers;
 
+import com.google.common.base.Strings;
 import uk.gov.hmcts.reform.draftstore.data.model.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.data.model.UpdateDraft;
+import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 
 import java.time.ZonedDateTime;
 
@@ -31,5 +33,9 @@ public class SampleData {
             "some_type",
             maxStaleDays
         );
+    }
+
+    public static String secret() {
+        return Strings.repeat("x", Secrets.MIN_SECRET_LENGTH);
     }
 }
