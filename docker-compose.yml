@@ -39,6 +39,33 @@ services:
       - 5429:5432
     volumes:
       - draft-store-database-data:/var/lib/postgresql/data
+  draft-store-swagger:
+    build:
+      context: swagger
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    image: docker.artifactory.reform.hmcts.net/reform/draft-store-swagger
+    environment:
+      - DRAFT_STORE_DB_HOST=draft-store-database
+      - DRAFT_STORE_DB_PORT
+      - DRAFT_STORE_DB_PASSWORD
+      - ROOT_APPENDER
+      - JSON_CONSOLE_PRETTY_PRINT
+      - ROOT_LOGGING_LEVEL
+      - REFORM_SERVICE_NAME
+      - REFORM_TEAM
+      - REFORM_ENVIRONMENT
+      - IDAM_USE_STUB
+      - S2S_USER_STUB
+    ports:
+      - 8800:8800
+    volumes:
+      - ./swagger/build/install/swagger:/opt/app/
+    depends_on:
+      draft-store-database:
+        condition: service_healthy
 
 volumes:
   draft-store-database-data:

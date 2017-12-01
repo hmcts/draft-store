@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.draftstore.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -11,16 +12,17 @@ import uk.gov.hmcts.reform.draftstore.DraftStoreApplication;
 
 @Configuration
 @EnableSwagger2
+@Import(DraftStoreConfig.class)
 public class SwaggerConfiguration {
 
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(false)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage(DraftStoreApplication.BASE_PACKAGE_NAME + ".controllers"))
-                .paths(PathSelectors.any())
-                .build();
+            .useDefaultResponseMessages(false)
+            .select()
+            .apis(RequestHandlerSelectors.basePackage(DraftStoreApplication.BASE_PACKAGE_NAME + ".controllers"))
+            .paths(PathSelectors.any())
+            .build();
     }
 
 }

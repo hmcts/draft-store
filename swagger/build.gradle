@@ -1,0 +1,21 @@
+group 'uk.gov.hmcts.reform'
+
+def versions = [
+  springfoxSwagger: '2.7.0'
+]
+
+dependencies {
+  compile project(':')
+
+  compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+  compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
+
+  compile group: 'org.springframework', name: 'spring-context', version: '4.3.13.RELEASE'
+}
+
+run {
+  mainClassName = 'uk.gov.hmcts.reform.draftstore.DraftStoreApplication'
+  if (debug == 'true') {
+    jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
+  }
+}

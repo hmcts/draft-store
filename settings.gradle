@@ -8,3 +8,5 @@ pluginManagement {
 }
 
 rootProject.name = 'draft-store'
+
+include 'swagger'
