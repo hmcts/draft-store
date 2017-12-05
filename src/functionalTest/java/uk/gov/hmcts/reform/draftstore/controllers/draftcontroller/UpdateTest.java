@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.draftstore.controllers.DraftController;
+import uk.gov.hmcts.reform.draftstore.controllers.helpers.SampleData;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
@@ -20,15 +21,11 @@ import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
-import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.internal.matchers.Null.NULL;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpHeaders.WARNING;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
@@ -72,19 +69,12 @@ public class UpdateTest {
     }
 
     @Test
-    public void should_set_warning_header_when_encryption_header_is_not_provided() throws Exception {
-        sendUpdate(null)
-            .andExpect(header().string(WARNING, notNullValue()));
-    }
-
-    @Test
-    public void should_NOT_set_warning_header_when_encryption_header_is_provided() throws Exception {
-        sendUpdate(Strings.repeat("?", MIN_SECRET_LENGTH))
-            .andExpect(header().string(WARNING, NULL));
+    public void should_return_400_when_encryption_header_is_not_provided() throws Exception {
+        sendUpdate(null).andExpect(status().isBadRequest());
     }
 
     private ResultActions sendUpdate() throws Exception {
-        return sendUpdate(null);
+        return sendUpdate(SampleData.secret());
     }
 
     private ResultActions sendUpdate(String secret) throws Exception {

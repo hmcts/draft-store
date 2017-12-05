@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
+import uk.gov.hmcts.reform.draftstore.service.mappers.SampleSecret;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -82,7 +83,7 @@ public class UpdateTest extends BaseTest {
         draftService.update(
             "123",
             new UpdateDraft(new ObjectMapper().createObjectNode(), "some_type"),
-            userAndService
+            userAndService.withSecrets(SampleSecret.getObject())
         );
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.draftstore.controllers.DraftController;
+import uk.gov.hmcts.reform.draftstore.controllers.helpers.SampleData;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
@@ -21,6 +22,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 @RunWith(SpringRunner.class)
@@ -62,6 +64,7 @@ public class GetByIdTest {
                     get("/drafts/123")
                         .header(AUTHORIZATION, "irrelevant-header")
                         .header(SERVICE_HEADER, "irrelevant-service-name")
+                        .header(SECRET_HEADER, SampleData.secret())
                 ).andReturn();
 
         return result.getResponse().getStatus();

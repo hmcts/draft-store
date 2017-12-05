@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.draftstore.controllers.DraftController;
+import uk.gov.hmcts.reform.draftstore.controllers.helpers.SampleData;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
@@ -24,7 +25,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
-import static org.springframework.http.HttpHeaders.WARNING;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
@@ -100,27 +100,12 @@ public class CreateTest {
     }
 
     @Test
-    public void should_add_warning_header_when_encryption_secret_is_not_provided() throws Exception {
-        MvcResult result = send(validDraft, null).andReturn();
-
-        assertThat(result.getResponse().getHeader(WARNING))
-            .as("Warning header")
-            .isNotBlank();
-    }
-
-    @Test
-    public void should_NOT_add_warning_header_when_encryption_secret_is_provided() throws Exception {
-        MvcResult result =
-            send(
-                validDraft,
-                Strings.repeat("x", MIN_SECRET_LENGTH)
-            ).andReturn();
-
-        assertThat(result.getResponse().getHeader(WARNING)).isNull();
+    public void should_return_400_when_encryption_secret_is_not_provided() throws Exception {
+        send(validDraft, null).andExpect(status().is(400));
     }
 
     private ResultActions send(String content) throws Exception {
-        return send(content, null);
+        return send(content, SampleData.secret());
     }
 
     private ResultActions send(String content, String secret) throws Exception {

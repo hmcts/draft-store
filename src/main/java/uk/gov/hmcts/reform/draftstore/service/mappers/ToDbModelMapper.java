@@ -13,8 +13,8 @@ public class ToDbModelMapper {
         Secrets secrets
     ) {
         return new CreateDraft(
-            secrets.primary != null ? null : draft.document.toString(),
-            secrets.primary != null ? encrypt(draft.document.toString(), secrets.primary) : null,
+            null,
+            encrypt(draft.document.toString(), secrets.primary),
             draft.type,
             draft.maxStaleDays
         );
@@ -25,8 +25,8 @@ public class ToDbModelMapper {
         Secrets secrets
     ) {
         return new UpdateDraft(
-            secrets.primary != null ? null : draft.document.toString(),
-            secrets.primary != null ? encrypt(draft.document.toString(), secrets.primary) : null,
+            null,
+            encrypt(draft.document.toString(), secrets.primary),
             draft.type
         );
     }
