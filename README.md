@@ -27,6 +27,12 @@ Run the application by executing:
 ./gradlew bootRun
 ```
 
+### Operational note
+When operating this service with live data, no one should under any circumstances view the encrypted data. 
+The reason for this is because it would be considered under [Article 14 of GDPR](https://gdpr-info.eu/art-14-gdpr/) that we had commenced processing data. 
+Then we would have thirty days to notify any third party parties mentioned in the application that we had commenced processing their data. 
+This must not happen as the citizen, who is creating the application, has not yet submitted their application.
+
 ## API documentation
 API documentation is provided with Swagger.  
 You can view the json spec here: [http://localhost:8800/v2/api-docs](http://localhost:8800/v2/api-docs)  
