@@ -21,7 +21,7 @@ public class CreateDraft {
         notes = "Number of days before removing a draft that hasn't been updated"
     )
     @Min(value = 1L)
-    public Integer maxStaleDays;
+    public final Integer maxStaleDays;
 
     public CreateDraft(
         @JsonProperty("document") JsonNode document,
