@@ -9,7 +9,7 @@ then
 fi
 
 ./gradlew clean installDist
-docker-compose up -d
+docker-compose up -d draft-store-swagger
 sleep 15
 REPO_NAME=$(echo ${TRAVIS_REPO_SLUG} | cut -f2- -d/)
 CURRENT_DOCS=$(curl https://hmcts.github.io/reform-api-docs/specs/${REPO_NAME}.json)

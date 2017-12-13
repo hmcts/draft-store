@@ -2,6 +2,7 @@
 build
 classes/
 .DS_store
+*.iml
 .gradle
 out/
 
