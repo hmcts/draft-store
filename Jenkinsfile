@@ -65,6 +65,10 @@ node {
     archiveArtifacts 'build/reports/**/*.html'
     notifyBuildFailure channel: channel
     throw err
-  }
+  } finally {
+        step([$class: 'InfluxDbPublisher',
+               customProjectName: 'CMC Draftstore',
+               target: 'Jenkins Data'])
+    }
   notifyBuildFixed channel: channel
 }
