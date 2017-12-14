@@ -6,7 +6,7 @@
 The Draft store micro-service provides a ’save and resume’ feature for reform applications via an internal API. 
 It stores a draft json document against the userId provided.
 
-![Low Level Design](/docs/design.png)
+![Low Level Design](/doc/design.png)
 
 ## Getting Started
 
