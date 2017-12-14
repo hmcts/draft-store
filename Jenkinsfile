@@ -67,7 +67,7 @@ node {
     throw err
   } finally {
         step([$class: 'InfluxDbPublisher',
-               customProjectName: 'CMC Draftstore',
+               customProjectName: 'Draftstore',
                target: 'Jenkins Data'])
     }
   notifyBuildFixed channel: channel
