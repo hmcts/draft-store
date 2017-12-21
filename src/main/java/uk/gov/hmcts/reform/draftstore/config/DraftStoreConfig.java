@@ -13,8 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
+import uk.gov.hmcts.reform.api.filters.SensitiveHeadersRequestTraceFilter;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
-import uk.gov.hmcts.reform.draftstore.filters.RequestTraceFilter;
+import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClient;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientImpl;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientStub;
@@ -26,6 +27,8 @@ import uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter;
 
 import java.time.Clock;
 import javax.servlet.Filter;
+
+import static java.util.Collections.singleton;
 
 @Configuration
 public class DraftStoreConfig {
@@ -54,8 +57,15 @@ public class DraftStoreConfig {
     }
 
     @Bean
-    public RequestTraceFilter requestTraceFilter(TraceRepository traceRepository, TraceProperties traceProperties) {
-        return new RequestTraceFilter(traceRepository, traceProperties);
+    public SensitiveHeadersRequestTraceFilter requestTraceFilter(
+        TraceRepository traceRepository,
+        TraceProperties traceProperties
+    ) {
+        return new SensitiveHeadersRequestTraceFilter(
+            traceRepository,
+            traceProperties,
+            singleton(AuthService.SECRET_HEADER)
+        );
     }
 
     @Bean
