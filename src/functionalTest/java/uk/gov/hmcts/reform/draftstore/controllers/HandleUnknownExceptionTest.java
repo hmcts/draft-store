@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.gov.hmcts.reform.draftstore.controllers.helpers.SampleData;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
 
 import java.util.UUID;
@@ -21,6 +22,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.draftstore.service.AuthService.SECRET_HEADER;
 import static uk.gov.hmcts.reform.draftstore.service.AuthService.SERVICE_HEADER;
 
 /*
@@ -53,6 +55,7 @@ public class HandleUnknownExceptionTest {
             .accept(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, AUTH_TOKEN)
             .header(SERVICE_HEADER, "some-service")
+            .header(SECRET_HEADER, SampleData.secret())
             .when()
             .get(DRAFT_URI)
             .then()

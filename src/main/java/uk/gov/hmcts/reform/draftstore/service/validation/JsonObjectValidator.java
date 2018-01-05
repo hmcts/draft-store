@@ -9,7 +9,7 @@ public class JsonObjectValidator implements ConstraintValidator<JsonObject, Json
 
     @Override
     public void initialize(JsonObject constraintAnnotation) {
-
+        // nothing to initialize
     }
 
     @Override

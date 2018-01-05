@@ -1,8 +1,6 @@
 package uk.gov.hmcts.reform.draftstore.service.secrets;
 
 import com.google.common.base.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.reform.draftstore.utils.Lists;
 
 import java.util.Arrays;
@@ -13,16 +11,12 @@ import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_
 
 public class SecretsBuilder {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecretsBuilder.class);
-
     public static final String SEPARATOR = ",";
 
     public static Secrets fromHeader(String header) {
 
-        // only during transition stage.
         if (Strings.isNullOrEmpty(header)) {
-            logger.info("No encryption secrets received.");
-            return new Secrets(null, null);
+            throw new SecretsException("Secret is required");
         } else {
             List<String> secrets =
                 Arrays

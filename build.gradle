@@ -78,7 +78,8 @@ dependencies {
 
   compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.4.1.Final'
 
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '1.2.1'
+  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '1.4.0'
+  compile group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.3.0'
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
 

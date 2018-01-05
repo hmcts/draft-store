@@ -6,14 +6,8 @@
 The Draft store micro-service provides a ’save and resume’ feature for reform applications via an internal API. 
 It stores a draft json document against the userId provided.
 
-![Low Level Design](/docs/design.png)
+![Low Level Design](/doc/design.png)
 
-## Encryption feature in v3
-A new version of the API has been created to meet [point 6 of the NCSC Security Design Principles: Reducing the impact 
-of compromise](https://www.ncsc.gov.uk/guidance/design-principles-reducing-impact-compromise). 
-The current API allows for both client to _optionally_ supply an encryption key. This optionality will be revoked in the 
-future to ensure all partially completed form data being stored by service teams is encrypted per user.
- 
 ## Getting Started
 
 ### Prerequisites
@@ -32,6 +26,12 @@ Run the application by executing:
 ```bash
 ./gradlew bootRun
 ```
+
+### Operational note
+When operating this service with live data, no one should under any circumstances view the encrypted data. 
+The reason for this is because it would be considered under [Article 14 of GDPR](https://gdpr-info.eu/art-14-gdpr/) that we had commenced processing data. 
+Then we would have thirty days to notify any third party parties mentioned in the application that we had commenced processing their data. 
+This must not happen as the citizen, who is creating the application, has not yet submitted their application.
 
 ## API documentation
 API documentation is provided with Swagger.  
@@ -53,10 +53,11 @@ To run all functional tests execute the following command:
 ./gradlew functionalTest
 ```
 
-### Coding style tests
-To run all checks (including unit tests) execute the following command:
+### Code quality checks
+We use [checkstyle](http://checkstyle.sourceforge.net/) and [PMD](https://pmd.github.io/).  
+To run all checks execute the following command:
 ```bash
-./gradlew check
+./lint.sh
 ```
 
 ## License

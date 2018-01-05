@@ -66,7 +66,7 @@ public class CryptoService {
             return new String(cipher.doFinal(cipherText), UTF_8);
 
         } catch (AEADBadTagException exc) {
-            throw new InvalidKeyException("Invalid secret");
+            throw new InvalidKeyException("Invalid secret"); //NOPMD
         } catch (GeneralSecurityException exc) {
             throw new GeneralSecurityRuntimeException(exc);
         }

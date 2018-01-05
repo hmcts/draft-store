@@ -18,7 +18,7 @@ public class UnencryptedDraftsInfoContributor implements InfoContributor {
 
     private final DraftStoreDAO repo;
 
-    private LocalDateTime lastCheckDate = null;
+    private LocalDateTime lastCheckDate;
     private List<Map<String, Object>> lastResult = new ArrayList<>();
 
     public UnencryptedDraftsInfoContributor(DraftStoreDAO repo) {
