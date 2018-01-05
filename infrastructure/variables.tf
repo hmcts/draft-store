@@ -17,7 +17,7 @@ variable "env" {
   type = "string"
 }
 
-// region app config
+# region app config
 
 variable "max_stale_days_default" {
   default = 90
@@ -27,4 +27,4 @@ variable "max_stale_days_cron" {
   default = "0 0 3 * * *"
 }
 
-// endregion
+# endregion
