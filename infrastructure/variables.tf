@@ -3,31 +3,32 @@ variable "product" {
   default = "draft-store"
 }
 
-variable "location" {
+variable "location_api" {
   type    = "string"
   default = "UK South"
+}
+
+variable "location_db" {
+  type    = "string"
+  default = "West Europe"
 }
 
 variable "env" {
   type = "string"
 }
 
-variable "infrastructure_env" {
-  default     = "dev"
-  description = "Infrastructure environment to point to"
-}
-
 // region app config
 
-variable "db_password" {}
+variable "db_password" {
+  default = "Notarealpassword!"
+}
 
-variable "idam_url" {}
-variable "idam_use_stub" {}
+variable "max_stale_days_default" {
+  default = 90
+}
 
-variable "s2s_url" {}
-variable "s2s_use_stub" {}
-
-variable "max_stale_days_default" {}
-variable "max_stale_days_cron" {}
+variable "max_stale_days_cron" {
+  default = "0 0 3 * * *"
+}
 
 // endregion
