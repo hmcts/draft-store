@@ -1,5 +1,0 @@
-@Library('Infrastructure')
-
-def product = "draft-store"
-
-withInfrastructurePipeline(product)
