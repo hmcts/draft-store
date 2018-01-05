@@ -7,5 +7,4 @@ def product = "draft-store"
 def app = "draft-store"
 
 withPipeline(type, product, app) {
-  enableSlackNotifications('#cmc-tech-cnp')
 }
