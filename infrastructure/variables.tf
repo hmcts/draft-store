@@ -19,8 +19,6 @@ variable "env" {
 
 // region app config
 
-variable "db_password" {}
-
 variable "max_stale_days_default" {
   default = 90
 }
