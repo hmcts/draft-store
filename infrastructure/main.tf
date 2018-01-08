@@ -8,7 +8,7 @@ module "api" {
   product  = "${var.product}-api"
   location = "${var.location_api}"
   env      = "${var.env}"
-  asename  = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+  ilbIp    = "${var.ilbIp}"
 
   app_settings = {
     DRAFT_STORE_DB_HOST     = "${module.db.host_name}"
