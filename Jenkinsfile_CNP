@@ -4,7 +4,7 @@
 
 def type = "java"
 def product = "draft-store"
-def app = "draft-store"
+def app = "service"
 
 withPipeline(type, product, app) {
 }
