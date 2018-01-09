@@ -134,7 +134,10 @@ public class DraftStoreDAO {
 
     public List<Map<String, Object>> getUnencryptedDrafts() {
         return jdbcTemplate.queryForList(
-            "SELECT service, created, updated FROM draft_document WHERE encrypted_document IS NULL",
+            "SELECT service, created, updated "
+                + "FROM draft_document "
+                + "WHERE encrypted_document IS NULL "
+                + "ORDER BY updated DESC",
             new MapSqlParameterSource()
         );
     }
