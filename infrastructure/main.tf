@@ -15,8 +15,8 @@ module "api" {
     DRAFT_STORE_DB_PORT     = "${module.db.postgresql_listen_port}"
     DRAFT_STORE_DB_PASSWORD = "${random_string.password.result}"
 
-    IDAM_URL                = "http://idam-${var.env}.service.${data.terraform_remote_state.core_apps_compute.ase_name[0]}.internal"
-    S2S_URL                 = "http://idam-s2s-${var.env}.service.${data.terraform_remote_state.core_apps_compute.ase_name[0]}.internal"
+    IDAM_URL                = "http://betaDevBccidamAppLB.reform.hmcts.net:4551"
+    S2S_URL                 = "http://betaDevBccidamAppLB.reform.hmcts.net:4552"
 
     MAX_STALE_DAYS_DEFAULT  = "${var.max_stale_days_default}"
     MAX_STALE_DAYS_CRON     = "${var.max_stale_days_cron}"
