@@ -26,7 +26,7 @@ module "api" {
 module "db" {
   source              = "git@github.com/hmcts/terraform-module-postgres.git"
   product             = "${var.product}-db"
-  location            = "${var.location_api}"
+  location            = "${var.location_db}"
   env                 = "${var.env}"
   postgresql_user     = "draftstore"
   postgresql_password = "${random_string.password.result}"
