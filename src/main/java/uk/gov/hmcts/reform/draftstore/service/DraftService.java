@@ -9,8 +9,10 @@ import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
+
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 import static uk.gov.hmcts.reform.draftstore.service.mappers.FromDbModelMapper.fromDb;
@@ -54,14 +56,15 @@ public class DraftService {
     }
 
     public void update(String id, UpdateDraft updatedDraft, UserAndService userAndService) {
-        draftRepo
-            .read(toInternalId(id))
-            .map(d -> {
-                assertCanEdit(d, userAndService);
-                draftRepo.update(toInternalId(id), toDb(updatedDraft, userAndService.secrets));
-                return d;
-            })
-            .orElseThrow(() -> new NoDraftFoundException());
+
+        Optional<uk.gov.hmcts.reform.draftstore.data.model.Draft> draft = draftRepo.read(toInternalId(id));
+
+        if (draft.isPresent()) {
+            assertCanEdit(draft.get(), userAndService);
+            draftRepo.update(toInternalId(id), toDb(updatedDraft, userAndService.secrets));
+        } else {
+            throw new NoDraftFoundException();
+        }
     }
 
     public void delete(String id, UserAndService userAndService) {
