@@ -50,7 +50,7 @@ To run all unit tests execute the following command:
 ### Integration tests
 To run all integration tests execute the following command:
 ```bash
-./gradlew integrationTest
+./gradlew integration
 ```
 
 ### Code quality checks
