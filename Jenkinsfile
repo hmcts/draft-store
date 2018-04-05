@@ -39,8 +39,8 @@ node {
       sh "./gradlew test"
     }
 
-    stage('Test (functional)') {
-      sh "./gradlew functionalTest"
+    stage('Test (integration)') {
+      sh "./gradlew integrationTest"
     }
 
     stage('Package (JAR)') {
