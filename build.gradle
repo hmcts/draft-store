@@ -94,14 +94,14 @@ dependencies {
 
 }
 
-task integrationTest(type: Test) {
+task integration(type: Test) {
   description = "Runs Integration Tests"
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 jacocoTestReport {
-  executionData(test, integrationTest)
+  executionData(test, integration)
   reports {
     xml.enabled true
     csv.enabled false
@@ -109,7 +109,7 @@ jacocoTestReport {
   }
 }
 
-project.tasks['sonarqube'].dependsOn test, integrationTest
+project.tasks['sonarqube'].dependsOn test, integration
 sonarqube {
   properties {
     property "sonar.projectName", "Reform :: Draft Store"
