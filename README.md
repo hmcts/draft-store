@@ -47,10 +47,10 @@ To run all unit tests execute the following command:
 ./gradlew test
 ```
 
-### Functional tests
-To run all functional tests execute the following command:
+### Integration tests
+To run all integration tests execute the following command:
 ```bash
-./gradlew functionalTest
+./gradlew integrationTest
 ```
 
 ### Code quality checks

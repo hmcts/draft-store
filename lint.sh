@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-./gradlew clean checkstyleMain checkstyleTest checkstyleFunctionalTest pmdMain pmdTest pmdFunctionalTest
+./gradlew clean checkstyleMain checkstyleTest checkstyleIntegrationTest pmdMain pmdTest pmdIntegrationTest
