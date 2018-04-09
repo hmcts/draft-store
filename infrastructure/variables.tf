@@ -19,6 +19,8 @@ variable "env" {
 
 variable "ilbIp" {}
 
+variable "subscription" {}
+
 # region app config
 
 variable "max_stale_days_default" {

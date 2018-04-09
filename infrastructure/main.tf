@@ -7,11 +7,12 @@ module "db" {
 }
 
 module "api" {
-  source   = "git@github.com:hmcts/moj-module-webapp"
-  product  = "${var.product}-api"
-  location = "${var.location_api}"
-  env      = "${var.env}"
-  ilbIp    = "${var.ilbIp}"
+  source        = "git@github.com:hmcts/moj-module-webapp"
+  product       = "${var.product}-api"
+  location      = "${var.location_api}"
+  env           = "${var.env}"
+  ilbIp         = "${var.ilbIp}"
+  subscription  = "${var.subscription}"
 
   app_settings = {
     DRAFT_STORE_DB_HOST     = "${module.db.host_name}"
