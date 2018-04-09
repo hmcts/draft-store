@@ -8,7 +8,7 @@ module "db" {
 
 module "api" {
   source        = "git@github.com:hmcts/moj-module-webapp"
-  product       = "${var.product}-api"
+  product       = "${var.product}-${var.microservice}"
   location      = "${var.location_api}"
   env           = "${var.env}"
   ilbIp         = "${var.ilbIp}"
