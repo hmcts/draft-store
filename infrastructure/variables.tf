@@ -3,6 +3,11 @@ variable "product" {
   default = "draft-store"
 }
 
+variable "microservice" {
+  type = "string"
+  default = "service"
+}
+
 variable "location_api" {
   type    = "string"
   default = "UK South"
