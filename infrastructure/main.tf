@@ -4,7 +4,7 @@ resource "random_string" "password" {
 }
 
 module "api" {
-  source   = "git@github.com/hmcts/terraform-module-webapp.git"
+  source   = "git@github.com:hmcts/moj-module-webapp"
   product  = "${var.product}-api"
   location = "${var.location_api}"
   env      = "${var.env}"
@@ -24,7 +24,7 @@ module "api" {
 }
 
 module "db" {
-  source              = "git@github.com/hmcts/terraform-module-postgres.git"
+  source              = "git@github.com:hmcts/moj-module-postgres"
   product             = "${var.product}-db"
   location            = "${var.location_db}"
   env                 = "${var.env}"
