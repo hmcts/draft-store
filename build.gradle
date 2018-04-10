@@ -127,8 +127,9 @@ pmd {
 }
 
 jar {
-  manifest {
+  archiveName 'draft-store.jar'
 
+  manifest {
     attributes 'Implementation-Title': project.name,
       'Implementation-Version': project.version
   }
