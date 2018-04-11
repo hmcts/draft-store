@@ -3,9 +3,8 @@ variable "product" {
   default = "draft-store"
 }
 
-variable "microservice" {
+variable "component" {
   type = "string"
-  default = "service"
 }
 
 variable "location_api" {
