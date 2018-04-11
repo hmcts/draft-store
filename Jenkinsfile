@@ -12,7 +12,7 @@ properties(
 Packager packager = new Packager(this, 'reform')
 Versioner versioner = new Versioner(this)
 
-def channel = '#cmc-tech-notification'
+def channel = '#rpe-build-notices'
 
 node {
   try {
@@ -30,7 +30,7 @@ node {
         sh "./gradlew -DdependencyCheck.failBuild=true dependencyCheck"
       } catch (ignored) {
         archiveArtifacts 'build/reports/dependency-check-report.html'
-        notifyBuildResult channel: '#development', color: 'warning',
+        notifyBuildResult channel: channel, color: 'warning',
           message: 'OWASP dependency check failed for draft-store see the report for the errors'
       }
     }
