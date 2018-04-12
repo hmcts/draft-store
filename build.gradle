@@ -135,16 +135,6 @@ jar {
   }
 }
 
-bootRepackage {
-  classifier 'all'
-}
-
-task printVersion {
-  doLast {
-    print project.version
-  }
-}
-
 run {
   mainClassName = 'uk.gov.hmcts.reform.draftstore.DraftStoreApplication'
   if (debug == 'true') {
