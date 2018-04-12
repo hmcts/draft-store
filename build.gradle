@@ -2,6 +2,7 @@ plugins {
   id 'application'
   id 'checkstyle'
   id 'io.spring.dependency-management' version '1.0.3.RELEASE'
+  id 'org.flywaydb.flyway' version '5.0.7'
   id 'org.springframework.boot' version '1.5.7.RELEASE'
   id 'org.owasp.dependencycheck' version '1.4.5.1'
   id 'com.github.ben-manes.versions' version '0.15.0'
@@ -15,6 +16,14 @@ version '1.1.0'
 
 checkstyle.toolVersion = '7.2'
 checkstyle.configFile = new File(rootDir, "checkstyle.xml")
+
+flyway {
+  url = System.getenv('FLYWAY_URL')
+  user = System.getenv('FLYWAY_USER')
+  password = System.getenv('FLYWAY_PASSWORD')
+  baselineOnMigrate = true
+  baselineVersion = '000'
+}
 
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
 dependencyCheck {
@@ -68,7 +77,7 @@ dependencies {
 
   compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
 
-  compile group: 'org.flywaydb', name: 'flyway-core', version: '4.1.2'
+  compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
@@ -98,6 +107,13 @@ task integration(type: Test) {
   description = "Runs Integration Tests"
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+  baselineOnMigrate = true
+  if (project.hasProperty("dburl")) {
+    url = "jdbc:postgresql://${dburl}"
+  }
 }
 
 jacocoTestReport {
