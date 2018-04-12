@@ -49,7 +49,7 @@ node {
     }
 
     stage('Package (RPM)') {
-      packager.javaRPM('draft-store', 'build/libs/draft-store-$(./gradlew -q printVersion)-all.jar',
+      packager.javaRPM('draft-store', 'build/libs/draft-store.jar',
         'springboot', 'src/main/resources/application.yaml')
 
       onMaster {
