@@ -112,6 +112,7 @@ dependencies {
 
   smokeTestCompile sourceSets.main.runtimeClasspath
   smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+  smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.7'
 }
 
 task integration(type: Test) {
