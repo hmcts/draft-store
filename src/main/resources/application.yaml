@@ -6,8 +6,8 @@ spring:
   application:
     name: HMCTS Draft Store
   datasource:
-    url: jdbc:postgresql://${DRAFT_STORE_DB_HOST:localhost}:${DRAFT_STORE_DB_PORT:5432}/draftstore
-    username: draftstore
+    url: jdbc:postgresql://${DRAFT_STORE_DB_HOST:localhost}:${DRAFT_STORE_DB_PORT:5432}/${DRAFT_STORE_DB_NAME:draftstore}${DRAFT_STORE_DB_CONN_OPTIONS:}
+    username: ${DRAFT_STORE_DB_USER_NAME:draftstore}
     password: ${DRAFT_STORE_DB_PASSWORD:}
     properties:
       charSet: UTF-8
