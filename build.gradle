@@ -52,6 +52,15 @@ sourceSets {
     }
     resources.srcDir file('src/integrationTest/resources')
   }
+
+  smokeTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/smokeTest/java')
+    }
+    resources.srcDir file('src/smokeTest/resources')
+  }
 }
 
 def springBootVersion = '1.5.8.RELEASE'
@@ -101,12 +110,20 @@ dependencies {
     'org.testcontainers:postgresql:1.4.3'
   )
 
+  smokeTestCompile sourceSets.main.runtimeClasspath
+  smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
 }
 
 task integration(type: Test) {
   description = "Runs Integration Tests"
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+task smoke(type: Test) {
+  description = "Runs Smoke Tests"
+  testClassesDirs = sourceSets.smokeTest.output.classesDirs
+  classpath = sourceSets.smokeTest.runtimeClasspath
 }
 
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
@@ -137,7 +154,7 @@ sonarqube {
 pmd {
   toolVersion = "5.8.1"
   ignoreFailures = true
-  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest]
+  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   ruleSetFiles = files("ruleset.xml")
 }
