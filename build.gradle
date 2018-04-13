@@ -126,10 +126,7 @@ dependencies {
   functionalTestCompile sourceSets.main.runtimeClasspath
   functionalTestCompile(
     'org.springframework.boot:spring-boot-starter-test',
-    'com.jayway.restassured:rest-assured:2.9.0',
-    'com.warrenstrange:googleauth:1.1.2',
-    'org.assertj:assertj-core:1.7.0',
-    'com.googlecode.lambdaj:lambdaj:2.3.3'
+    'com.jayway.restassured:rest-assured:2.9.0'
   )
 }
 
