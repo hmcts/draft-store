@@ -126,7 +126,7 @@ dependencies {
   functionalTestCompile sourceSets.main.runtimeClasspath
   functionalTestCompile(
     'org.springframework.boot:spring-boot-starter-test',
-    'com.jayway.restassured:rest-assured:2.9.0'
+    'io.rest-assured:rest-assured:3.0.7'
   )
 }
 

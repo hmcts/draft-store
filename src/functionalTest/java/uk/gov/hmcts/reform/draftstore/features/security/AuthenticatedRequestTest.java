@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.draftstore.features.security;
 
-import com.jayway.restassured.RestAssured;
+import io.restassured.RestAssured;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ public class AuthenticatedRequestTest {
             .relaxedHTTPSValidation()
             .baseUri(draftStoreUrl)
             .basePath("/drafts")
-            .queryParameter("type", "default")
+            .queryParam("type", "default")
             .when()
             .get()
             .then()
