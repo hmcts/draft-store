@@ -61,6 +61,15 @@ sourceSets {
     }
     resources.srcDir file('src/smokeTest/resources')
   }
+
+  functionalTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/functionalTest/java')
+    }
+    resources.srcDir file('src/functionalTest/resources')
+  }
 }
 
 def springBootVersion = '1.5.8.RELEASE'
@@ -113,6 +122,15 @@ dependencies {
   smokeTestCompile sourceSets.main.runtimeClasspath
   smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.7'
+
+  functionalTestCompile sourceSets.main.runtimeClasspath
+  functionalTestCompile(
+    'org.springframework.boot:spring-boot-starter-test',
+    'com.jayway.restassured:rest-assured:2.9.0',
+    'com.warrenstrange:googleauth:1.1.2',
+    'org.assertj:assertj-core:1.7.0',
+    'com.googlecode.lambdaj:lambdaj:2.3.3'
+  )
 }
 
 task integration(type: Test) {
@@ -125,6 +143,12 @@ task smoke(type: Test) {
   description = "Runs Smoke Tests"
   testClassesDirs = sourceSets.smokeTest.output.classesDirs
   classpath = sourceSets.smokeTest.runtimeClasspath
+}
+
+task functional(type: Test) {
+  description = "Runs Functional Tests"
+  testClassesDirs = sourceSets.functionalTest.output.classesDirs
+  classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
