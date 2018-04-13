@@ -1,12 +1,11 @@
 package uk.gov.hmcts.reform.draftstore.features.security;
 
+import com.jayway.restassured.RestAssured;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static com.jayway.restassured.RestAssured.given;
 
 @TestPropertySource("classpath:application.properties")
 @RunWith(SpringRunner.class)
@@ -17,15 +16,16 @@ public class AuthenticatedRequestTest {
 
     @Test
     public void rejecting_request_when_missing_required_headers() {
-        given()
+        RestAssured
+            .given()
             .log().all()
             .relaxedHTTPSValidation()
             .baseUri(draftStoreUrl)
             .basePath("/drafts")
             .queryParameter("type", "default")
-        .when()
+            .when()
             .get()
-        .then()
+            .then()
             .assertThat()
             .statusCode(400);
     }
