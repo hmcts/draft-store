@@ -45,7 +45,7 @@ node {
 
     stage('Package (JAR)') {
       versioner.addJavaVersionInfo()
-      sh "./gradlew bootRepackage installDist"
+      sh "./gradlew installDist"
     }
 
     stage('Package (RPM)') {
