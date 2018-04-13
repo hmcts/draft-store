@@ -15,7 +15,7 @@ public class AuthenticatedRequestTest {
     private String draftStoreUrl;
 
     @Test
-    public void rejecting_request_when_missing_required_headers() {
+    public void should_reject_request_when_missing_required_headers() {
         RestAssured
             .given()
             .log().all()
