@@ -176,7 +176,8 @@ sonarqube {
 pmd {
   toolVersion = "5.8.1"
   ignoreFailures = true
-  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.smokeTest]
+  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.smokeTest,
+                sourceSets.functionalTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   ruleSetFiles = files("ruleset.xml")
 }
