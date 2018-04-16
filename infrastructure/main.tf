@@ -1,5 +1,7 @@
 locals {
   db_connection_options = "?ssl=true"
+  ase_name        = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+  s2s_url         = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"
 }
 
 module "db" {
@@ -26,8 +28,8 @@ module "api" {
     DRAFT_STORE_DB_NAME         = "${module.db.postgresql_database}"
     DRAFT_STORE_DB_CONN_OPTIONS = "${local.db_connection_options}"
 
-    IDAM_URL                    = "http://betaDevBccidamAppLB.reform.hmcts.net:4551"
-    S2S_URL                     = "http://betaDevBccidamAppLB.reform.hmcts.net:4552"
+    IDAM_URL                    = "${var.idam_api_url}"
+    S2S_URL                     = "${local.s2s_url}"
 
     MAX_STALE_DAYS_DEFAULT      = "${var.max_stale_days_default}"
     MAX_STALE_DAYS_CRON         = "${var.max_stale_days_cron}"
