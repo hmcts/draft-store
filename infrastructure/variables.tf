@@ -38,6 +38,10 @@ variable "subscription" {}
 
 # region app config
 
+variable "idam_api_url" {
+  default = "http://betaDevBccidamAppLB.reform.hmcts.net:4551"
+}
+
 variable "max_stale_days_default" {
   default = 90
 }
