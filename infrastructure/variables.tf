@@ -50,4 +50,8 @@ variable "max_stale_days_cron" {
   default = "0 0 3 * * *"
 }
 
+variable "run_db_migration_on_startup" {
+  default = "false"
+}
+
 # endregion

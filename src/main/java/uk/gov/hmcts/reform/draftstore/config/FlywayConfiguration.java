@@ -20,7 +20,7 @@ import uk.gov.hmcts.reform.draftstore.data.migration.FlywayNoOpStrategy;
 @AutoConfigureBefore(FlywayAutoConfiguration.class)
 @Configuration
 @ConditionalOnClass(Flyway.class)
-@ConditionalOnProperty(prefix = "flyway", name = "enabled", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "dbMigration", name = "runOnStartup", havingValue = "false")
 public class FlywayConfiguration {
 
     @Bean
