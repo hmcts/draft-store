@@ -22,6 +22,7 @@ services:
       - REFORM_ENVIRONMENT
       - IDAM_USE_STUB
       - S2S_USER_STUB
+      - RUN_DB_MIGRATION_ON_STARTUP
     volumes:
       - ./build/install/draft-store:/opt/app/
     ports:

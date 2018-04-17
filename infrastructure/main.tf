@@ -37,6 +37,8 @@ module "api" {
     FLYWAY_URL                  = "jdbc:postgresql://${module.db.host_name}:${module.db.postgresql_listen_port}/${module.db.postgresql_database}${local.db_connection_options}"
     FLYWAY_USER                 = "${module.db.user_name}"
     FLYWAY_PASSWORD             = "${module.db.postgresql_password}"
+
+    RUN_DB_MIGRATION_ON_STARTUP = "${var.run_db_migration_on_startup}"
   }
 }
 
