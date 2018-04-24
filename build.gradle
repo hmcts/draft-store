@@ -105,7 +105,7 @@ dependencies {
 
   compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.4.1.Final'
 
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '1.4.0'
+  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '2.0.2'
   compile group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.3.0'
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
@@ -122,6 +122,7 @@ dependencies {
   smokeTestCompile sourceSets.main.runtimeClasspath
   smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.7'
+  smokeTestCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
 
   functionalTestCompile sourceSets.main.runtimeClasspath
   functionalTestCompile(
