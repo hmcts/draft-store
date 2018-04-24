@@ -43,7 +43,7 @@ variable "vault_section" {
 # region app config
 
 variable "idam_api_url" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net:4551"
+  default = "http://betaDevBccidamAppLB.reform.hmcts.net"
 }
 
 variable "max_stale_days_default" {
