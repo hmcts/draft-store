@@ -2,23 +2,16 @@ package uk.gov.hmcts.reform.draftstore;
 
 import io.restassured.RestAssured;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.Matchers.equalTo;
 
-@RunWith(SpringRunner.class)
-public class ApplicationSmokeTest {
-
-    @Value("${test-url}")
-    private String testUrl;
+public class ApplicationSmokeTest extends SmokeTestSuite {
 
     @Test
     public void service_is_healthy() {
-        RestAssured.baseURI = testUrl;
+        RestAssured.baseURI = draftStoreUrl;
 
         RestAssured.given()
             .relaxedHTTPSValidation()
