@@ -24,6 +24,10 @@ output "idam_url_for_tests" {
   value = "${var.idam_api_url}"
 }
 
+output "idam_user_email_for_tests" {
+  value = "reformplatformengineering+tests@gmail.com"
+}
+
 // TODO: change the client to a dedicated test client (https://tools.hmcts.net/jira/browse/RPE-412)
 output "idam_client_id_for_tests" {
   value = "cmc_citizen"
