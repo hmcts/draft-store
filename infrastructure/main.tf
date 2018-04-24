@@ -1,3 +1,7 @@
+provider "vault" {
+  address = "https://vault.reform.hmcts.net:6200"
+}
+
 locals {
   db_connection_options = "?ssl=true"
   ase_name        = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"

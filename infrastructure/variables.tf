@@ -36,6 +36,10 @@ variable "jenkins_AAD_objectId" {
 
 variable "subscription" {}
 
+variable "vault_section" {
+  default = "test"
+}
+
 # region app config
 
 variable "idam_api_url" {
