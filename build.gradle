@@ -92,13 +92,11 @@ def versions = [
 
 dependencyManagement {
   dependencies {
-    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.9.5') {
-      entry 'jackson-annotations'
-      entry 'jackson-core'
+    // spring boot dependency management plugin downgrades
+    // hystrix related libraries use 2.4.3 and not clear if plan to upgrade
+    // bump to 2.8.11.1 because of https://nvd.nist.gov/vuln/detail/CVE-2018-7489
+    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.8.11.1') {
       entry 'jackson-databind'
-    }
-    dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.9.5') {
-      entry 'jackson-datatype-jsr310'
     }
   }
   imports {
