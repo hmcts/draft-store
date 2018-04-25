@@ -9,7 +9,6 @@ import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
