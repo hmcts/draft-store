@@ -1,10 +1,13 @@
 package uk.gov.hmcts.reform.draftstore;
 
+import net.bytebuddy.utility.RandomString;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.gov.hmcts.reform.draftstore.client.DraftStoreClient;
 import uk.gov.hmcts.reform.draftstore.client.IdamClient;
 import uk.gov.hmcts.reform.draftstore.client.S2sClient;
 
@@ -45,10 +48,26 @@ public abstract class SmokeTestSuite {
     @Value("${draft-store-url}")
     protected String draftStoreUrl;
 
+    protected DraftStoreClient draftStoreClient;
+
     @Before
     public void setUp() {
-        new S2sClient(s2sUrl, s2sName, s2sSecret).signIntoS2S();
-        signIntoIdam(createIdamClient());
+        String s2sToken = new S2sClient(s2sUrl, s2sName, s2sSecret).signIntoS2S();
+        String idamToken = signIntoIdam(createIdamClient());
+
+        String encryptionSecret = RandomString.make(20);
+
+        draftStoreClient = new DraftStoreClient(
+            draftStoreUrl,
+            s2sToken,
+            idamToken,
+            encryptionSecret
+        );
+    }
+
+    @After
+    public void tearDown() {
+        draftStoreClient.deleteAllUsersDrafts();
     }
 
     /**
