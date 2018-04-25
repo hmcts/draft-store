@@ -48,7 +48,7 @@ public class DeleteTest extends BaseTest {
     }
 
     @Test
-    public void should_NOT_throw_an_exception_when_draft_assigned_to_user_and_service_exists() {
+    public void should_not_throw_an_exception_when_draft_assigned_to_user_and_service_exists() {
         // given
         UserAndService john = new UserAndService("john", "service");
         thereExists(
@@ -63,7 +63,7 @@ public class DeleteTest extends BaseTest {
     }
 
     @Test
-    public void should_NOT_throw_an_exception_when_draft_does_not_exist() {
+    public void should_not_throw_an_exception_when_draft_does_not_exist() {
         // given
         thereExists(
             null

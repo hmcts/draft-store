@@ -48,7 +48,7 @@ public class OldDraftsCleanupTest {
     }
 
     @Test
-    public void should_NOT_remove_old_drafts_that_were_recently_updated() throws Exception {
+    public void should_not_remove_old_drafts_that_were_recently_updated() throws Exception {
 
         int newDraftId = repoAtTime(now).insert("", "", SampleData.createDraft(10));
 

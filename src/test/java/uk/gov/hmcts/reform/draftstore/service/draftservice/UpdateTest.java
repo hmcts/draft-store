@@ -65,7 +65,7 @@ public class UpdateTest extends BaseTest {
     }
 
     @Test
-    public void should_NOT_throw_exception_when_updating_own_draft() throws Exception {
+    public void should_not_throw_exception_when_updating_own_draft() throws Exception {
         // given
         UserAndService john = new UserAndService("john", "service");
         thereExists(
