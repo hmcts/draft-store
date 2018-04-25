@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
 
 import static org.mockito.Mockito.mock;
 
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
 public class TestUnhandledExceptionConfig {
     @Bean
     @Primary
-    public DraftStoreDAO dao() {
-        return mock( DraftStoreDAO.class );
+    public DraftStoreDao dao() {
+        return mock(DraftStoreDao.class);
     }
 }

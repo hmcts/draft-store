@@ -32,7 +32,7 @@ public class OldDraftsCleanupTest {
 
     @Test
     public void should_remove_stale_drafts() throws Exception {
-        DraftStoreDAO nowRepo = repoAtTime(now);
+        DraftStoreDao nowRepo = repoAtTime(now);
 
         int d1 = nowRepo.insert("", "", SampleData.createDraft(5));
         int d2 = nowRepo.insert("", "", SampleData.createDraft(15));
@@ -66,16 +66,16 @@ public class OldDraftsCleanupTest {
         );
     }
 
-    private DraftStoreDAO repoAtTime(Instant instant) {
-        return new DraftStoreDAO(
+    private DraftStoreDao repoAtTime(Instant instant) {
+        return new DraftStoreDao(
             jdbcTemplate,
             0,
             Clock.fixed(instant, ZoneId.systemDefault())
         );
     }
 
-    private void after(Duration duration, Consumer<DraftStoreDAO> daoOperation) {
-        DraftStoreDAO dao = repoAtTime(now.plus(duration));
+    private void after(Duration duration, Consumer<DraftStoreDao> daoOperation) {
+        DraftStoreDao dao = repoAtTime(now.plus(duration));
         daoOperation.accept(dao);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.draftstore.controllers.helpers.SampleData;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
 
 import java.util.UUID;
 
@@ -37,7 +37,7 @@ So, this test demonstrates that for all unhandled exceptions the exception messa
 public class HandleUnknownExceptionTest {
     private static final String DRAFT_URI = "/drafts";
     @Autowired
-    private DraftStoreDAO dao;
+    private DraftStoreDao dao;
 
     private static final String USER_ID = UUID.randomUUID().toString();
     private static final String AUTH_TOKEN = "hmcts-id " + USER_ID;

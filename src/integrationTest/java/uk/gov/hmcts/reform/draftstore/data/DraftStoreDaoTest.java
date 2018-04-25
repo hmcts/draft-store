@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @TestPropertySource("/database.properties")
 @Transactional
-public class DraftStoreDAOTest {
+public class DraftStoreDaoTest {
     private static final String USER_ID = "a user";
     private static final String ANOTHER_USER_ID = "another user";
 
     @Autowired
-    private DraftStoreDAO underTest;
+    private DraftStoreDao underTest;
 
     @Autowired
     private uk.gov.hmcts.reform.draftstore.data.DataAgent dataAgent;

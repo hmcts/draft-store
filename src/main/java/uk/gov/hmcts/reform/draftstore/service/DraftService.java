@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.draftstore.service;
 
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.DraftList;
@@ -21,9 +21,9 @@ import static uk.gov.hmcts.reform.draftstore.service.mappers.ToDbModelMapper.toD
 @Service
 public class DraftService {
 
-    private final DraftStoreDAO draftRepo;
+    private final DraftStoreDao draftRepo;
 
-    public DraftService(DraftStoreDAO draftRepo) {
+    public DraftService(DraftStoreDao draftRepo) {
         this.draftRepo = draftRepo;
     }
 

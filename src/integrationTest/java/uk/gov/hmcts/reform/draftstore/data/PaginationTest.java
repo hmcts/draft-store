@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PaginationTest {
 
     @Autowired
-    private DraftStoreDAO repo;
+    private DraftStoreDao repo;
 
     @Test
     public void should_limit_number_of_results() throws Exception {

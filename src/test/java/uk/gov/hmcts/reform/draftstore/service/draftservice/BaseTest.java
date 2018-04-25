@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.draftstore.service.draftservice;
 import org.junit.Before;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
@@ -15,7 +15,8 @@ import static org.mockito.Matchers.anyInt;
 
 public class BaseTest {
 
-    @Mock DraftStoreDAO repo;
+    @Mock
+    DraftStoreDao repo;
     DraftService draftService;
 
     @Before
