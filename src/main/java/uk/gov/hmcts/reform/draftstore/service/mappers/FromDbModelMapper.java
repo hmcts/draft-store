@@ -6,7 +6,7 @@ import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.service.crypto.CryptoService;
 import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 
-public class FromDbModelMapper {
+public final class FromDbModelMapper {
 
     private static final Logger logger = LoggerFactory.getLogger(FromDbModelMapper.class);
 
@@ -39,5 +39,9 @@ public class FromDbModelMapper {
             dbDraft.created,
             dbDraft.updated
         );
+    }
+
+    private FromDbModelMapper() {
+        // utility class constructor
     }
 }

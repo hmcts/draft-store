@@ -8,7 +8,7 @@ import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 
 import java.time.ZonedDateTime;
 
-public class SampleData {
+public final class SampleData {
     public static Draft draft(String id) {
         return new Draft(
             id,
@@ -37,5 +37,9 @@ public class SampleData {
 
     public static String secret() {
         return Strings.repeat("x", Secrets.MIN_SECRET_LENGTH);
+    }
+
+    private SampleData() {
+        // utility class constructor
     }
 }

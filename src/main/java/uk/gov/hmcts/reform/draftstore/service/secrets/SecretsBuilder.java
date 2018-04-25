@@ -9,7 +9,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_LENGTH;
 
-public class SecretsBuilder {
+public final class SecretsBuilder {
 
     public static final String SEPARATOR = ",";
 
@@ -35,5 +35,9 @@ public class SecretsBuilder {
                 );
             }
         }
+    }
+
+    private SecretsBuilder() {
+        // utility class constructor
     }
 }
