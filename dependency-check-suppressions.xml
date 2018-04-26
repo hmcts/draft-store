@@ -39,4 +39,22 @@ The URL pattern of "" (the empty string) which exactly maps to the context root 
     <cve>CVE-2017-14798</cve>
   </suppress>
 
+  <!-- not used by server -->
+
+  <suppress>
+    <notes><![CDATA[Used only for testing not used in prod]]></notes>
+    <gav regex="true">^org\.testcontainers:postgresql:.*$</gav>
+    <cpe>cpe:/a:postgresql:postgresql</cpe>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[Related to Groovy LDAP API which is not used by the service]]></notes>
+    <gav regex="true">^org\.codehaus\.groovy:groovy-xml:.*$</gav>
+    <cpe>cpe:/a:apache:groovy</cpe>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[Related to Groovy LDAP API which is not used by the service]]></notes>
+    <gav regex="true">^org\.codehaus\.groovy:groovy-json:.*$</gav>
+    <cve>CVE-2016-6497</cve>
+  </suppress>
+
 </suppressions>
