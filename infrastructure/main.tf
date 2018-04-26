@@ -43,6 +43,9 @@ module "api" {
     FLYWAY_PASSWORD             = "${module.db.postgresql_password}"
 
     RUN_DB_MIGRATION_ON_STARTUP = "${var.run_db_migration_on_startup}"
+
+    LOGBACK_REQUIRE_ALERT_LEVEL = "false"
+    LOGBACK_REQUIRE_ERROR_CODE  = "false"
   }
 }
 
