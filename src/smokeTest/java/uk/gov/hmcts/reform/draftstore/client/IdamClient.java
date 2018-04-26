@@ -8,7 +8,9 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.isOneOf;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -54,6 +56,19 @@ public class IdamClient {
             .post(idamUrl + "/testing-support/accounts")
             .then()
             .statusCode(NO_CONTENT.value());
+    }
+
+    /**
+     * Deletes the user with Idam's testing support.
+     */
+    public void deleteUser() {
+        RestAssured
+            .given()
+            .relaxedHTTPSValidation()
+            .baseUri(this.idamUrl)
+            .delete("/testing-support/accounts/{email}", email)
+            .then()
+            .statusCode(isOneOf(NO_CONTENT.value(), NOT_FOUND.value()));
     }
 
     public Optional<String> getAuthorisationCode(boolean failIfUnauthorised) {
