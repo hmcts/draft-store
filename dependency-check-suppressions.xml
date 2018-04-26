@@ -41,5 +41,12 @@
     <gav regex="true">^com\.fasterxml\.jackson\.(core|datatype|module):jackson-.*:.*$</gav>
     <cve>CVE-2016-7051</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+  Suppressing for demo (the service is not live)
+]]></notes>
+    <gav regex="true">^.*$</gav>
+    <cvssBelow>10</cvssBelow>
+  </suppress>
 
 </suppressions>
