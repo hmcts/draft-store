@@ -82,7 +82,8 @@ public abstract class SmokeTestSuite {
             .map(code -> idamClient.getIdamToken(code))
             .orElseGet(() -> {
                 idamClient.registerUser();
-                return idamClient.getAuthorisationCode(true).get();
+                String code = idamClient.getAuthorisationCode(true).get();
+                return idamClient.getIdamToken(code);
             });
     }
 
