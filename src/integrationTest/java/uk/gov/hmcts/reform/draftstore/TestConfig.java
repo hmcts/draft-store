@@ -11,6 +11,6 @@ import uk.gov.hmcts.reform.draftstore.data.DataAgent;
 public class TestConfig {
     @Bean
     public DataAgent dataAgent(NamedParameterJdbcTemplate jdbcTemplate) {
-        return new DataAgent( jdbcTemplate );
+        return new DataAgent(jdbcTemplate);
     }
 }

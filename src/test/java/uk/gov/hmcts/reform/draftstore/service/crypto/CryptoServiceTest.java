@@ -43,4 +43,30 @@ public class CryptoServiceTest {
         assertThat(thrown)
             .isInstanceOf(InvalidKeyException.class);
     }
+
+    @Test
+    public void should_throw_an_exception_when_empty_input_received() {
+        Throwable thrownWhenDecrypt = catchThrowable(() -> CryptoService.decrypt(null, "secret"));
+        Throwable thrownWhenEncrypt = catchThrowable(() -> CryptoService.encrypt(null, "secret"));
+
+        assertThat(thrownWhenDecrypt)
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Input can't be empty");
+        assertThat(thrownWhenEncrypt)
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Input can't be null");
+    }
+
+    @Test
+    public void should_throw_an_exception_when_empty_secret_received() {
+        Throwable thrownWhenDecrypt = catchThrowable(() -> CryptoService.decrypt("input".getBytes(), null));
+        Throwable thrownWhenEncrypt = catchThrowable(() -> CryptoService.encrypt("input", null));
+
+        assertThat(thrownWhenDecrypt)
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Secret can't be empty");
+        assertThat(thrownWhenEncrypt)
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Secret can't be empty");
+    }
 }

@@ -1,14 +1,13 @@
 package uk.gov.hmcts.reform.draftstore.service;
 
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.DraftList;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
-
 
 import java.util.List;
 import java.util.Objects;
@@ -21,9 +20,9 @@ import static uk.gov.hmcts.reform.draftstore.service.mappers.ToDbModelMapper.toD
 @Service
 public class DraftService {
 
-    private final DraftStoreDAO draftRepo;
+    private final DraftStoreDao draftRepo;
 
-    public DraftService(DraftStoreDAO draftRepo) {
+    public DraftService(DraftStoreDao draftRepo) {
         this.draftRepo = draftRepo;
     }
 

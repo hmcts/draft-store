@@ -10,15 +10,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.draftstore.controllers.helpers.SampleData;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
 
 import java.util.UUID;
 
 import static com.jayway.restassured.RestAssured.given;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -37,7 +37,7 @@ So, this test demonstrates that for all unhandled exceptions the exception messa
 public class HandleUnknownExceptionTest {
     private static final String DRAFT_URI = "/drafts";
     @Autowired
-    private DraftStoreDAO dao;
+    private DraftStoreDao dao;
 
     private static final String USER_ID = UUID.randomUUID().toString();
     private static final String AUTH_TOKEN = "hmcts-id " + USER_ID;

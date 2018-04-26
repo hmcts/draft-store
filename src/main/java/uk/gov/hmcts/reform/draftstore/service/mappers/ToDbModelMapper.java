@@ -6,7 +6,7 @@ import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 
 import static uk.gov.hmcts.reform.draftstore.service.crypto.CryptoService.encrypt;
 
-public class ToDbModelMapper {
+public final class ToDbModelMapper {
 
     public static CreateDraft toDb(
         uk.gov.hmcts.reform.draftstore.domain.CreateDraft draft,
@@ -29,5 +29,9 @@ public class ToDbModelMapper {
             encrypt(draft.document.toString(), secrets.primary),
             draft.type
         );
+    }
+
+    private ToDbModelMapper() {
+        // utility class constructor
     }
 }

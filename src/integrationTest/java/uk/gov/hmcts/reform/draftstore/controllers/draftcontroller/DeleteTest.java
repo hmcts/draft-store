@@ -15,9 +15,11 @@ import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,11 +32,11 @@ public class DeleteTest {
     @Autowired private MockMvc mockMvc;
 
     @MockBean private DraftService draftService;
-    @MockBean private AuthService authService; //NOPMD - mock declaration required
+    @MockBean private AuthService authService;
 
     @Test
     public void should_return_403_when_auth_exception_is_thrown() throws Exception {
-
+        given(authService.authenticate(anyString(), anyString())).willReturn(mock(UserAndService.class));
         willThrow(new AuthorizationException())
             .given(draftService)
             .delete(anyString(), any(UserAndService.class));

@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.draftstore.info;
 import org.springframework.boot.actuate.info.Info;
 import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -16,12 +16,12 @@ import static java.time.LocalDateTime.now;
 @Component
 public class UnencryptedDraftsInfoContributor implements InfoContributor {
 
-    private final DraftStoreDAO repo;
+    private final DraftStoreDao repo;
 
     private LocalDateTime lastCheckDate;
     private List<Map<String, Object>> lastResult = new ArrayList<>();
 
-    public UnencryptedDraftsInfoContributor(DraftStoreDAO repo) {
+    public UnencryptedDraftsInfoContributor(DraftStoreDao repo) {
         this.repo = repo;
     }
 

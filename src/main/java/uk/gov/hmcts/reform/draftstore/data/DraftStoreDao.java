@@ -19,15 +19,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
 @SuppressWarnings("checkstyle:LineLength")
-public class DraftStoreDAO {
+public class DraftStoreDao {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final int defaultMaxStaleDays;
     private final Clock clock;
 
-    public DraftStoreDAO(
+    public DraftStoreDao(
         NamedParameterJdbcTemplate jdbcTemplate,
         int defaultMaxStaleDays,
         Clock clock

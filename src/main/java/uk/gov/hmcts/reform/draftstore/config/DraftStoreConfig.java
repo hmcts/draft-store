@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import uk.gov.hmcts.reform.api.filters.SensitiveHeadersRequestTraceFilter;
-import uk.gov.hmcts.reform.draftstore.data.DraftStoreDAO;
+import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClient;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientImpl;
@@ -48,8 +48,8 @@ public class DraftStoreConfig {
     }
 
     @Bean
-    public DraftStoreDAO draftDocumentDAO(NamedParameterJdbcTemplate jdbcTemplate) {
-        return new DraftStoreDAO(
+    public DraftStoreDao draftDocumentDao(NamedParameterJdbcTemplate jdbcTemplate) {
+        return new DraftStoreDao(
             jdbcTemplate,
             maxStaleDaysDefault,
             Clock.systemDefaultZone()

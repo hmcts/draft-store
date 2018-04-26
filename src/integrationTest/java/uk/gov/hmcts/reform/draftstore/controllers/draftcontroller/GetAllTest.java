@@ -17,9 +17,10 @@ import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
 import java.util.Collections;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -44,7 +45,7 @@ public class GetAllTest {
             .willReturn(new UserAndService("john", "service"));
 
         BDDMockito
-            .given(draftService.read(any(UserAndService.class), anyInt(), anyInt()))
+            .given(draftService.read(any(UserAndService.class), eq(null), anyInt()))
             .willReturn(new DraftList(Collections.emptyList()));
 
         mockMvc

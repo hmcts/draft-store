@@ -60,7 +60,7 @@ public class ReadSingleTest extends BaseTest {
     }
 
     @Test
-    public void should_NOT_throw_exception_for_correct_user_and_service() throws Exception {
+    public void should_not_throw_exception_for_correct_user_and_service() throws Exception {
         // given
         UserAndService john = new UserAndService("john", "service");
         thereExists(

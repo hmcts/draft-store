@@ -17,7 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import static com.google.common.base.Charsets.UTF_8;
 
-public class CryptoService {
+public final class CryptoService {
 
     private static final String CIPHER = "AES/GCM/NoPadding";
     private static final Length KEY_LENGTH = Length.BITS_128;
@@ -84,5 +84,9 @@ public class CryptoService {
         new SecureRandom().nextBytes(iv);
 
         return iv;
+    }
+
+    private CryptoService() {
+        // utility class constructor
     }
 }
