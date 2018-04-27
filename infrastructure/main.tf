@@ -3,9 +3,18 @@ provider "vault" {
 }
 
 locals {
-  db_connection_options = "?ssl=true"
-  ase_name        = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
   s2s_url         = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"
+  db_connection_options      = "?ssl=true"
+  ase_name                   = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+  max_vault_name_len         = 24
+  max_vault_product_name_len = "${var.deployment_namespace != ""
+                                    ? local.max_vault_name_len
+                                    : local.max_vault_name_len - 1 - length(var.env)}"
+
+  vault_product_name         = "${substr(var.product, 0, min(length(var.product), local.max_vault_product_name_len))}"
+  vault_name                 = "${var.deployment_namespace != ""
+                                    ? local.vault_product_name
+                                    : format("%s-%s", local.vault_product_name, var.env)}"
 }
 
 module "db" {
@@ -55,6 +64,7 @@ module "api" {
 # region save DB details to Azure Key Vault
 module "key-vault" {
   source              = "git@github.com:hmcts/moj-module-key-vault?ref=master"
+  name                = "${local.vault_name}"
   product             = "${var.product}"
   env                 = "${var.env}"
   tenant_id           = "${var.tenant_id}"
