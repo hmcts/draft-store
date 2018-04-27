@@ -20,6 +20,11 @@ variable "env" {
   type = "string"
 }
 
+# pr-###- in preview environment. Empty elsewhere.
+variable "deployment_namespace" {
+  type = "string"
+}
+
 variable "ilbIp" {}
 
 variable "tenant_id" {}
