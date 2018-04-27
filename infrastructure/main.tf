@@ -3,9 +3,22 @@ provider "vault" {
 }
 
 locals {
-  s2s_url         = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"
   db_connection_options      = "?ssl=true"
   ase_name                   = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+
+  # Environment we take our dependencies from. Typically the same as for the app,
+  # but has to be different for preview
+  dependencies_env = "${var.env == "preview"
+                          ? "aat"
+                          : var.env == "spreview" ? "saat" : var.env
+                      }"
+
+  dependencies_ase = "${var.env == "preview"
+                          ? "core-compute-aat"
+                          : var.env == "spreview" ? "core-compute-saat" : local.ase_name
+                       }"
+
+  s2s_url         = "http://rpe-service-auth-provider-${local.dependencies_env}.service.${local.dependencies_ase}.internal"
   max_vault_name_len         = 24
   max_vault_product_name_len = "${var.deployment_namespace != ""
                                     ? local.max_vault_name_len
