@@ -48,7 +48,7 @@ public abstract class SmokeTestSuite {
     @Value("${draft-store-url}")
     protected String draftStoreUrl;
 
-    @Value("${use-idam-testing-support")
+    @Value("${use-idam-testing-support}")
     protected boolean useIdamTestingSupport;
 
     protected DraftStoreClient draftStoreClient;
