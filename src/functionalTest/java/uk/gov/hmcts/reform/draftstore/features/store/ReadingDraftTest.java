@@ -7,6 +7,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.draftstore.SmokeTestSuite;
 import uk.gov.hmcts.reform.draftstore.response.Draft;
+import uk.gov.hmcts.reform.draftstore.response.DraftList;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -30,5 +31,19 @@ public class ReadingDraftTest extends SmokeTestSuite {
         assertThat(draft.document.get("testing")).isEqualTo("functional");
         assertThat(draft.created).isNotNull();
         assertThat(draft.updated).isNotNull();
+    }
+
+    @Test
+    public void user_can_see_list_of_own_drafts() throws IOException, JSONException {
+        String draftIdA = draftStoreClient.createDraft("{\"a\":\"1\"}");
+        Optional<Draft> responseA = draftStoreClient.readDraft(draftIdA);
+        Draft returnedDraftA = responseA.get();
+
+        String draftIdB = draftStoreClient.createDraft("{\"b\":\"2\"}");
+        Optional<Draft> responseB = draftStoreClient.readDraft(draftIdB);
+        Draft returnedDraftB = responseB.get();
+
+        DraftList draftList = draftStoreClient.readDraftPage();
+        assertThat(draftList.data).containsExactlyInAnyOrder(returnedDraftA, returnedDraftB);
     }
 }
