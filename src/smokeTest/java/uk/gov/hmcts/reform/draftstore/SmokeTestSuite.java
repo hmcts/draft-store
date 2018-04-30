@@ -48,6 +48,9 @@ public abstract class SmokeTestSuite {
     @Value("${draft-store-url}")
     protected String draftStoreUrl;
 
+    @Value("${use-idam-testing-support")
+    protected boolean useIdamTestingSupport;
+
     protected DraftStoreClient draftStoreClient;
 
     @Before
@@ -76,7 +79,9 @@ public abstract class SmokeTestSuite {
      * @return Idam access token
      */
     private String signIntoIdam(IdamClient idamClient) {
-        Optional<String> authorisationCode = idamClient.getAuthorisationCode(false);
+        boolean failIfUnauthorised = !useIdamTestingSupport;
+
+        Optional<String> authorisationCode = idamClient.getAuthorisationCode(failIfUnauthorised);
 
         return authorisationCode
             .map(code -> idamClient.getIdamToken(code))

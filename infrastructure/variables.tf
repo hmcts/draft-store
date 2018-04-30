@@ -58,4 +58,8 @@ variable "run_db_migration_on_startup" {
   default = "false"
 }
 
+variable "use_idam_testing_support" {
+  default = "true"
+}
+
 # endregion
