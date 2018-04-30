@@ -63,3 +63,13 @@ variable "use_idam_testing_support" {
 }
 
 # endregion
+
+# region test config
+
+# redirect-uri to be used by end-to-end tests when signing user in to Idam (must be whitelisted)
+variable "idam_redirect_uri_for_tests" {
+  # despite what it looks like, this is an actual whitelisted URI for test env
+  default = "https://i-am-not-used/receiver"
+}
+
+# endregion
