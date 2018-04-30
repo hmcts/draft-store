@@ -35,7 +35,7 @@ output "idam_client_id_for_tests" {
 
 // One of the whitelisted URLs - tests need to use it in order to log user in
 output "idam_redirect_uri_for_tests" {
-  value = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
+  value = "${var.idam_redirect_uri_for_tests}"
 }
 
 output "use_idam_testing_support" {
