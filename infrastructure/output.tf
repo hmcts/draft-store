@@ -38,4 +38,8 @@ output "idam_redirect_uri_for_tests" {
   value = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
 }
 
+output "use_idam_testing_support" {
+  value = "${var.use_idam_testing_support}"
+}
+
 # endregion
