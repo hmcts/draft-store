@@ -9,11 +9,14 @@ locals {
 }
 
 module "db" {
-  source              = "git@github.com:hmcts/moj-module-postgres"
-  product             = "${var.product}-db"
+  source              = "git@github.com:hmcts/moj-module-postgres?ref=cnp-449-tactical"
+  product             = "${var.product}-postgres-db"
   location            = "${var.location_db}"
   env                 = "${var.env}"
-  postgresql_user     = "draftstore"
+  database_name       = "draft_store"
+  postgresql_user     = "draft_store"
+  sku_name            = "GP_Gen5_2"
+  sku_tier            = "GeneralPurpose"
 }
 
 module "api" {
