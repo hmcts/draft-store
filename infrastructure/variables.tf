@@ -14,7 +14,7 @@ variable "location_api" {
 
 variable "location_db" {
   type    = "string"
-  default = "West Europe"
+  default = "UK South"
 }
 
 variable "env" {
