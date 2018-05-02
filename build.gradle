@@ -153,11 +153,7 @@ dependencies {
   smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
   smokeTestCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
 
-  functionalTestCompile sourceSets.main.runtimeClasspath
-  functionalTestCompile(
-    'org.springframework.boot:spring-boot-starter-test',
-    'io.rest-assured:rest-assured:3.1.0'
-  )
+  functionalTestCompile sourceSets.smokeTest.runtimeClasspath
 }
 
 task integration(type: Test) {

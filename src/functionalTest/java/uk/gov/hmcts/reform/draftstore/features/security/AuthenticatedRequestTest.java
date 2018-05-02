@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class AuthenticatedRequestTest {
 
-    @Value("${test-url}")
+    @Value("${draft-store-url}")
     private String draftStoreUrl;
 
     @Test
