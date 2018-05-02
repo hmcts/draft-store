@@ -1,6 +1,5 @@
 variable "product" {
   type    = "string"
-  default = "draft-store"
 }
 
 variable "component" {
@@ -18,6 +17,11 @@ variable "location_db" {
 }
 
 variable "env" {
+  type = "string"
+}
+
+# pr-###- in preview environment. Empty elsewhere.
+variable "deployment_namespace" {
   type = "string"
 }
 
