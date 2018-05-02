@@ -33,6 +33,7 @@ public class UpdatingDraftTest extends SmokeTestSuite {
         assertThat(newDraft.id).isEqualTo(draftId);
         JsonNode expectedDocument = new ObjectMapper().readTree(newJsonDocument);
         assertThat(newDraft.document).isEqualTo(expectedDocument);
+        assertThat(newDraft.created).isNotNull();
         assertThat(newDraft.created).isLessThanOrEqualTo(newDraft.updated);
     }
 }
