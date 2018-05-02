@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.draftstore.features.store;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,8 +29,8 @@ public class ReadingDraftTest extends SmokeTestSuite {
         Draft draft = response.get();
         assertThat(draft.id).isEqualTo(draftId);
         assertThat(draft.document).isNotNull();
-        assertThat(draft.document.hasNonNull("testing")).isTrue();
-        assertThat(draft.document.get("testing")).isEqualTo("functional");
+        JsonNode expectedDocument = new ObjectMapper().readTree(documentJson);
+        assertThat(draft.document).isEqualTo(expectedDocument);
         assertThat(draft.created).isNotNull();
         assertThat(draft.updated).isNotNull();
     }
