@@ -7,7 +7,6 @@ public class Draft {
     public final String id;
     public final String userId;
     public final String service;
-    public final String document;
     public final byte[] encryptedDocument;
     public final String type;
     public final ZonedDateTime created;
@@ -19,7 +18,6 @@ public class Draft {
         String id,
         String userId,
         String service,
-        String document,
         byte[] encryptedDocument,
         String type,
         ZonedDateTime created,
@@ -28,7 +26,6 @@ public class Draft {
         this.id = id;
         this.userId = userId;
         this.service = service;
-        this.document = document;
         this.encryptedDocument = encryptedDocument;
         this.type = type;
         this.created = created;

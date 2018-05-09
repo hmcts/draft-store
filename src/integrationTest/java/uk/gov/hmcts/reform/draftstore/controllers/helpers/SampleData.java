@@ -14,8 +14,7 @@ public final class SampleData {
             id,
             "abc",
             "serviceA",
-            "{}",
-            null,
+            "{}".getBytes(),
             "some_type",
             ZonedDateTime.now(),
             ZonedDateTime.now()
@@ -23,13 +22,12 @@ public final class SampleData {
     }
 
     public static UpdateDraft updateDraft() {
-        return new UpdateDraft("{}", null, "some_type");
+        return new UpdateDraft("{}".getBytes(), "some_type");
     }
 
     public static CreateDraft createDraft(Integer maxStaleDays) {
         return new CreateDraft(
-            "{}",
-            null,
+            "{}".getBytes(),
             "some_type",
             maxStaleDays
         );

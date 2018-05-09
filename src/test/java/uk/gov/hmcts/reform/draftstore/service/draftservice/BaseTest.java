@@ -29,8 +29,7 @@ public class BaseTest {
             "123",
             userAndService.userId,
             userAndService.service,
-            "{}",
-            null,
+            "{}".getBytes(),
             "some_type",
             ZonedDateTime.now(),
             ZonedDateTime.now()

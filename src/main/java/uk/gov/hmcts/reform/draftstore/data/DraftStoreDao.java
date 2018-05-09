@@ -16,7 +16,6 @@ import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings("checkstyle:LineLength")
@@ -46,12 +45,11 @@ public class DraftStoreDao {
         Timestamp now = Timestamp.from(this.clock.instant());
 
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, service, document, encrypted_document, document_type, max_stale_days, created, updated)"
+            "INSERT INTO draft_document (user_id, service, encrypted_document, document_type, max_stale_days, created, updated)"
                 + "VALUES (:userId, :service, :doc::JSON, :encDoc, :type, :maxStaleDays, :created, :updated)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("service", service)
-                .addValue("doc", newDraft.document)
                 .addValue("encDoc", newDraft.encryptedDocument)
                 .addValue("type", newDraft.type)
                 .addValue("maxStaleDays", Optional.ofNullable(newDraft.maxStaleDays).orElse(defaultMaxStaleDays))
@@ -66,10 +64,9 @@ public class DraftStoreDao {
     public void update(int id, UpdateDraft draft) {
         jdbcTemplate.update(
             "UPDATE draft_document "
-                + "SET document = :doc::JSON, encrypted_document = :encDoc,  document_type = :type, updated = :updated "
+                + "SET encrypted_document = :encDoc, document_type = :type, updated = :updated "
                 + "WHERE id = :id",
             new MapSqlParameterSource()
-                .addValue("doc", draft.document)
                 .addValue("encDoc", draft.encryptedDocument)
                 .addValue("type", draft.type)
                 .addValue("updated", Timestamp.from(this.clock.instant()))
@@ -134,16 +131,6 @@ public class DraftStoreDao {
         );
     }
 
-    public List<Map<String, Object>> getUnencryptedDrafts() {
-        return jdbcTemplate.queryForList(
-            "SELECT service, created, updated "
-                + "FROM draft_document "
-                + "WHERE encrypted_document IS NULL "
-                + "ORDER BY updated DESC",
-            new MapSqlParameterSource()
-        );
-    }
-
     private static final class DraftMapper implements RowMapper<Draft> {
         @Override
         public Draft mapRow(ResultSet rs, int rowNumber) throws SQLException {
@@ -151,7 +138,6 @@ public class DraftStoreDao {
                 rs.getString("id"),
                 rs.getString("user_id"),
                 rs.getString("service"),
-                rs.getString("document"),
                 rs.getBytes("encrypted_document"),
                 rs.getString("document_type"),
                 rs.getTimestamp("created").toInstant().atOffset(ZoneOffset.UTC).toZonedDateTime(),

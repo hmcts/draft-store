@@ -41,7 +41,7 @@ public class DraftStoreDaoTest {
     @Test
     public void deleteAll_should_delete_all_drafts_for_given_user_and_service() {
         String draftType = "some_type";
-        CreateDraft draft = new CreateDraft("{ \"a\": 123 }", null, draftType, 123);
+        CreateDraft draft = new CreateDraft("{ \"a\": 123 }".getBytes(), draftType, 123);
         String service1 = "some_service";
         String service2 = "a different service";
 
