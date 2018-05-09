@@ -78,12 +78,18 @@ public class DraftStoreDaoTest {
 
     @Test
     public void readAll_should_return_all_matching_drafts() throws SQLException {
-        dataAgent.setupDocumentForUser("id", "t", "[1]");
-        dataAgent.setupDocumentForUser("id", "t", "[2]");
+
+        dataAgent.setupDocumentForUser("id", "t", "hello".getBytes());
+        dataAgent.setupDocumentForUser("id", "t", "world".getBytes());
 
         List<Draft> drafts = underTest.readAll("id", "cmc", null, 10);
 
         assertThat(drafts).hasSize(2);
-        assertThat(drafts).extracting("document").contains("[1]", "[2]");
+        assertThat(drafts)
+            .extracting("encryptedDocument")
+            .contains(
+                "hello".getBytes(),
+                "world".getBytes()
+            );
     }
 }

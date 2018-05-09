@@ -46,7 +46,7 @@ public class DraftStoreDao {
 
         jdbcTemplate.update(
             "INSERT INTO draft_document (user_id, service, encrypted_document, document_type, max_stale_days, created, updated)"
-                + "VALUES (:userId, :service, :doc::JSON, :encDoc, :type, :maxStaleDays, :created, :updated)",
+                + "VALUES (:userId, :service, :encDoc, :type, :maxStaleDays, :created, :updated)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("service", service)
