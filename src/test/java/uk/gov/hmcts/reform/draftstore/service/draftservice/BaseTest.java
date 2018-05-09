@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
+import uk.gov.hmcts.reform.draftstore.service.crypto.CryptoService;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class BaseTest {
             "123",
             userAndService.userId,
             userAndService.service,
-            "{}".getBytes(),
+            CryptoService.encrypt("{}", userAndService.secrets.primary),
             "some_type",
             ZonedDateTime.now(),
             ZonedDateTime.now()

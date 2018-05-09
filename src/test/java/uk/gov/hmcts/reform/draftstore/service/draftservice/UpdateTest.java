@@ -23,7 +23,7 @@ public class UpdateTest extends BaseTest {
 
         // when
         Throwable exception = catchThrowable(() ->
-            callUpdateAs(new UserAndService("john", "service"))
+            callUpdateAs(new UserAndService("john", "service", SampleSecret.getObject()))
         );
 
         // then
@@ -36,12 +36,12 @@ public class UpdateTest extends BaseTest {
 
         // given
         thereExists(
-            draftCreatedBy(new UserAndService("john", "service"))
+            draftCreatedBy(new UserAndService("john", "service", SampleSecret.getObject()))
         );
 
         // when
         Throwable exception = catchThrowable(() ->
-            callUpdateAs(new UserAndService("definitely not john", "service"))
+            callUpdateAs(new UserAndService("definitely not john", "service", SampleSecret.getObject()))
         );
 
         // then
@@ -52,7 +52,7 @@ public class UpdateTest extends BaseTest {
     public void should_throw_exception_when_trying_to_update_draft_assigned_to_different_service() throws Exception {
         // given
         thereExists(
-            draftCreatedBy(new UserAndService("john", "service_A"))
+            draftCreatedBy(new UserAndService("john", "service_A", SampleSecret.getObject()))
         );
 
         // when
@@ -67,7 +67,7 @@ public class UpdateTest extends BaseTest {
     @Test
     public void should_not_throw_exception_when_updating_own_draft() throws Exception {
         // given
-        UserAndService john = new UserAndService("john", "service");
+        UserAndService john = new UserAndService("john", "service", SampleSecret.getObject());
         thereExists(
             draftCreatedBy(john)
         );
