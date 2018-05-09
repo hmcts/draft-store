@@ -4,17 +4,21 @@ import com.google.common.base.Strings;
 import uk.gov.hmcts.reform.draftstore.data.model.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.data.model.UpdateDraft;
+import uk.gov.hmcts.reform.draftstore.service.crypto.CryptoService;
 import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 
 import java.time.ZonedDateTime;
 
 public final class SampleData {
+
+    private static final byte[] encryptedDoc = CryptoService.encrypt("{}", secret());
+
     public static Draft draft(String id) {
         return new Draft(
             id,
             "abc",
             "serviceA",
-            "{}".getBytes(),
+            encryptedDoc,
             "some_type",
             ZonedDateTime.now(),
             ZonedDateTime.now()
@@ -22,12 +26,12 @@ public final class SampleData {
     }
 
     public static UpdateDraft updateDraft() {
-        return new UpdateDraft("{}".getBytes(), "some_type");
+        return new UpdateDraft(encryptedDoc, "some_type");
     }
 
     public static CreateDraft createDraft(Integer maxStaleDays) {
         return new CreateDraft(
-            "{}".getBytes(),
+            encryptedDoc,
             "some_type",
             maxStaleDays
         );
