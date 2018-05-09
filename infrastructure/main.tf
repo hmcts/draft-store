@@ -3,9 +3,29 @@ provider "vault" {
 }
 
 locals {
-  db_connection_options = "?ssl=true"
-  ase_name        = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
-  s2s_url         = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"
+  db_connection_options  = "?ssl=true"
+  ase_name               = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+
+  # Environment we take our dependencies from. Typically the same as for the app,
+  # but has to be different for preview
+  dependencies_env       = "${var.env == "preview"
+                                ? "aat"
+                                : var.env == "spreview" ? "saat" : var.env
+                             }"
+
+  dependencies_ase       = "${var.env == "preview"
+                                ? "core-compute-aat"
+                                : var.env == "spreview" ? "core-compute-saat" : local.ase_name
+                             }"
+
+  s2s_url                = "http://rpe-service-auth-provider-${local.dependencies_env}.service.${local.dependencies_ase}.internal"
+
+  preview_vault_name     = "${var.product}"
+  default_vault_name     = "${var.product}-${var.env}"
+  vault_name             = "${(var.env == "preview" || var.env == "spreview")
+                                 ? local.preview_vault_name
+                                 : local.default_vault_name
+                             }"
 }
 
 module "db" {
@@ -53,8 +73,12 @@ module "api" {
 }
 
 # region save DB details to Azure Key Vault
+
+# this key vault is created in every environment, but preview, being short-lived,
+# will use the aat one instead
 module "key-vault" {
   source              = "git@github.com:hmcts/moj-module-key-vault?ref=master"
+  name                = "${local.vault_name}"
   product             = "${var.product}"
   env                 = "${var.env}"
   tenant_id           = "${var.tenant_id}"

@@ -3,7 +3,7 @@ output "vaultUri" {
 }
 
 output "vaultName" {
-  value = "${module.key-vault.key_vault_name}"
+  value = "${local.vault_name}"
 }
 
 output "microserviceName" {
