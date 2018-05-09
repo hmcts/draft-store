@@ -48,6 +48,25 @@ public class OldDraftsCleanupTest {
     }
 
     @Test
+    public void should_use_default_max_stale_days_to_determine_whether_to_delete_drafts_with_null_max_stale_days() {
+        final int defaultMaxStaleDays = 30;
+        DraftStoreDao nowRepo = repoAtTime(now, defaultMaxStaleDays);
+
+        int old = nowRepo.insert("", "", SampleData.createDraft(null));
+        int ok = nowRepo.insert("", "", SampleData.createDraft(defaultMaxStaleDays + 5));
+
+        after(
+            Duration.of(defaultMaxStaleDays + 1, DAYS),
+            repo -> {
+                repo.deleteStaleDrafts();
+
+                assertThat(repo.read(old)).isEmpty();
+                assertThat(repo.read(ok)).isNotEmpty();
+            }
+        );
+    }
+
+    @Test
     public void should_not_remove_old_drafts_that_were_recently_updated() throws Exception {
 
         int newDraftId = repoAtTime(now).insert("", "", SampleData.createDraft(10));
@@ -67,9 +86,13 @@ public class OldDraftsCleanupTest {
     }
 
     private DraftStoreDao repoAtTime(Instant instant) {
+        return repoAtTime(instant, 0);
+    }
+
+    private DraftStoreDao repoAtTime(Instant instant, int defaultMaxStaleDays) {
         return new DraftStoreDao(
             jdbcTemplate,
-            0,
+            defaultMaxStaleDays,
             Clock.fixed(instant, ZoneId.systemDefault())
         );
     }
