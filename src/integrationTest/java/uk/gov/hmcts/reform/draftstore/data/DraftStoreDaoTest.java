@@ -9,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.reform.draftstore.controllers.helpers.SampleData;
 import uk.gov.hmcts.reform.draftstore.data.model.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 
@@ -40,10 +41,9 @@ public class DraftStoreDaoTest {
 
     @Test
     public void deleteAll_should_delete_all_drafts_for_given_user_and_service() {
-        String draftType = "some_type";
-        CreateDraft draft = new CreateDraft("{ \"a\": 123 }".getBytes(), draftType, 123);
         String service1 = "some_service";
         String service2 = "a different service";
+        CreateDraft draft = SampleData.createDraft(123);
 
         // given
         underTest.insert(USER_ID, service1, draft);
