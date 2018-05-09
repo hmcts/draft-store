@@ -38,6 +38,7 @@ public class DraftStoreDao {
 
     /**
      * Creates a new draft.
+     *
      * @return id of newly created draft.
      */
     public int insert(String userId, String service, CreateDraft newDraft) {
@@ -126,8 +127,10 @@ public class DraftStoreDao {
     public void deleteStaleDrafts() {
         jdbcTemplate.update(
             "DELETE FROM draft_document "
-                + "WHERE updated + interval '1 day' * max_stale_days < :now",
-            new MapSqlParameterSource("now", Timestamp.from(this.clock.instant()))
+                + "WHERE updated + interval '1 day' * COALESCE(max_stale_days, :defaultMaxStaleDays) < :now",
+            new MapSqlParameterSource()
+                .addValue("now", Timestamp.from(this.clock.instant()))
+                .addValue("defaultMaxStaleDays", this.defaultMaxStaleDays)
         );
     }
 

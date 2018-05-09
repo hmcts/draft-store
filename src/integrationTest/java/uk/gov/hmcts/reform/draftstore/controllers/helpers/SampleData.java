@@ -26,7 +26,7 @@ public final class SampleData {
         return new UpdateDraft("{}", null, "some_type");
     }
 
-    public static CreateDraft createDraft(int maxStaleDays) {
+    public static CreateDraft createDraft(Integer maxStaleDays) {
         return new CreateDraft(
             "{}",
             null,
