@@ -11,9 +11,8 @@ variable "location_api" {
   default = "UK South"
 }
 
-variable "location_db" {
-  type    = "string"
-  default = "UK South"
+variable "db_host" {
+  default = "test-data-lb.moneyclaim.reform.hmcts.net"
 }
 
 variable "env" {
