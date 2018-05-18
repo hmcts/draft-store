@@ -110,4 +110,4 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   value     = "draftstore"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
-
+# endregion
