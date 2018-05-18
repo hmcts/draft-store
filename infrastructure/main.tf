@@ -65,6 +65,8 @@ module "api" {
   }
 }
 
+# region save DB details to Azure Key Vault
+
 # this key vault is created in every environment, but preview, being short-lived,
 # will use the aat one instead
 module "key-vault" {
@@ -77,5 +79,35 @@ module "key-vault" {
   resource_group_name = "${module.api.resource_group_name}"
   # dcd_cc-dev group object ID
   product_group_object_id = "38f9dea6-e861-4a50-9e73-21e64f563537"
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-USER" {
+  name      = "${var.component}-POSTGRES-USER"
+  value     = "draftstore"
+  vault_uri = "${module.key-vault.key_vault_uri}"
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
+  name      = "${var.component}-POSTGRES-PASS"
+  value     = "${data.vault_generic_secret.db_password.data["value"]}"
+  vault_uri = "${module.key-vault.key_vault_uri}"
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
+  name      = "${var.component}-POSTGRES-HOST"
+  value     = "${var.db_host}"
+  vault_uri = "${module.key-vault.key_vault_uri}"
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
+  name      = "${var.component}-POSTGRES-PORT"
+  value     = "5432"
+  vault_uri = "${module.key-vault.key_vault_uri}"
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
+  name      = "${var.component}-POSTGRES-DATABASE"
+  value     = "draftstore"
+  vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
