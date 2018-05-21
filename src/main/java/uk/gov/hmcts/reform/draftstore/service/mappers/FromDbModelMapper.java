@@ -16,19 +16,14 @@ public final class FromDbModelMapper {
     ) {
         String documentToReturn;
 
-        // only during transition stage
-        if (dbDraft.encryptedDocument == null) {
-            documentToReturn = dbDraft.document;
-        } else {
-            try {
-                documentToReturn = CryptoService.decrypt(dbDraft.encryptedDocument, secrets.primary);
-            } catch (Exception exc) {
-                if (secrets.secondary != null) {
-                    logger.info("Unable to decrypt using primary secret, retrying with secondary");
-                    documentToReturn = CryptoService.decrypt(dbDraft.encryptedDocument, secrets.secondary);
-                } else {
-                    throw exc;
-                }
+        try {
+            documentToReturn = CryptoService.decrypt(dbDraft.encryptedDocument, secrets.primary);
+        } catch (Exception exc) {
+            if (secrets.secondary != null) {
+                logger.info("Unable to decrypt using primary secret, retrying with secondary");
+                documentToReturn = CryptoService.decrypt(dbDraft.encryptedDocument, secrets.secondary);
+            } else {
+                throw exc;
             }
         }
 

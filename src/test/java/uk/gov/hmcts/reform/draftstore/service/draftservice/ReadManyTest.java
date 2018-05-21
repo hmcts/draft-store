@@ -6,6 +6,7 @@ import org.mockito.BDDMockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.draftstore.domain.DraftList;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
+import uk.gov.hmcts.reform.draftstore.service.mappers.SampleSecret;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -19,12 +20,13 @@ public class ReadManyTest extends BaseTest {
     @Test
     public void should_return_empty_list_when_no_drafts_were_found() throws Exception {
         // given
+        UserAndService creds = new UserAndService("john", "service", SampleSecret.getObject());
         BDDMockito
             .given(repo.readAll(anyString(), anyString(), anyInt(), anyInt()))
             .willReturn(emptyList());
 
         // when
-        DraftList result = draftService.read(new UserAndService("john", "service"), 10, 10);
+        DraftList result = draftService.read(creds, 10, 10);
 
         // then
         assertThat(result).isNotNull();
@@ -34,12 +36,14 @@ public class ReadManyTest extends BaseTest {
     @Test
     public void should_return_list_of_drafts() throws Exception {
         // given
+        UserAndService creds = new UserAndService("john", "service", SampleSecret.getObject());
+
         BDDMockito
             .given(repo.readAll(anyString(), anyString(), anyInt(), anyInt()))
-            .willReturn(singletonList(draftCreatedBy(new UserAndService("john", "service"))));
+            .willReturn(singletonList(draftCreatedBy(creds)));
 
         // when
-        DraftList result = draftService.read(new UserAndService("john", "service"), 10, 10);
+        DraftList result = draftService.read(creds, 10, 10);
 
         // then
         assertThat(result).isNotNull();

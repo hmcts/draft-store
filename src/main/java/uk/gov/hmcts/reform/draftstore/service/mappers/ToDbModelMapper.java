@@ -13,7 +13,6 @@ public final class ToDbModelMapper {
         Secrets secrets
     ) {
         return new CreateDraft(
-            null,
             encrypt(draft.document.toString(), secrets.primary),
             draft.type,
             draft.maxStaleDays
@@ -25,7 +24,6 @@ public final class ToDbModelMapper {
         Secrets secrets
     ) {
         return new UpdateDraft(
-            null,
             encrypt(draft.document.toString(), secrets.primary),
             draft.type
         );

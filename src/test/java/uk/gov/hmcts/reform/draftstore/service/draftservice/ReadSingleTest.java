@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
+import uk.gov.hmcts.reform.draftstore.service.mappers.SampleSecret;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -19,7 +20,7 @@ public class ReadSingleTest extends BaseTest {
 
         // when
         Throwable exception = catchThrowable(
-            () -> draftService.read("123", new UserAndService("john", "service"))
+            () -> draftService.read("123", new UserAndService("john", "service", SampleSecret.getObject()))
         );
 
         // then
@@ -29,13 +30,16 @@ public class ReadSingleTest extends BaseTest {
     @Test
     public void should_throw_exception_if_trying_to_read_draft_assigned_to_different_user() throws Exception {
         // given
+        UserAndService john = new UserAndService("john", "service", SampleSecret.getObject());
+        UserAndService someoneElse = new UserAndService("definitely not john", "service", SampleSecret.getObject());
+
         thereExists(
-            draftCreatedBy(new UserAndService("john", "service"))
+            draftCreatedBy(john)
         );
 
         // when
         Throwable exception = catchThrowable(
-            () -> draftService.read("123", new UserAndService("definitely not john", "service"))
+            () -> draftService.read("123", someoneElse)
         );
 
         // then
@@ -45,13 +49,16 @@ public class ReadSingleTest extends BaseTest {
     @Test
     public void should_throw_exception_if_trying_to_read_draft_assigned_to_different_service() throws Exception {
         // given
+        UserAndService john1 = new UserAndService("john", "serviceA", SampleSecret.getObject());
+        UserAndService john2 = new UserAndService("john", "serviceBBBBBBB", SampleSecret.getObject());
+
         thereExists(
-            draftCreatedBy(new UserAndService("john", "serviceA"))
+            draftCreatedBy(john1)
         );
 
         // when
         Throwable exception = catchThrowable(
-            () -> draftService.read("123", new UserAndService("john", "serviceBBBBBBB"))
+            () -> draftService.read("123", john2)
         );
 
         // then
@@ -62,7 +69,7 @@ public class ReadSingleTest extends BaseTest {
     @Test
     public void should_not_throw_exception_for_correct_user_and_service() throws Exception {
         // given
-        UserAndService john = new UserAndService("john", "service");
+        UserAndService john = new UserAndService("john", "service", SampleSecret.getObject());
         thereExists(
             draftCreatedBy(john)
         );

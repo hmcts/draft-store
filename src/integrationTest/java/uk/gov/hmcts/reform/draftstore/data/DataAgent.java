@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.draftstore.data;
 
-import org.postgresql.util.PGobject;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
@@ -13,17 +12,14 @@ public class DataAgent {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void setupDocumentForUser(String userId, String type, String document) throws SQLException {
-        PGobject jsonbObj = new PGobject();
-        jsonbObj.setType("json");
-        jsonbObj.setValue(document);
+    public void setupDocumentForUser(String userId, String type, byte[] encryptedDoc) throws SQLException {
 
         jdbcTemplate.update(
-            "INSERT INTO draft_document (user_id, document_type, service, document, created, updated) "
-                + "VALUES (:userId, :type, 'cmc', :document, now(), now())",
+            "INSERT INTO draft_document (user_id, document_type, encrypted_document, service, created, updated) "
+                + "VALUES (:userId, :type, :document, 'cmc', now(), now())",
             new MapSqlParameterSource("userId", userId)
                 .addValue("type", type)
-                .addValue("document", jsonbObj)
+                .addValue("document", encryptedDoc)
         );
     }
 
