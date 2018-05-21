@@ -15,9 +15,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import static java.time.Instant.now;
 import static java.time.temporal.ChronoUnit.DAYS;
+import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,6 +45,24 @@ public class OldDraftsCleanupTest {
                 repo.deleteStaleDrafts();
                 assertThat(repo.read(d1)).isEmpty();
                 assertThat(repo.read(d2)).isNotEmpty();
+            }
+        );
+    }
+
+    @Test
+    public void should_return_the_number_of_deleted_drafts() throws Exception {
+        DraftStoreDao nowRepo = repoAtTime(now);
+        final int draftsToDeleteCount = 3;
+
+        range(0, draftsToDeleteCount).forEach(x ->
+            nowRepo.insert("", "", SampleData.createDraft(1))
+        );
+
+        after(
+            Duration.of(10, DAYS),
+            repo -> {
+                int count = repo.deleteStaleDrafts();
+                assertThat(count).isEqualTo(draftsToDeleteCount);
             }
         );
     }

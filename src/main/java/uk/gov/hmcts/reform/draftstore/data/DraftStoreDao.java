@@ -124,8 +124,12 @@ public class DraftStoreDao {
         );
     }
 
-    public void deleteStaleDrafts() {
-        jdbcTemplate.update(
+    /**
+     * Deletes drafts that were not updated for a specific time.
+     * @return number of deleted drafts
+     */
+    public int deleteStaleDrafts() {
+        return jdbcTemplate.update(
             "DELETE FROM draft_document "
                 + "WHERE updated + interval '1 day' * COALESCE(max_stale_days, :defaultMaxStaleDays) < :now",
             new MapSqlParameterSource()
