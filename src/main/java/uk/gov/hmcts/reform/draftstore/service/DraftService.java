@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static uk.gov.hmcts.reform.draftstore.service.mappers.FromDbModelMapper.fromDb;
@@ -76,13 +77,15 @@ public class DraftService {
     }
 
     public void delete(String id, UserAndService userAndService) {
-        draftRepo
-            .read(toInternalId(id))
-            .ifPresent(d -> {
-                assertCanEdit(d, userAndService);
-                draftRepo.delete(toInternalId(id));
-                log.info("Deleted draft. ID: {}", id);
-            });
+        Optional<uk.gov.hmcts.reform.draftstore.data.model.Draft> draft = draftRepo.read(toInternalId(id));
+
+        if (draft.isPresent()) {
+            assertCanEdit(draft.get(), userAndService);
+            draftRepo.delete(toInternalId(id));
+            log.info("Deleted draft. ID: {}", id);
+        } else {
+            log.warn("Tried to delete draft {}, but it was not found", id);
+        }
     }
 
     public void deleteAll(UserAndService userAndService) {
