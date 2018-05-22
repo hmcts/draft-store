@@ -20,7 +20,7 @@ public class ScheduledTasks {
 
     @Scheduled(cron = "${maxStaleDays.cron}")
     public void deleteStaleDrafts() {
-        log.trace("Deleting stale drafts...");
+        log.info("Deleting stale drafts...");
         int count = repo.deleteStaleDrafts();
         log.info("Deleted {} stale drafts", count);
     }
