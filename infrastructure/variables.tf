@@ -46,7 +46,7 @@ variable "vault_section" {
 # region app config
 
 variable "idam_api_url" {
-  default = "http://idam-api-idam-saat.service.core-compute-saat.internal"
+  default = "http://betaDevBccidamAppLB.reform.hmcts.net"
 }
 
 variable "max_stale_days_default" {
