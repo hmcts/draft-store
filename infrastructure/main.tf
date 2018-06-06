@@ -39,6 +39,7 @@ module "api" {
   env           = "${var.env}"
   ilbIp         = "${var.ilbIp}"
   subscription  = "${var.subscription}"
+  capacity      = "${var.capacity}"
 
   app_settings = {
     DRAFT_STORE_DB_HOST         = "${var.db_host}"
