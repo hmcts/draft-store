@@ -5,17 +5,10 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 import java.util.Base64;
-import java.util.Map;
-import java.util.Optional;
 
-import static org.hamcrest.Matchers.isOneOf;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 public class IdamClient {
@@ -44,40 +37,30 @@ public class IdamClient {
     }
 
     /**
-     * Registers a new user with Idam's testing support.
+     * Signs into Idam using credentials from config.
+     *
+     * @return Idam access token
      */
-    public void registerUser() {
-        RestAssured
+    public String signIn() {
+        String authorisationCode = getAuthorisationCode();
+        return getIdamToken(authorisationCode);
+    }
+
+    public String getTestToken() {
+        return RestAssured
             .given()
             .relaxedHTTPSValidation()
             .baseUri(this.idamUrl)
-            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-            .body(buildUserRegistrationRequestBody())
-            .post(idamUrl + "/testing-support/accounts")
-            .then()
-            .statusCode(NO_CONTENT.value());
+            .get("/testing-support/lease")
+            .getBody()
+            .asString();
     }
 
-    /**
-     * Deletes the user with Idam's testing support.
-     */
-    public void deleteUser() {
-        RestAssured
-            .given()
-            .relaxedHTTPSValidation()
-            .baseUri(this.idamUrl)
-            .delete("/testing-support/accounts/{email}", email)
-            .then()
-            .statusCode(isOneOf(NO_CONTENT.value(), NOT_FOUND.value()));
-    }
-
-    public Optional<String> getAuthorisationCode(boolean failIfUnauthorised) {
+    private String getAuthorisationCode() {
         Response response = sendAuthorisationRequest();
 
         if (response.getStatusCode() == OK.value()) {
-            return Optional.of(extractAuthorisationCodeFromIdamResponse(response));
-        } else if (response.getStatusCode() == UNAUTHORIZED.value() && !failIfUnauthorised) {
-            return Optional.empty();
+            return extractAuthorisationCodeFromIdamResponse(response);
         } else {
             throw new AssertionError(String.format(
                 "Unexpected Idam response (%s) when trying to log user in. Response body: %s",
@@ -87,7 +70,7 @@ public class IdamClient {
         }
     }
 
-    public String getIdamToken(String code) {
+    private String getIdamToken(String code) {
         return RestAssured
             .given()
             .relaxedHTTPSValidation()
@@ -133,15 +116,6 @@ public class IdamClient {
         String unencodedToken = String.format("%s:%s", email, password);
 
         return Base64.getEncoder().encodeToString(unencodedToken.getBytes());
-    }
-
-    private Map<String, String> buildUserRegistrationRequestBody() {
-        return ImmutableMap.of(
-            "email", this.email,
-            "forename", "Platform Engineering",
-            "surname", "Smoke tests",
-            "password", this.password
-        );
     }
 
     private String extractAuthorisationCodeFromIdamResponse(Response response) {

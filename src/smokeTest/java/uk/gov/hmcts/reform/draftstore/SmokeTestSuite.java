@@ -11,8 +11,6 @@ import uk.gov.hmcts.reform.draftstore.client.DraftStoreClient;
 import uk.gov.hmcts.reform.draftstore.client.IdamClient;
 import uk.gov.hmcts.reform.draftstore.client.S2sClient;
 
-import java.util.Optional;
-
 @RunWith(SpringRunner.class)
 @SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod")
 @TestPropertySource("classpath:application.properties")
@@ -56,7 +54,8 @@ public abstract class SmokeTestSuite {
     @Before
     public void setUp() {
         String s2sToken = new S2sClient(s2sUrl, s2sName, s2sSecret).signIntoS2S();
-        String idamToken = signIntoIdam(createIdamClient());
+        IdamClient idamClient = createIdamClient();
+        String idamToken = this.useIdamTestingSupport ? idamClient.getTestToken() : idamClient.signIn();
 
         String encryptionSecret = RandomString.make(20);
 
@@ -71,26 +70,6 @@ public abstract class SmokeTestSuite {
     @After
     public void tearDown() {
         draftStoreClient.deleteAllUsersDrafts();
-    }
-
-    /**
-     * Signs into Idam. If 401 response is returned, registers the user and retries.
-     *
-     * @return Idam access token
-     */
-    private String signIntoIdam(IdamClient idamClient) {
-        boolean failIfUnauthorised = !useIdamTestingSupport;
-
-        Optional<String> authorisationCode = idamClient.getAuthorisationCode(failIfUnauthorised);
-
-        return authorisationCode
-            .map(code -> idamClient.getIdamToken(code))
-            .orElseGet(() -> {
-                idamClient.deleteUser();
-                idamClient.registerUser();
-                String code = idamClient.getAuthorisationCode(true).get();
-                return idamClient.getIdamToken(code);
-            });
     }
 
     private IdamClient createIdamClient() {
