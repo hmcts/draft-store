@@ -51,7 +51,7 @@ public class IdamClient {
             .given()
             .relaxedHTTPSValidation()
             .baseUri(this.idamUrl)
-            .get("/testing-support/lease")
+            .post("/testing-support/lease?id=1&role=citizen")
             .getBody()
             .asString();
     }
