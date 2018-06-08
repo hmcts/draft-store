@@ -50,7 +50,7 @@ variable "capacity" {
 # region app config
 
 variable "idam_api_url" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net"
+  default = "http://idam-api-idam-saat.service.core-compute-saat.internal"
 }
 
 variable "max_stale_days_default" {
