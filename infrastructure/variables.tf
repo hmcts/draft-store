@@ -43,10 +43,6 @@ variable "vault_section" {
   default = "test"
 }
 
-variable "capacity" {
-  default = "1"
-}
-
 # region app config
 
 variable "idam_api_url" {
