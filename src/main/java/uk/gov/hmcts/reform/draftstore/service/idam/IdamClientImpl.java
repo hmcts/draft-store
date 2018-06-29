@@ -32,7 +32,7 @@ public class IdamClientImpl implements IdamClient {
                     User.class
                 ).getBody();
 
-        } catch (HttpClientErrorException exc) {
+        } catch (HttpClientErrorException exc) { // idam returns 401 if token is invalid...
             throw new InvalidIdamTokenException(exc.getMessage(), exc);
         }
     }

@@ -31,7 +31,7 @@ public class S2sClientImpl implements S2sClient {
                     String.class
                 ).getBody();
 
-        } catch (HttpClientErrorException exc) { // s2s throws 401 if token is invalid...
+        } catch (HttpClientErrorException exc) { // s2s returns 401 if token is invalid...
             throw new InvalidServiceTokenException(exc.getMessage(), exc);
         }
     }
