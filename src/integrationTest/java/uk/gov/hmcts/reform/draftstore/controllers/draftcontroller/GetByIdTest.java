@@ -16,6 +16,8 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
+import uk.gov.hmcts.reform.draftstore.service.idam.InvalidIdamTokenException;
+import uk.gov.hmcts.reform.draftstore.service.s2s.InvalidServiceTokenException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,6 +36,7 @@ public class GetByIdTest {
     @MockBean private DraftService draftService;
     @MockBean private AuthService authService;
 
+    // TODO: create a separate test for checking exception mapping in the app in general.
     @Test
     public void should_map_no_draft_exception_to_404() throws Exception {
         BDDMockito
@@ -44,6 +47,28 @@ public class GetByIdTest {
 
         assertThat(status).isEqualTo(HttpStatus.NOT_FOUND.value());
 
+    }
+
+    @Test
+    public void should_map_InvalidIdamTokenException_to_401() throws Exception {
+        BDDMockito
+            .given(authService.authenticate(anyString(), anyString()))
+            .willThrow(new InvalidIdamTokenException("msg", null));
+
+        int status = callGet();
+
+        assertThat(status).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    public void should_map_InvalidServiceTokenException_to_401() throws Exception {
+        BDDMockito
+            .given(authService.authenticate(anyString(), anyString()))
+            .willThrow(new InvalidServiceTokenException("msg", null));
+
+        int status = callGet();
+
+        assertThat(status).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
     @Test
