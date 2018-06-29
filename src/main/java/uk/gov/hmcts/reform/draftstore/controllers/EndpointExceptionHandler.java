@@ -164,7 +164,7 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidServiceTokenException.class)
-    public ResponseEntity<ErrorResult> handleInvalidSerbiceTokenException(HttpServletRequest req, Exception exc) {
+    public ResponseEntity<ErrorResult> handleInvalidServiceTokenException(HttpServletRequest req, Exception exc) {
         log.warn(exc.getMessage(), exc);
         return new ResponseEntity<>(
             new ErrorResult(INVALID_SERVICE_AUTH_TOKEN, emptyList()),
