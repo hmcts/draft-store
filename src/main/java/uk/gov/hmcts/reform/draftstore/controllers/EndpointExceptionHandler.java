@@ -9,13 +9,13 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import uk.gov.hmcts.reform.draftstore.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.crypto.InvalidKeyException;
+import uk.gov.hmcts.reform.draftstore.service.idam.InvalidIdamTokenException;
 import uk.gov.hmcts.reform.draftstore.service.secrets.SecretsException;
 
 import java.util.List;
@@ -29,6 +29,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.hmcts.reform.draftstore.domain.ErrorCode.BAD_ARGUMENT;
 import static uk.gov.hmcts.reform.draftstore.domain.ErrorCode.INVALID_AUTH_TOKEN;
 import static uk.gov.hmcts.reform.draftstore.domain.ErrorCode.NO_RECORD_FOUND;
@@ -151,12 +152,12 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<ErrorResult> unknownException(HttpServletRequest req, HttpClientErrorException exc) {
+    @ExceptionHandler(InvalidIdamTokenException.class)
+    public ResponseEntity<ErrorResult> handleInvalidIdamTokenException(HttpServletRequest req, Exception exc) {
         log.warn(exc.getMessage(), exc);
         return new ResponseEntity<>(
             new ErrorResult(INVALID_AUTH_TOKEN, emptyList()),
-            exc.getStatusCode()
+            UNAUTHORIZED
         );
     }
 }
