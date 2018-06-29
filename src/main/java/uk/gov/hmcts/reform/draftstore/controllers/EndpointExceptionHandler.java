@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.crypto.InvalidKeyException;
 import uk.gov.hmcts.reform.draftstore.service.idam.InvalidIdamTokenException;
+import uk.gov.hmcts.reform.draftstore.service.s2s.InvalidServiceTokenException;
 import uk.gov.hmcts.reform.draftstore.service.secrets.SecretsException;
 
 import java.util.List;
@@ -32,6 +33,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.hmcts.reform.draftstore.domain.ErrorCode.BAD_ARGUMENT;
 import static uk.gov.hmcts.reform.draftstore.domain.ErrorCode.INVALID_AUTH_TOKEN;
+import static uk.gov.hmcts.reform.draftstore.domain.ErrorCode.INVALID_SERVICE_AUTH_TOKEN;
 import static uk.gov.hmcts.reform.draftstore.domain.ErrorCode.NO_RECORD_FOUND;
 import static uk.gov.hmcts.reform.draftstore.domain.ErrorCode.SERVER_ERROR;
 import static uk.gov.hmcts.reform.draftstore.domain.ErrorCode.USER_DETAILS_SERVICE_ERROR;
@@ -157,6 +159,15 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn(exc.getMessage(), exc);
         return new ResponseEntity<>(
             new ErrorResult(INVALID_AUTH_TOKEN, emptyList()),
+            UNAUTHORIZED
+        );
+    }
+
+    @ExceptionHandler(InvalidServiceTokenException.class)
+    public ResponseEntity<ErrorResult> handleInvalidSerbiceTokenException(HttpServletRequest req, Exception exc) {
+        log.warn(exc.getMessage(), exc);
+        return new ResponseEntity<>(
+            new ErrorResult(INVALID_SERVICE_AUTH_TOKEN, emptyList()),
             UNAUTHORIZED
         );
     }
