@@ -39,6 +39,8 @@ public class GetByIdTest {
     // TODO: create a separate test for checking exception mapping in the app in general.
     @Test
     public void should_map_no_draft_exception_to_404() throws Exception {
+        givenIsAuthenticated();
+
         BDDMockito
             .given(draftService.read(anyString(), any(UserAndService.class)))
             .willThrow(new NoDraftFoundException());
@@ -73,16 +75,20 @@ public class GetByIdTest {
 
     @Test
     public void should_return_200_if_draft_is_found() throws Exception {
+        givenIsAuthenticated();
+
         int status = callGet();
 
         assertThat(status).isEqualTo(HttpStatus.OK.value());
     }
 
-    private int callGet() throws Exception {
+    private void givenIsAuthenticated() {
         BDDMockito
             .given(authService.authenticate(anyString(), anyString()))
             .willReturn(new UserAndService("john", "service"));
+    }
 
+    private int callGet() throws Exception {
         MvcResult result =
             mockMvc
                 .perform(
