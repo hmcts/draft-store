@@ -16,6 +16,8 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
+import uk.gov.hmcts.reform.draftstore.service.idam.InvalidIdamTokenException;
+import uk.gov.hmcts.reform.draftstore.service.s2s.InvalidServiceTokenException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,8 +36,11 @@ public class GetByIdTest {
     @MockBean private DraftService draftService;
     @MockBean private AuthService authService;
 
+    // TODO: create a separate test for checking exception mapping in the app in general.
     @Test
     public void should_map_no_draft_exception_to_404() throws Exception {
+        givenIsAuthenticated();
+
         BDDMockito
             .given(draftService.read(anyString(), any(UserAndService.class)))
             .willThrow(new NoDraftFoundException());
@@ -47,17 +52,43 @@ public class GetByIdTest {
     }
 
     @Test
+    public void should_map_InvalidIdamTokenException_to_401() throws Exception {
+        BDDMockito
+            .given(authService.authenticate(anyString(), anyString()))
+            .willThrow(new InvalidIdamTokenException("msg", null));
+
+        int status = callGet();
+
+        assertThat(status).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    public void should_map_InvalidServiceTokenException_to_401() throws Exception {
+        BDDMockito
+            .given(authService.authenticate(anyString(), anyString()))
+            .willThrow(new InvalidServiceTokenException("msg", null));
+
+        int status = callGet();
+
+        assertThat(status).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
     public void should_return_200_if_draft_is_found() throws Exception {
+        givenIsAuthenticated();
+
         int status = callGet();
 
         assertThat(status).isEqualTo(HttpStatus.OK.value());
     }
 
-    private int callGet() throws Exception {
+    private void givenIsAuthenticated() {
         BDDMockito
             .given(authService.authenticate(anyString(), anyString()))
             .willReturn(new UserAndService("john", "service"));
+    }
 
+    private int callGet() throws Exception {
         MvcResult result =
             mockMvc
                 .perform(
