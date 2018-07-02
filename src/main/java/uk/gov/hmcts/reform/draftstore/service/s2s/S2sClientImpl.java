@@ -12,8 +12,8 @@ public class S2sClientImpl implements S2sClient {
     private final RestTemplate restTemplate;
     private final String url;
 
-    public S2sClientImpl(final String idamUrl) {
-        this.restTemplate = new RestTemplate();
+    public S2sClientImpl(RestTemplate restTemplate, String idamUrl) {
+        this.restTemplate = restTemplate;
         this.url = idamUrl;
     }
 
