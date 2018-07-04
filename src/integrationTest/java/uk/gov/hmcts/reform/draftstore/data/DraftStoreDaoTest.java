@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -85,5 +86,34 @@ public class DraftStoreDaoTest {
 
         assertThat(drafts).hasSize(2);
         assertThat(drafts).extracting("document").contains("[1]", "[2]");
+    }
+
+    @Test
+    public void getDraftCountPerService_should_return_number_of_drafts_per_service() {
+
+        CreateDraft draft = new CreateDraft("{ \"a\": 123 }", null, "some_type", 123);
+        String service1 = "service_1";
+        String service2 = "service_2";
+
+        // given
+        underTest.insert(USER_ID, service1, draft);
+        underTest.insert(USER_ID, service1, draft);
+        underTest.insert(USER_ID, service1, draft);
+        underTest.insert(USER_ID, service1, draft);
+
+        underTest.insert(USER_ID, service2, draft);
+        underTest.insert(USER_ID, service2, draft);
+
+        // when
+        List<Map<String, Object>> result = underTest.getDraftCountPerService();
+
+        // then
+        assertThat(result.size()).isEqualTo(2);
+
+        assertThat(result.get(0).get("service")).isEqualTo(service1);
+        assertThat(result.get(0).get("count")).isEqualTo(4L);
+
+        assertThat(result.get(1).get("service")).isEqualTo(service2);
+        assertThat(result.get(1).get("count")).isEqualTo(2L);
     }
 }
