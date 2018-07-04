@@ -66,6 +66,17 @@ module "api" {
   }
 }
 
+module "db" {
+  source              = "git@github.com:hmcts/moj-module-postgres?ref=master"
+  product             = "${var.product}-db"
+  location            = "${var.location_api}"
+  env                 = "${var.env}"
+  database_name       = "draftstore"
+  postgresql_user     = "draftstore"
+  sku_name            = "GP_Gen5_2"
+  sku_tier            = "GeneralPurpose"
+}
+
 # region save DB details to Azure Key Vault
 
 # this key vault is created in every environment, but preview, being short-lived,
