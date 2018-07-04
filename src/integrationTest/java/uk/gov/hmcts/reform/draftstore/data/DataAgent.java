@@ -33,4 +33,8 @@ public class DataAgent {
             new MapSqlParameterSource("userId", userId)
         );
     }
+
+    public void deleteAll() {
+        jdbcTemplate.update("DELETE FROM draft_document", new MapSqlParameterSource());
+    }
 }

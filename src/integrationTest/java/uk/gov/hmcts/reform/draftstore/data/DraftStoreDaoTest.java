@@ -35,8 +35,7 @@ public class DraftStoreDaoTest {
 
     @Before
     public void cleanDb() {
-        dataAgent.deleteDocuments(USER_ID);
-        dataAgent.deleteDocuments(ANOTHER_USER_ID);
+        dataAgent.deleteAll();
     }
 
     @Test
