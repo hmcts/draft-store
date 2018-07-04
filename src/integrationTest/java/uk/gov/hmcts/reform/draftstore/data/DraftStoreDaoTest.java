@@ -35,8 +35,7 @@ public class DraftStoreDaoTest {
 
     @Before
     public void cleanDb() {
-        dataAgent.deleteDocuments(USER_ID);
-        dataAgent.deleteDocuments(ANOTHER_USER_ID);
+        dataAgent.deleteAll();
     }
 
     @Test
@@ -79,10 +78,10 @@ public class DraftStoreDaoTest {
 
     @Test
     public void readAll_should_return_all_matching_drafts() throws SQLException {
-        dataAgent.setupDocumentForUser("id", "t", "[1]");
-        dataAgent.setupDocumentForUser("id", "t", "[2]");
+        dataAgent.setupDocumentForUser(USER_ID, "t", "[1]");
+        dataAgent.setupDocumentForUser(USER_ID, "t", "[2]");
 
-        List<Draft> drafts = underTest.readAll("id", "cmc", null, 10);
+        List<Draft> drafts = underTest.readAll(USER_ID, "cmc", null, 10);
 
         assertThat(drafts).hasSize(2);
         assertThat(drafts).extracting("document").contains("[1]", "[2]");
