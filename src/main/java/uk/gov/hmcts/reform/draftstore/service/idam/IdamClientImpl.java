@@ -13,8 +13,8 @@ public class IdamClientImpl implements IdamClient {
     private final RestTemplate restTemplate;
     private final String idamUrl;
 
-    public IdamClientImpl(final String idamUrl) {
-        this.restTemplate = new RestTemplate();
+    public IdamClientImpl(RestTemplate restTemplate, String idamUrl) {
+        this.restTemplate = restTemplate;
         this.idamUrl = idamUrl;
     }
 

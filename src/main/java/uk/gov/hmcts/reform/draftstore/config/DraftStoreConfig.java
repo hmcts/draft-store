@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import uk.gov.hmcts.reform.api.filters.SensitiveHeadersRequestTraceFilter;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
@@ -77,13 +78,13 @@ public class DraftStoreConfig {
     @Bean
     @ConditionalOnProperty(name = "idam.useStub", havingValue = "false")
     public IdamClient idamClient() {
-        return new IdamClientImpl(idamUrl);
+        return new IdamClientImpl(new RestTemplate(), idamUrl);
     }
 
     @Bean
     @ConditionalOnProperty(name = "s2s.useStub", havingValue = "false")
     public S2sClient s2sClient() {
-        return new S2sClientImpl(s2sUrl);
+        return new S2sClientImpl(new RestTemplate(), s2sUrl);
     }
 
     @Bean
