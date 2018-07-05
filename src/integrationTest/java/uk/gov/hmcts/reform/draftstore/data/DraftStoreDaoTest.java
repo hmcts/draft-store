@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,8 +35,7 @@ public class DraftStoreDaoTest {
 
     @Before
     public void cleanDb() {
-        dataAgent.deleteDocuments(USER_ID);
-        dataAgent.deleteDocuments(ANOTHER_USER_ID);
+        dataAgent.deleteAll();
     }
 
     @Test
@@ -78,12 +78,41 @@ public class DraftStoreDaoTest {
 
     @Test
     public void readAll_should_return_all_matching_drafts() throws SQLException {
-        dataAgent.setupDocumentForUser("id", "t", "[1]");
-        dataAgent.setupDocumentForUser("id", "t", "[2]");
+        dataAgent.setupDocumentForUser(USER_ID, "t", "[1]");
+        dataAgent.setupDocumentForUser(USER_ID, "t", "[2]");
 
-        List<Draft> drafts = underTest.readAll("id", "cmc", null, 10);
+        List<Draft> drafts = underTest.readAll(USER_ID, "cmc", null, 10);
 
         assertThat(drafts).hasSize(2);
         assertThat(drafts).extracting("document").contains("[1]", "[2]");
+    }
+
+    @Test
+    public void getDraftCountPerService_should_return_number_of_drafts_per_service() {
+
+        CreateDraft draft = new CreateDraft("{ \"a\": 123 }", null, "some_type", 123);
+        String service1 = "service_1";
+        String service2 = "service_2";
+
+        // given
+        underTest.insert(USER_ID, service1, draft);
+        underTest.insert(USER_ID, service1, draft);
+        underTest.insert(USER_ID, service1, draft);
+        underTest.insert(USER_ID, service1, draft);
+
+        underTest.insert(USER_ID, service2, draft);
+        underTest.insert(USER_ID, service2, draft);
+
+        // when
+        List<Map<String, Object>> result = underTest.getDraftCountPerService();
+
+        // then
+        assertThat(result.size()).isEqualTo(2);
+
+        assertThat(result.get(0).get("service")).isEqualTo(service1);
+        assertThat(result.get(0).get("count")).isEqualTo(4L);
+
+        assertThat(result.get(1).get("service")).isEqualTo(service2);
+        assertThat(result.get(1).get("count")).isEqualTo(2L);
     }
 }

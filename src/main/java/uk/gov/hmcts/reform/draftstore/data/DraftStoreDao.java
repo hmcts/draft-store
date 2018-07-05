@@ -148,6 +148,16 @@ public class DraftStoreDao {
         );
     }
 
+    public List<Map<String, Object>> getDraftCountPerService() {
+        return jdbcTemplate.queryForList(
+            "SELECT service, count(*) "
+                + "FROM draft_document "
+                + "GROUP BY service "
+                + "ORDER BY count DESC",
+            new MapSqlParameterSource()
+        );
+    }
+
     private static final class DraftMapper implements RowMapper<Draft> {
         @Override
         public Draft mapRow(ResultSet rs, int rowNumber) throws SQLException {
