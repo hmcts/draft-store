@@ -40,6 +40,7 @@ module "api" {
   ilbIp         = "${var.ilbIp}"
   subscription  = "${var.subscription}"
   capacity      = "${var.capacity}"
+  common_tags   = "${var.common_tags}"
 
   app_settings = {
     DRAFT_STORE_DB_HOST         = "${var.db_host}"
@@ -75,6 +76,7 @@ module "db" {
   postgresql_user     = "draftstore"
   sku_name            = "GP_Gen5_2"
   sku_tier            = "GeneralPurpose"
+  common_tags         = "${var.common_tags}"
 }
 
 # region save DB details to Azure Key Vault
