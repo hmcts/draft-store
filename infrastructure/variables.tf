@@ -54,7 +54,7 @@ variable "common_tags" {
 # region app config
 
 variable "idam_api_url" {
-  default = "http://idam-api-idam-saat.service.core-compute-saat.internal"
+  type = "string"
 }
 
 variable "max_stale_days_default" {
