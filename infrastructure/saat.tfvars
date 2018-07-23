@@ -1,1 +1,1 @@
-idam_api_url = "http://betadevbccidamapplb.reform.hmcts.net/"
+idam_api_url = "http://idam-api-idam-saat.service.core-compute-saat.internal/"
