@@ -53,9 +53,7 @@ variable "common_tags" {
 
 # region app config
 
-variable "idam_api_url" {
-  type = "string"
-}
+variable "idam_api_url" {}
 
 variable "max_stale_days_default" {
   default = 90
