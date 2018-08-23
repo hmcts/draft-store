@@ -1,0 +1,12 @@
+#!groovy
+
+@Library("Infrastructure")
+
+def type = "java"
+def product = "draft-store"
+def app = "service"
+def channel = '#rpe-build-notices'
+
+withNightlyPipeline(type, product, app) {
+  enableSlackNotifications(channel)
+}
