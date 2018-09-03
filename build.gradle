@@ -2,9 +2,9 @@ plugins {
   id 'application'
   id 'checkstyle'
   id 'io.spring.dependency-management' version '1.0.5.RELEASE'
-  id 'org.flywaydb.flyway' version '5.0.7'
-  id 'org.springframework.boot' version '1.5.13.RELEASE'
-  id 'org.owasp.dependencycheck' version '3.2.1'
+  id 'org.flywaydb.flyway' version '5.1.4'
+  id 'org.springframework.boot' version '1.5.15.RELEASE'
+  id 'org.owasp.dependencycheck' version '3.3.1'
   id 'com.github.ben-manes.versions' version '0.17.0'
   id 'org.sonarqube' version '2.6.2'
   id 'jacoco'
@@ -115,9 +115,9 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: versions.springBoot
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
-  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
+  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.4'
 
-  compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
+  compile group: 'org.flywaydb', name: 'flyway-core', version: '5.1.4'
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
