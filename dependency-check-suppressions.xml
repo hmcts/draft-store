@@ -3,22 +3,7 @@
 
   <!-- server related, mostly applicable to linux. hopefully get better cover with spring boot 2 -->
 
-  <suppress>
-    <notes><![CDATA[ Spring Boot dependencies ]]></notes>
-    <gav regex="true">org\.apache\.tomcat:tomcat-annotations-api:8\.5\.31</gav>
-    <cve>CVE-2016-5425</cve>
-    <cve>CVE-2016-6325</cve>
-    <cve>CVE-2017-6056</cve>
-  </suppress>
 
-  <!-- postgresql -->
-
-  <suppress>
-    <notes><![CDATA[ No newer version available as of yet ]]></notes>
-    <gav regex="true">org\.postgresql:postgresql:42\.2\.2</gav>
-    <cve>CVE-2017-14798</cve>
-    <cve>CVE-2018-1115</cve>
-  </suppress>
 
   <!-- not used by server -->
 
