@@ -2,10 +2,6 @@ provider "vault" {
   address = "https://vault.reform.hmcts.net:6200"
 }
 
-data "vault_generic_secret" "db_password" {
-  path = "secret/${var.vault_section}/cmc/draft-store/database/password"
-}
-
 locals {
   db_connection_options  = "?ssl=true"
   ase_name               = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
@@ -32,6 +28,11 @@ locals {
                              }"
 }
 
+data "azurerm_key_vault_secret" "db_password" {
+  name      = "db-password"
+  vault_uri = "https://${var.raw_product}-${local.dependencies_env}.vault.azure.net/"
+}
+
 module "api" {
   source        = "git@github.com:hmcts/moj-module-webapp"
   product       = "${var.product}-${var.component}"
@@ -45,7 +46,7 @@ module "api" {
   app_settings = {
     DRAFT_STORE_DB_HOST         = "${var.db_host}"
     DRAFT_STORE_DB_PORT         = "5432"
-    DRAFT_STORE_DB_PASSWORD     = "${data.vault_generic_secret.db_password.data["value"]}"
+    DRAFT_STORE_DB_PASSWORD     = "${data.azurerm_key_vault_secret.db_password.value}"
     DRAFT_STORE_DB_USER_NAME    = "draftstore"
     DRAFT_STORE_DB_NAME         = "draftstore"
     DRAFT_STORE_DB_CONN_OPTIONS = "${local.db_connection_options}"
@@ -58,7 +59,7 @@ module "api" {
 
     FLYWAY_URL                  = "jdbc:postgresql://${var.db_host}:5432/draftstore${local.db_connection_options}"
     FLYWAY_USER                 = "draftstore"
-    FLYWAY_PASSWORD             = "${data.vault_generic_secret.db_password.data["value"]}"
+    FLYWAY_PASSWORD             = "${data.azurerm_key_vault_secret.db_password.value}"
 
     RUN_DB_MIGRATION_ON_STARTUP = "${var.run_db_migration_on_startup}"
 
@@ -103,7 +104,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-USER" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name      = "${var.component}-POSTGRES-PASS"
-  value     = "${data.vault_generic_secret.db_password.data["value"]}"
+  value     = "${data.azurerm_key_vault_secret.db_password.value}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
