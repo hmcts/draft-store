@@ -1,6 +1,3 @@
-provider "vault" {
-  address = "https://vault.reform.hmcts.net:6200"
-}
 
 locals {
   db_connection_options  = "?ssl=true"
