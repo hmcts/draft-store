@@ -1,23 +1,28 @@
 # configuration for end-to-end tests
 
-// TODO: use the draft store test microservice once https://github.com/hmcts/service-auth-provider-app/pull/27 is merged
-data "vault_generic_secret" "tests_s2s_secret" {
-  path = "secret/${var.vault_section}/ccidam/service-auth-provider/api/microservice-keys/send-letter-tests"
-}
-
-data "vault_generic_secret" "test_idam_client_secret" {
-  path = "secret/${var.vault_section}/ccidam/idam-api/oauth2/client-secrets/cmc-citizen"
+# Secrets for tests are stored in permanent (long-lived) Azure Key Vault instances.
+# With the exception of (s)preview all Vault instances are long-lived. For preview, however,
+# test secrets (not created during deployment) need to be copied over from a permanent vault -
+# that's what the code below does.
+data "azurerm_key_vault_secret" "source_s2s-secret-for-tests" {
+  name      = "s2s-secret-for-tests"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "s2s-secret-for-tests" {
   name      = "s2s-secret-for-tests"
-  value     = "${data.vault_generic_secret.tests_s2s_secret.data["value"]}"
+  value     = "${data.azurerm_key_vault_secret.source_s2s-secret-for-tests.value}"
   vault_uri = "${module.key-vault.key_vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "source_idam-client-secret-for-tests" {
+  name      = "idam-client-secret-for-tests"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "idam-client-secret-for-tests" {
   name      = "idam-client-secret-for-tests"
-  value     = "${data.vault_generic_secret.test_idam_client_secret.data["value"]}"
+  value     = "${data.azurerm_key_vault_secret.source_idam-client-secret-for-tests.value}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 

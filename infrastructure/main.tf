@@ -23,11 +23,16 @@ locals {
                                  ? local.preview_vault_name
                                  : local.default_vault_name
                              }"
+
+  # URI of vault that stores long-term secrets. It's the app's own Key Vault, except for (s)preview,
+  # where vaults are short-lived and can only store secrets generated during deployment
+  permanent_vault_uri    = "https://${var.raw_product}-${local.dependencies_env}.vault.azure.net/"
 }
 
+# TODO: remove once the DB is migrated to CNP
 data "azurerm_key_vault_secret" "db_password" {
   name      = "db-password"
-  vault_uri = "https://${var.raw_product}-${local.dependencies_env}.vault.azure.net/"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
 module "api" {
