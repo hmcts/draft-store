@@ -17,7 +17,7 @@ output "s2s_url_for_tests" {
 }
 
 output "s2s_name_for_tests" {
-  value = "send_letter_tests"
+  value = "draft_store_tests"
 }
 
 output "idam_url_for_tests" {
