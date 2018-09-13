@@ -75,7 +75,7 @@ module "api" {
 
 module "db" {
   source              = "git@github.com:hmcts/moj-module-postgres?ref=master"
-  product             = "${var.product}-db"
+  product             = "rpe-${var.product}-db"
   location            = "${var.location_api}"
   env                 = "${var.env}"
   database_name       = "draftstore"
