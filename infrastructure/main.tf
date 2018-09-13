@@ -30,6 +30,8 @@ locals {
   # URI of vault that stores long-term secrets. It's the app's own Key Vault, except for (s)preview,
   # where vaults are short-lived and can only store secrets generated during deployment
   permanent_vault_uri    = "https://${var.raw_product}-${local.dependencies_env}.vault.azure.net/"
+
+  sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
 }
 
 # TODO: remove once the DB is migrated to CNP
@@ -39,7 +41,7 @@ data "azurerm_key_vault_secret" "db_password" {
 }
 
 module "api" {
-  source        = "git@github.com:hmcts/moj-module-webapp"
+  source        = "git@github.com:hmcts/cnp-module-webapp"
   product       = "${var.product}-${var.component}"
   location      = "${var.location_api}"
   env           = "${var.env}"
@@ -47,6 +49,9 @@ module "api" {
   subscription  = "${var.subscription}"
   capacity      = "${var.capacity}"
   common_tags   = "${var.common_tags}"
+  asp_name      = "${var.product}-${var.component}-${var.env}"
+  asp_rg        = "${var.product}-${var.component}-${var.env}"
+  instance_size = "${local.sku_size}"
 
   app_settings = {
     DRAFT_STORE_DB_HOST         = "${var.db_host}"
