@@ -140,13 +140,13 @@ dependencies {
     'com.jayway.restassured:rest-assured:2.9.0',
     'org.mockito:mockito-core:2.22.0',
     'org.assertj:assertj-core:3.11.1',
-    'org.testcontainers:postgresql:1.4.3'
+    'org.testcontainers:postgresql:1.8.3'
   )
 
   smokeTestCompile sourceSets.main.runtimeClasspath
   smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.1'
-  smokeTestCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
+  smokeTestCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.2.0'
 
   functionalTestCompile sourceSets.smokeTest.runtimeClasspath
 }
