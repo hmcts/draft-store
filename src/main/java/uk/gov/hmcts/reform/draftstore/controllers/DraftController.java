@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.draftstore.controllers;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +29,7 @@ import uk.gov.hmcts.reform.draftstore.service.secrets.SecretsBuilder;
 
 import java.net.URI;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.ResponseEntity.created;
@@ -102,7 +102,7 @@ public class DraftController {
     public ResponseEntity<Void> create(
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
-        @RequestHeader(SECRET_HEADER) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
+        @RequestHeader(SECRET_HEADER) @Valid @Size(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid CreateDraft newDraft
     ) {
         Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
@@ -126,7 +126,7 @@ public class DraftController {
         @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
-        @RequestHeader(SECRET_HEADER) @Valid @Length(min = MIN_SECRET_LENGTH) String secretHeader,
+        @RequestHeader(SECRET_HEADER) @Valid @Size(min = MIN_SECRET_LENGTH) String secretHeader,
         @RequestBody @Valid UpdateDraft updatedDraft
     ) {
         Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
