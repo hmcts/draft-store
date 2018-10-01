@@ -1,6 +1,6 @@
 
 locals {
-  db_connection_options  = "?ssl=true"
+  db_connection_options  = "?sslmode=required"
   ase_name               = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
 
   # Environment we take our dependencies from. Typically the same as for the app,
