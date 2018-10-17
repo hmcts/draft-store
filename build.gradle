@@ -210,6 +210,10 @@ jar {
   }
 }
 
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}
+
 run {
   mainClassName = 'uk.gov.hmcts.reform.draftstore.DraftStoreApplication'
   if (debug == 'true') {

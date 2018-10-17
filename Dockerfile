@@ -1,11 +1,12 @@
-FROM openjdk:8-jre
+FROM hmcts/cnp-java-base:openjdk-jre-8-alpine-1.4
 
-COPY build/install/draft-store /opt/app/
+# Mandatory!
+ENV APP draft-store.jar
+ENV APPLICATION_TOTAL_MEMORY 1024M
+ENV APPLICATION_SIZE_ON_DISK_IN_MB 39
 
-WORKDIR /opt/app
+COPY build/libs/$APP /opt/app/
 
-HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" curl --silent --fail http://localhost:8800/health
+HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" wget -q --spider http://localhost:8800/health || exit 1
 
 EXPOSE 8800
-
-ENTRYPOINT ["/opt/app/bin/draft-store"]
