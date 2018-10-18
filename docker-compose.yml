@@ -1,5 +1,4 @@
----
-version: '2.1'
+version: "2.1"
 
 services:
   draft-store-api:
@@ -9,11 +8,10 @@ services:
         - http_proxy
         - https_proxy
         - no_proxy
-    image: docker.artifactory.reform.hmcts.net/reform/draft-store-api
+    image: hmcts.azurecr.io/hmcts/draft-store-service
     environment:
       - DRAFT_STORE_DB_HOST=draft-store-database
-      - DRAFT_STORE_DB_PORT
-      - DRAFT_STORE_DB_PASSWORD
+      - DRAFT_STORE_DB_PASSWORD=draftstore
       - ROOT_APPENDER
       - JSON_CONSOLE_PRETTY_PRINT
       - ROOT_LOGGING_LEVEL
@@ -23,8 +21,6 @@ services:
       - IDAM_USE_STUB
       - S2S_USER_STUB
       - RUN_DB_MIGRATION_ON_STARTUP
-    volumes:
-      - ./build/install/draft-store:/opt/app/
     ports:
       - 8800:8800
     depends_on:
@@ -33,13 +29,13 @@ services:
   draft-store-database:
     build:
       context: docker/database
-    image: docker.artifactory.reform.hmcts.net/reform/draft-store-database
+    image: hmcts/draft-store-database
     environment:
-      - DRAFT_STORE_DB_PASSWORD
+      - DRAFT_STORE_DB_PASSWORD=draftstore
     ports:
       - 5429:5432
     volumes:
       - draft-store-database-data:/var/lib/postgresql/data
 
 volumes:
-  draft-store-database-data:
+  - draft-store-database-data:

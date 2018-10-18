@@ -27,6 +27,11 @@ Run the application by executing:
 ./gradlew bootRun
 ```
 
+### Consuming this service locally
+This image is available in the HMCTS azure container registry (currently private)  
+Image url is: `hmcts.azurecr.io/hmcts/draft-store-service`  
+See required config in: [docker-compose.yml](docker-compose.yml)
+
 ### Operational note
 When operating this service with live data, no one should under any circumstances view the encrypted data. 
 The reason for this is because it would be considered under [Article 14 of GDPR](https://gdpr-info.eu/art-14-gdpr/) that we had commenced processing data. 
