@@ -28,8 +28,8 @@ Run the application by executing:
 ```
 
 ### Consuming this service locally
-This image is available in the HMCTS azure container registry (currently private)
-Image url is: `hmcts.azurecr.io/hmcts/draft-store-service`
+This image is available in the HMCTS azure container registry (currently private)  
+Image url is: `hmcts.azurecr.io/hmcts/draft-store-service`  
 See required config in: [docker-compose.yml](docker-compose.yml)
 
 ### Operational note
