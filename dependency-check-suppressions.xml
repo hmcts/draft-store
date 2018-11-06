@@ -26,11 +26,6 @@
   </suppress>
   <suppress>
     <notes><![CDATA[Used only in tests]]></notes>
-    <gav regex="true">^org\.jetbrains:annotations:.*$</gav>
-    <cve>CVE-2017-8316</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[Used only in tests]]></notes>
     <gav regex="true">^org\.apache\.sling:org\.apache\.sling\.javax\.activation:0\.1\.0$</gav>
     <cpe>cpe:/a:apache:sling</cpe>
   </suppress>
