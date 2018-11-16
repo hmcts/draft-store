@@ -3,8 +3,8 @@ plugins {
   id 'checkstyle'
   id 'io.spring.dependency-management' version '1.0.5.RELEASE'
   id 'org.flywaydb.flyway' version '5.1.4'
-  id 'org.springframework.boot' version '1.5.15.RELEASE'
-  id 'org.owasp.dependencycheck' version '3.3.1'
+  id 'org.springframework.boot' version '1.5.17.RELEASE'
+  id 'org.owasp.dependencycheck' version '3.3.4'
   id 'com.github.ben-manes.versions' version '0.17.0'
   id 'org.sonarqube' version '2.6.2'
   id 'jacoco'
@@ -87,7 +87,7 @@ sourceSets {
 
 def versions = [
   springBoot      : plugins.getPlugin('org.springframework.boot').class.package.implementationVersion,
-  springfoxSwagger: '2.7.0'
+  springfoxSwagger: '2.9.2'
 ]
 
 dependencyManagement {
