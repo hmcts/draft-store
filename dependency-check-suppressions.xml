@@ -2,9 +2,8 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
 
   <suppress>
-    <notes><![CDATA[ Fix not available atm. ]]></notes>
-    <gav regex="true">^org\.postgresql:postgresql:.*$</gav>
-    <cve>CVE-2016-7048</cve>
+    <gav regex="true">^com\.google\.guava:guava:.*$</gav>
+    <cpe>cpe:/a:google:guava</cpe>
   </suppress>
 
   <!-- not used by server -->
