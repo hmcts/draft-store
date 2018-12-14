@@ -28,4 +28,9 @@
     <gav regex="true">^org\.apache\.sling:org\.apache\.sling\.javax\.activation:0\.1\.0$</gav>
     <cpe>cpe:/a:apache:sling</cpe>
   </suppress>
+  
+  <suppress>
+    <notes><![CDATA[ slf4j only has a beta version released with the 'fix', looks like lots of changes in it... ]]></notes>
+    <cve>CVE-2018-8088</cve>
+  </suppress>
 </suppressions>
