@@ -100,7 +100,7 @@ dependencyManagement {
       entry 'jackson-core'
       entry 'jackson-databind'
     }
-    dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.9.7') {
+    dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.9.8') {
       entry 'jackson-datatype-jsr310'
     }
   }
