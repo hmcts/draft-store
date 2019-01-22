@@ -33,7 +33,7 @@ withPipeline(type, product, app) {
   after('test') {
     builder.gradle('integration')
   }
-  
+
   env.USE_IDAM_TESTING_SUPPORT = "true"
   env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
   env.IDAM_URL_FOR_TESTS = "https://preprod-idamapi.reform.hmcts.net:3511"

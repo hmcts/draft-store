@@ -51,7 +51,7 @@ module "api" {
 }
 
 module "db" {
-  source                = "git@github.com:hmcts/moj-module-postgres?ref=master"
+  source                = "git@github.com:hmcts/cnp-module-postgres?ref=remove-deleted-subnets"
   product               = "rpe-${var.product}"
   location              = "${var.location_api}"
   env                   = "${var.env}"
@@ -69,7 +69,7 @@ module "db" {
 # this key vault is created in every environment, but preview, being short-lived,
 # will use the aat one instead
 module "key-vault" {
-  source              = "git@github.com:hmcts/moj-module-key-vault?ref=master"
+  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=master"
   product             = "${var.product}"
   env                 = "${var.env}"
   tenant_id           = "${var.tenant_id}"
