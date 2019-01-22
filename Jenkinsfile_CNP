@@ -33,10 +33,14 @@ withPipeline(type, product, app) {
   after('test') {
     builder.gradle('integration')
   }
-
-  onPR {
-    env.USE_IDAM_TESTING_SUPPORT = "true"
-  }
+  
+  env.USE_IDAM_TESTING_SUPPORT = "true"
+  env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+  env.IDAM_URL_FOR_TESTS = "https://preprod-idamapi.reform.hmcts.net:3511"
+  env.S2S_NAME_FOR_TESTS = "draft_store_tests"
+  env.IDAM_USER_EMAIL_FOR_TESTS = "reformplatformengineering+tests@gmail.com"
+  env.IDAM_CLIENT_ID_FOR_TESTS = "cmc_citizen" // TODO change this
+  env.IDAM_REDIRECT_URI_FOR_TESTS = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
 
   enableSlackNotifications(channel)
   enableDbMigration()
