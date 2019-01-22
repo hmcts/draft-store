@@ -30,5 +30,6 @@ withPipeline(type, product, app) {
   enableSlackNotifications(channel)
   enableDbMigration()
   enableDockerBuild()
+  installCharts()
   loadVaultSecrets(secrets)
 }
