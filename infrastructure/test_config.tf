@@ -3,7 +3,7 @@
 #region Copying the test microservice key from s2s's vault to app's own vault
 data "azurerm_key_vault_secret" "source_s2s-secret-for-tests" {
   name      = "microservicekey-draftStoreTests"
-  vault_uri = "https://s2s-${local.dependencies_env}.vault.azure.net/"
+  vault_uri = "https://s2s-${var.env}.vault.azure.net/"
 }
 
 resource "azurerm_key_vault_secret" "s2s-secret-for-tests" {
@@ -11,6 +11,7 @@ resource "azurerm_key_vault_secret" "s2s-secret-for-tests" {
   value     = "${data.azurerm_key_vault_secret.source_s2s-secret-for-tests.value}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
+
 #endregion
 
 # Secrets for tests are stored in permanent (long-lived) Azure Key Vault instances.
@@ -19,19 +20,13 @@ resource "azurerm_key_vault_secret" "s2s-secret-for-tests" {
 # that's what the code below does.
 data "azurerm_key_vault_secret" "source_idam-client-secret-for-tests" {
   name      = "idam-client-secret-for-tests"
-  vault_uri = "${local.permanent_vault_uri}"
-}
-
-resource "azurerm_key_vault_secret" "idam-client-secret-for-tests" {
-  name      = "idam-client-secret-for-tests"
-  value     = "${data.azurerm_key_vault_secret.source_idam-client-secret-for-tests.value}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
 #region IdAM test user's password
 
 resource "random_string" "idam_password" {
-  length = 16
+  length  = 16
   special = false
 }
 
@@ -45,3 +40,4 @@ resource "azurerm_key_vault_secret" "idam_password_for_tests" {
 }
 
 #endregion
+
