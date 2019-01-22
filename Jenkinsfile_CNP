@@ -34,6 +34,10 @@ withPipeline(type, product, app) {
     builder.gradle('integration')
   }
 
+  onPR {
+    env.USE_IDAM_TESTING_SUPPORT = "true"
+  }
+
   enableSlackNotifications(channel)
   enableDbMigration()
   enableDockerBuild()
