@@ -1,4 +1,4 @@
-module "send-letter-up-alert" {
+module "bad-response-codes-alert" {
   source            = "git@github.com:hmcts/cnp-module-metric-alert"
   location          = "${var.location_api}"
   app_insights_name = "${var.product}-${var.component}-appinsights-${var.env}"
