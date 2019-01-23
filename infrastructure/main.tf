@@ -51,7 +51,7 @@ module "api" {
 }
 
 module "db" {
-  source                = "git@github.com:hmcts/cnp-module-postgres?ref=remove-deleted-subnets"
+  source                = "git@github.com:hmcts/cnp-module-postgres?ref=master"
   product               = "rpe-${var.product}"
   location              = "${var.location_api}"
   env                   = "${var.env}"
