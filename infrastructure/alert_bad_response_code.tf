@@ -13,7 +13,6 @@ requests
 EOF
 
   frequency_in_minutes       = 5
-  // window no longer matters as it is defined in the query. but it is a requirement for module
   time_window_in_minutes     = 5
   severity_level             = "3"
   action_group_name          = "RPE alerts - ${var.env}"
