@@ -38,4 +38,4 @@ services:
       - draft-store-database-data:/var/lib/postgresql/data
 
 volumes:
-  - draft-store-database-data:
+  draft-store-database-data:
