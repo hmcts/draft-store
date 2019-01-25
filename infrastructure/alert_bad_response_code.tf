@@ -1,5 +1,5 @@
 module "bad-response-codes-alert" {
-  source            = "git@github.com:hmcts/cnp-module-metric-alert"
+  source            = "git@github.com:hmcts/cnp-module-metric-alert?ref=feature/rpe-916-make-rg-configurable"
   location          = "${var.location_api}"
   app_insights_name = "${var.product}-${var.component}-appinsights-${var.env}"
 
@@ -16,8 +16,9 @@ EOF
   time_window_in_minutes     = 5
   severity_level             = "3"
   action_group_name          = "RPE alerts - ${var.env}"
+  action_group_rg            = "rpe-${var.env}"
   custom_email_subject       = "Draft store - bad response codes detected"
   trigger_threshold_operator = "GreaterThan"
   trigger_threshold          = 0
-  resourcegroup_name         = "rpe-${var.env}"
+  resourcegroup_name         = "${module.api.resource_group_name}"
 }
