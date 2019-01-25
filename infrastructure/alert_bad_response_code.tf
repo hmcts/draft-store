@@ -19,5 +19,5 @@ EOF
   custom_email_subject       = "Draft store - bad response codes detected"
   trigger_threshold_operator = "GreaterThan"
   trigger_threshold          = 0
-  resourcegroup_name         = "${module.api.resource_group_name}"
+  resourcegroup_name         = "rpe-${var.env}"
 }
