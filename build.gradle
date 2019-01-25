@@ -126,7 +126,7 @@ dependencies {
   compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
 
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '2.2.1'
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '2.2.1'
+  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '4.0.1'
 
   compile group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.3.0'
 
