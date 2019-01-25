@@ -16,6 +16,7 @@ EOF
   time_window_in_minutes     = 5
   severity_level             = "3"
   action_group_name          = "RPE alerts - ${var.env}"
+  action_group_rg            = "rpe-${var.env}"
   custom_email_subject       = "Draft store - bad response codes detected"
   trigger_threshold_operator = "GreaterThan"
   trigger_threshold          = 0
