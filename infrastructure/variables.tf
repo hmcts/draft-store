@@ -1,5 +1,5 @@
 variable "product" {
-  type    = "string"
+  type = "string"
 }
 
 variable "raw_product" {
@@ -85,3 +85,4 @@ variable "idam_redirect_uri_for_tests" {
 }
 
 # endregion
+
