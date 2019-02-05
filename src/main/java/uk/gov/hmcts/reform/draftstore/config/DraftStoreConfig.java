@@ -2,18 +2,20 @@ package uk.gov.hmcts.reform.draftstore.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import uk.gov.hmcts.reform.api.filters.SensitiveHeadersRequestTraceFilter;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
+import uk.gov.hmcts.reform.draftstore.service.Liveness;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClient;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientImpl;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientStub;
@@ -27,6 +29,7 @@ import javax.servlet.Filter;
 import static org.springframework.boot.actuate.trace.http.Include.defaultIncludes;
 
 @Configuration
+@Import(Liveness.class)
 public class DraftStoreConfig {
 
     @Value("${idam.url}")
@@ -90,6 +93,6 @@ public class DraftStoreConfig {
         return new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            .setDateFormat(new ISO8601DateFormat());
+            .setDateFormat(new StdDateFormat());
     }
 }
