@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.trace.TraceProperties;
-import org.springframework.boot.actuate.trace.TraceRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import uk.gov.hmcts.reform.api.filters.SensitiveHeadersRequestTraceFilter;
 import uk.gov.hmcts.reform.draftstore.data.DraftStoreDao;
-import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClient;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientImpl;
 import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientStub;
@@ -29,14 +26,17 @@ import uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter;
 import java.time.Clock;
 import javax.servlet.Filter;
 
-import static java.util.Collections.singleton;
+import static org.springframework.boot.actuate.trace.http.Include.defaultIncludes;
 
 @Configuration
 public class DraftStoreConfig {
 
-    @Value("${idam.url}") private String idamUrl;
-    @Value("${s2s.url}") private String s2sUrl;
-    @Value("${maxStaleDays.default}") private int maxStaleDaysDefault;
+    @Value("${idam.url}")
+    private String idamUrl;
+    @Value("${s2s.url}")
+    private String s2sUrl;
+    @Value("${maxStaleDays.default}")
+    private int maxStaleDaysDefault;
 
     @Bean
     MethodValidationPostProcessor methodValidationPostProcessor() {
@@ -58,15 +58,8 @@ public class DraftStoreConfig {
     }
 
     @Bean
-    public SensitiveHeadersRequestTraceFilter requestTraceFilter(
-        TraceRepository traceRepository,
-        TraceProperties traceProperties
-    ) {
-        return new SensitiveHeadersRequestTraceFilter(
-            traceRepository,
-            traceProperties,
-            singleton(AuthService.SECRET_HEADER)
-        );
+    public SensitiveHeadersRequestTraceFilter requestTraceFilter() {
+        return new SensitiveHeadersRequestTraceFilter(defaultIncludes());
     }
 
     @Bean

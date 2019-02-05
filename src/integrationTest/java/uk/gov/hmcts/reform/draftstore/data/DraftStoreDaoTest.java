@@ -31,7 +31,7 @@ public class DraftStoreDaoTest {
     private DraftStoreDao underTest;
 
     @Autowired
-    private uk.gov.hmcts.reform.draftstore.data.DataAgent dataAgent;
+    private DataAgent dataAgent;
 
     @Before
     public void cleanDb() {

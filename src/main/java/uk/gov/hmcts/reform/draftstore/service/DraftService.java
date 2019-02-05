@@ -14,7 +14,6 @@ import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static uk.gov.hmcts.reform.draftstore.service.mappers.FromDbModelMapper.fromDb;
