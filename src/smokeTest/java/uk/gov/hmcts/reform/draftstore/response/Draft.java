@@ -5,6 +5,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.time.ZonedDateTime;
 
+/*
+ * This class should encapsulate functionality (OO) and not expose its internals "public final"
+ * We need to refactor this to follow good ood principles and practice.
+ * Jira ticket "RPE-933"
+ */
+@SuppressWarnings("PMD.DataClass")
 public class Draft {
 
     public final String id;
