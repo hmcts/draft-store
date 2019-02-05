@@ -20,8 +20,6 @@ import uk.gov.hmcts.reform.draftstore.service.idam.IdamClientStub;
 import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClient;
 import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClientImpl;
 import uk.gov.hmcts.reform.draftstore.service.s2s.S2sClientStub;
-import uk.gov.hmcts.reform.logging.filters.RequestIdsSettingFilter;
-import uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter;
 
 import java.time.Clock;
 import javax.servlet.Filter;
@@ -86,15 +84,6 @@ public class DraftStoreConfig {
         return new S2sClientStub();
     }
 
-    @Bean
-    public RequestIdsSettingFilter requestIdLoggingFilter() {
-        return new RequestIdsSettingFilter();
-    }
-
-    @Bean
-    public RequestStatusLoggingFilter requestStatusLoggingFilter() {
-        return new RequestStatusLoggingFilter();
-    }
 
     @Bean
     public ObjectMapper objectMapper() {
