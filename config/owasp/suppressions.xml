@@ -6,26 +6,21 @@
     <cpe>cpe:/a:google:guava</cpe>
   </suppress>
 
-  <!-- not used by server -->
-
   <suppress>
     <notes><![CDATA[Used only for testing not used in prod]]></notes>
-    <gav regex="true">^org\.testcontainers:postgresql:.*$</gav>
-    <cpe>cpe:/a:postgresql:postgresql</cpe>
+    <filePath regex="true">.*postgresql-1\.10\.6\.jar</filePath>
+    <cpe>cpe:/a:postgresql:postgresql:1.10.6</cpe>
   </suppress>
+
   <suppress>
     <notes><![CDATA[Related to Groovy LDAP API which is not used by the service]]></notes>
-    <gav regex="true">^org\.codehaus\.groovy:groovy-xml:.*$</gav>
+    <filePath regex="true">.*org.codehaus.groovy/groovy.*</filePath>
     <cpe>cpe:/a:apache:groovy</cpe>
   </suppress>
-  <suppress>
-    <notes><![CDATA[Related to Groovy LDAP API which is not used by the service]]></notes>
-    <gav regex="true">^org\.codehaus\.groovy:groovy-json:.*$</gav>
-    <cve>CVE-2016-6497</cve>
-  </suppress>
+
   <suppress>
     <notes><![CDATA[Used only in tests]]></notes>
-    <gav regex="true">^org\.apache\.sling:org\.apache\.sling\.javax\.activation:0\.1\.0$</gav>
+    <gav regex="true">org\.apache\.sling:org\.apache\.sling\.javax\.activation:0\.1\.0$</gav>
     <cpe>cpe:/a:apache:sling</cpe>
   </suppress>
 

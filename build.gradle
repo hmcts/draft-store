@@ -46,9 +46,9 @@ sourceSets {
   }
 }
 
-//tasks.withType(JavaCompile) {
-//  options.compilerArgs << "-Xlint:unchecked" << "-Werror"
-//}
+tasks.withType(JavaCompile) {
+  options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
 
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
   testClassesDirs = sourceSets.functionalTest.output.classesDirs
@@ -179,11 +179,11 @@ dependencies {
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
   testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-  
+
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
   testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.2.0'
-  testCompile 'org.testcontainers:postgresql:1.10.5'
+  testCompile 'org.testcontainers:postgresql:1.10.6'
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
