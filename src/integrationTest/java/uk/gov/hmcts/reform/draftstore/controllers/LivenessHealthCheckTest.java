@@ -15,7 +15,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/database.properties")
-@ActiveProfiles("test-unhandled-exception")
 public class LivenessHealthCheckTest {
 
     @LocalServerPort
