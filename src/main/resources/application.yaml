@@ -30,6 +30,12 @@ server:
   port: 8800
 
 management:
+  endpoint:
+    health:
+      show-details: "always"
+  endpoints:
+    web:
+      base-path: "/"
   security:
     enabled: false
 
