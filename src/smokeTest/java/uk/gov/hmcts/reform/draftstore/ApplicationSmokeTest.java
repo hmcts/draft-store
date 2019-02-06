@@ -79,7 +79,7 @@ public class ApplicationSmokeTest extends SmokeTestSuite {
         given()
             .accept(APPLICATION_JSON_VALUE)
             .when()
-            .get(draftStoreUrl + "/health/liveness")
+            .get("http" + draftStoreUrl.substring("https".length()) + "/health/liveness")
             .then()
             .statusCode(200)
             .body("status", is("UP"));
@@ -90,7 +90,7 @@ public class ApplicationSmokeTest extends SmokeTestSuite {
         given()
             .accept(APPLICATION_JSON_VALUE)
             .when()
-            .get(draftStoreUrl + "/health")
+            .get("http" + draftStoreUrl.substring("https".length()) + "/health")
             .then()
             .statusCode(200)
             .body("status", is("UP"));
