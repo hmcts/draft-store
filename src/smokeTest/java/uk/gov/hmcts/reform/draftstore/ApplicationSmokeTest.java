@@ -8,7 +8,10 @@ import uk.gov.hmcts.reform.draftstore.response.Draft;
 
 import java.util.Optional;
 
+import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RunWith(SpringRunner.class)
 public class ApplicationSmokeTest extends SmokeTestSuite {
@@ -68,5 +71,28 @@ public class ApplicationSmokeTest extends SmokeTestSuite {
         assertThat(draftStoreClient.readDraftPage().data).isNotEmpty();
         draftStoreClient.deleteAllUsersDrafts();
         assertThat(draftStoreClient.readDraftPage().data).isEmpty();
+    }
+
+
+    @Test
+    public void should_return_UP_for_liveness_check() {
+        given()
+            .accept(APPLICATION_JSON_VALUE)
+            .when()
+            .get(draftStoreUrl + "/health/liveness")
+            .then()
+            .statusCode(200)
+            .body("status", is("UP"));
+    }
+
+    @Test
+    public void should_have_an_up_status_healthCheck() {
+        given()
+            .accept(APPLICATION_JSON_VALUE)
+            .when()
+            .get(draftStoreUrl + "/health")
+            .then()
+            .statusCode(200)
+            .body("status", is("UP"));
     }
 }
