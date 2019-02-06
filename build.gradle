@@ -1,21 +1,60 @@
 plugins {
   id 'application'
   id 'checkstyle'
-  id 'jacoco'
-  id 'pmd'
-  id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+  id 'io.spring.dependency-management' version '1.0.5.RELEASE'
   id 'org.flywaydb.flyway' version '5.1.4'
-  id 'org.springframework.boot' version '2.1.2.RELEASE'
+  id 'org.springframework.boot' version '1.5.17.RELEASE'
   id 'org.owasp.dependencycheck' version '3.3.4'
   id 'com.github.ben-manes.versions' version '0.17.0'
   id 'org.sonarqube' version '2.6.2'
+  id 'jacoco'
+  id 'pmd'
 }
 
 group 'uk.gov.hmcts.reform'
 version '1.1.0'
 
+checkstyle.toolVersion = '8.9'
+checkstyle.configFile = new File(rootDir, "checkstyle.xml")
+
+flyway {
+  url = System.getenv('FLYWAY_URL')
+  user = System.getenv('FLYWAY_USER')
+  password = System.getenv('FLYWAY_PASSWORD')
+  baselineOnMigrate = true
+  baselineVersion = '000'
+}
+
+// https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
+dependencyCheck {
+  // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+  // range of 0-10 fails the build, anything greater and it doesn't fail the build
+  failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
+  suppressionFile = 'dependency-check-suppressions.xml'
+}
+
+dependencyUpdates.resolutionStrategy = {
+  componentSelection { rules ->
+    rules.all { ComponentSelection selection ->
+      boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
+        selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+      }
+      if (rejected) {
+        selection.reject('Release candidate')
+      }
+    }
+  }
+}
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+repositories {
+  maven {
+    url "https://dl.bintray.com/hmcts/hmcts-maven"
+  }
+  jcenter()
+}
 
 sourceSets {
   integrationTest {
@@ -46,40 +85,86 @@ sourceSets {
   }
 }
 
-tasks.withType(JavaCompile) {
-  options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+def versions = [
+  springBoot      : plugins.getPlugin('org.springframework.boot').class.package.implementationVersion,
+  springfoxSwagger: '2.9.2'
+]
+
+dependencyManagement {
+  dependencies {
+    // spring boot dependency management plugin downgrades
+    // hystrix related libraries use 2.4.3 and not clear if plan to upgrade
+    // bump to 2.9.7 because of https://nvd.nist.gov/vuln/detail/CVE-2018-7489
+    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.9.8') {
+      entry 'jackson-annotations'
+      entry 'jackson-core'
+      entry 'jackson-databind'
+    }
+    dependencySet(group: 'com.fasterxml.jackson.datatype', version: '2.9.8') {
+      entry 'jackson-datatype-jsr310'
+    }
+  }
+  imports {
+    mavenBom "org.springframework.boot:spring-boot-starter-parent:${versions.springBoot}"
+  }
 }
 
+dependencies {
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: versions.springBoot
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
-test {
-  useJUnitPlatform()
+  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+
+  compile group: 'org.flywaydb', name: 'flyway-core', version: '5.1.4'
+
+  compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+  compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
+
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
+  compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
+
+  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '2.2.1'
+  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '2.2.1'
+
+  compile group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.3.0'
+
+  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+
+  integrationTestCompile sourceSets.main.runtimeClasspath
+  integrationTestCompile(
+    'org.springframework.boot:spring-boot-starter-test',
+    'com.jayway.restassured:rest-assured:2.9.0',
+    'org.mockito:mockito-core:2.23.4',
+    'org.assertj:assertj-core:3.11.1',
+    'org.testcontainers:postgresql:1.10.5'
+  )
+
+  smokeTestCompile sourceSets.main.runtimeClasspath
+  smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+  smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
+  smokeTestCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.2.0'
+
+  functionalTestCompile sourceSets.smokeTest.runtimeClasspath
 }
 
-task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
-  testClassesDirs = sourceSets.functionalTest.output.classesDirs
-  classpath = sourceSets.functionalTest.runtimeClasspath
-  useJUnitPlatform()
-}
-
-task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
+task integration(type: Test) {
+  description = "Runs Integration Tests"
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
-  useJUnitPlatform()
 }
 
 task smoke(type: Test) {
   description = "Runs Smoke Tests"
   testClassesDirs = sourceSets.smokeTest.output.classesDirs
   classpath = sourceSets.smokeTest.runtimeClasspath
-  useJUnitPlatform()
 }
 
-flyway {
-  url = System.getenv('FLYWAY_URL')
-  user = System.getenv('FLYWAY_USER')
-  password = System.getenv('FLYWAY_PASSWORD')
-  baselineOnMigrate = true
-  baselineVersion = '000'
+task functional(type: Test) {
+  description = "Runs Functional Tests"
+  testClassesDirs = sourceSets.functionalTest.output.classesDirs
+  classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
@@ -89,26 +174,12 @@ task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
   }
 }
 
-checkstyle {
-  maxWarnings = 0
-  toolVersion = '8.14'
-  // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
-  configDir = new File(rootDir, 'config/checkstyle')
-}
-
-pmd {
-  toolVersion = "6.9.0"
-  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
-  reportsDir = file("$project.buildDir/reports/pmd")
-  ruleSetFiles = files("config/pmd/ruleset.xml")
-}
-
 jacocoTestReport {
   executionData(test, integration)
   reports {
-    xml.enabled = true
-    csv.enabled = false
-    xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    xml.enabled true
+    csv.enabled false
+    xml.destination file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
   }
 }
 
@@ -118,97 +189,19 @@ sonarqube {
     property "sonar.projectName", "Reform :: Draft Store"
     property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
     property "sonar.jacoco.itReportPath", "${project.buildDir}/jacoco/integration.exec"
-
   }
 }
 
-dependencyUpdates.resolutionStrategy = {
-  componentSelection { rules ->
-    rules.all { ComponentSelection selection ->
-      boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
-        selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
-      }
-      if (rejected) {
-        selection.reject('Release candidate')
-      }
-    }
-  }
+pmd {
+  toolVersion = "5.8.1"
+  ignoreFailures = true
+  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.smokeTest,
+                sourceSets.functionalTest]
+  reportsDir = file("$project.buildDir/reports/pmd")
+  ruleSetFiles = files("ruleset.xml")
 }
 
-// https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
-dependencyCheck {
-  // Specifies if the build should be failed if a CVSS score above a specified level is identified.
-  // range of 0-10 fails the build, anything greater and it doesn't fail the build
-  failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
-  suppressionFile = 'config/owasp/suppressions.xml'
-}
-
-repositories {
-  mavenLocal()
-  maven {
-    url "https://dl.bintray.com/hmcts/hmcts-maven"
-  }
-  jcenter()
-  mavenCentral()
-}
-
-// it is important to specify logback classic and core packages explicitly as libraries like spring boot
-// enforces it's own (older) version which is not recommended.
-def versions = [
-  junit: '5.3.2',
-  logging: '4.0.1',
-  springBoot: springBoot.class.package.implementationVersion,
-  springfoxSwagger: '2.9.2'
-]
-
-dependencies {
-  compile(
-    "org.springframework.boot:spring-boot-starter-web",
-    "org.springframework.boot:spring-boot-starter-actuator",
-    "org.springframework.boot:spring-boot-starter-jdbc",
-    "org.springframework.boot:spring-boot-starter-validation",
-  )
-  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
-
-  compile group: 'org.flywaydb', name: 'flyway-core', version: '5.2.4'
-
-  compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
-  compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
-
-  compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
-  compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
-
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.logging
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: versions.logging
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.logging
-
-  compile group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.4.0'
-
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-  testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
-
-
-  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-  testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
-  testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.2.0'
-  testCompile 'org.testcontainers:postgresql:1.10.6'
-
-  integrationTestCompile sourceSets.main.runtimeClasspath
-  integrationTestCompile sourceSets.test.runtimeClasspath
-  
-  functionalTestCompile sourceSets.main.runtimeClasspath
-  functionalTestCompile sourceSets.test.runtimeClasspath
-  functionalTestCompile sourceSets.smokeTest.runtimeClasspath
-  
-  smokeTestCompile sourceSets.main.runtimeClasspath
-  smokeTestCompile sourceSets.test.runtimeClasspath
-}
-
-mainClassName = 'uk.gov.hmcts.reform.draftstore.DraftStoreApplication'
-
-bootJar {
+jar {
   archiveName 'draft-store.jar'
 
   manifest {
@@ -219,4 +212,11 @@ bootJar {
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+run {
+  mainClassName = 'uk.gov.hmcts.reform.draftstore.DraftStoreApplication'
+  if (debug == 'true') {
+    jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
+  }
 }
