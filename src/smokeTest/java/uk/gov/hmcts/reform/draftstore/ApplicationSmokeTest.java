@@ -73,7 +73,6 @@ public class ApplicationSmokeTest extends SmokeTestSuite {
         assertThat(draftStoreClient.readDraftPage().data).isEmpty();
     }
 
-
     @Test
     public void should_return_UP_for_liveness_check() {
         given()
