@@ -9,4 +9,5 @@ HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" wget -q 
 
 EXPOSE 8800
 
-CMD ["\$APP"]
+#CMD ["\$APP"]
+CMD ["draft-store.jar"]
