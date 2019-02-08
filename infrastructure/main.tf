@@ -6,12 +6,6 @@ locals {
   sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
 }
 
-# TODO: remove once the DB is migrated to CNP
-data "azurerm_key_vault_secret" "db_password" {
-  name      = "db-password"
-  vault_uri = "${module.key-vault.key_vault_uri}"
-}
-
 module "api" {
   source        = "git@github.com:hmcts/cnp-module-webapp"
   product       = "${var.product}-${var.component}"
@@ -51,16 +45,16 @@ module "api" {
 }
 
 module "db" {
-  source                = "git@github.com:hmcts/cnp-module-postgres?ref=master"
-  product               = "rpe-${var.product}"
-  location              = "${var.location_api}"
-  env                   = "${var.env}"
-  database_name         = "draftstore"
-  postgresql_user       = "draftstore"
-  postgresql_version    = "10"
-  sku_name              = "GP_Gen5_2"
-  sku_tier              = "GeneralPurpose"
-  common_tags           = "${var.common_tags}"
+  source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
+  product            = "rpe-${var.product}"
+  location           = "${var.location_api}"
+  env                = "${var.env}"
+  database_name      = "draftstore"
+  postgresql_user    = "draftstore"
+  postgresql_version = "10"
+  sku_name           = "GP_Gen5_2"
+  sku_tier           = "GeneralPurpose"
+  common_tags        = "${var.common_tags}"
 }
 
 # region save DB details to Azure Key Vault
