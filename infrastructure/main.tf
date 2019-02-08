@@ -33,14 +33,7 @@ module "api" {
     MAX_STALE_DAYS_DEFAULT = "${var.max_stale_days_default}"
     MAX_STALE_DAYS_CRON    = "${var.max_stale_days_cron}"
 
-    FLYWAY_URL      = "jdbc:postgresql://${var.db_host}:5432/draftstore${local.db_connection_options}"
-    FLYWAY_USER     = "draftstore"
-    FLYWAY_PASSWORD = "${data.azurerm_key_vault_secret.db_password.value}"
-
     RUN_DB_MIGRATION_ON_STARTUP = "${var.run_db_migration_on_startup}"
-
-    LOGBACK_REQUIRE_ALERT_LEVEL = "false"
-    LOGBACK_REQUIRE_ERROR_CODE  = "false"
   }
 }
 
