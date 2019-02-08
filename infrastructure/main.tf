@@ -26,11 +26,11 @@ module "api" {
   instance_size = "${local.sku_size}"
 
   app_settings = {
-    DRAFT_STORE_DB_HOST         = "${var.db_host}"
+    DRAFT_STORE_DB_HOST         = "${module.db.host_name}"
     DRAFT_STORE_DB_PORT         = "5432"
-    DRAFT_STORE_DB_PASSWORD     = "${data.azurerm_key_vault_secret.db_password.value}"
-    DRAFT_STORE_DB_USER_NAME    = "draftstore"
-    DRAFT_STORE_DB_NAME         = "draftstore"
+    DRAFT_STORE_DB_PASSWORD     = "${module.db.postgresql_password}"
+    DRAFT_STORE_DB_USER_NAME    = "${module.db.user_name}"
+    DRAFT_STORE_DB_NAME         = "${module.db.postgresql_database}"
     DRAFT_STORE_DB_CONN_OPTIONS = "${local.db_connection_options}"
 
     IDAM_URL = "${var.idam_api_url}"
@@ -61,7 +61,6 @@ module "db" {
   sku_name              = "GP_Gen5_2"
   sku_tier              = "GeneralPurpose"
   common_tags           = "${var.common_tags}"
-  backup_retention_days = "35"
 }
 
 # region save DB details to Azure Key Vault
@@ -82,19 +81,19 @@ module "key-vault" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   name      = "${var.component}-POSTGRES-USER"
-  value     = "draftstore"
+  value     = "${module.db.user_name}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name      = "${var.component}-POSTGRES-PASS"
-  value     = "${data.azurerm_key_vault_secret.db_password.value}"
+  value     = "${module.db.postgresql_password}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   name      = "${var.component}-POSTGRES-HOST"
-  value     = "${var.db_host}"
+  value     = "${module.db.host_name}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
@@ -106,7 +105,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name      = "${var.component}-POSTGRES-DATABASE"
-  value     = "draftstore"
+  value     = "${module.db.postgresql_database}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
