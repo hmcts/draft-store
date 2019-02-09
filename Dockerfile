@@ -9,5 +9,7 @@ HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" wget -q 
 
 EXPOSE 8800
 
+ENV JAVA_TOOL_OPTIONS "-XX:+UseContainerSupport -XX:InitialRAMPercentage=25.0 -XX:MaxRAMPercentage=80.0 -XX:MinRAMPercentage=10.0 -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90"
+
 #CMD ["\$APP"]
 CMD ["draft-store.jar"]
