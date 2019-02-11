@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.draftstore;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.RestAssured;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,6 +22,11 @@ public class ApplicationSmokeTest extends SmokeTestSuite {
 
     private static final String SAMPLE_DOCUMENT = "{\"some\": \"draft\"}";
     private static final String SMOKE_TEST_DRAFT_TYPE = "smoke_test";
+
+    @Before
+    public void before() {
+        RestAssured.useRelaxedHTTPSValidation();
+    }
 
     @Test
     public void should_be_able_to_create_draft() throws Exception {
