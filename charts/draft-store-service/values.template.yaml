@@ -1,5 +1,4 @@
 java:
-  livenessPath: '/health/liveness'
   applicationPort: 8800
   environment:
     DRAFT_STORE_DB_HOST: ${SERVICE_NAME}-postgresql  # do not modify
