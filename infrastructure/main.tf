@@ -10,12 +10,6 @@ locals {
   sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
 }
 
-# TODO: remove once the DB is migrated to CNP
-data "azurerm_key_vault_secret" "db_password" {
-  name      = "db-password"
-  vault_uri = "${module.key-vault.key_vault_uri}"
-}
-
 module "api" {
   source        = "git@github.com:hmcts/cnp-module-webapp"
   product       = "${var.product}-${var.component}"
@@ -30,11 +24,11 @@ module "api" {
   instance_size = "${local.sku_size}"
 
   app_settings = {
-    DRAFT_STORE_DB_HOST         = "${var.db_host}"
+    DRAFT_STORE_DB_HOST         = "${module.db.host_name}"
     DRAFT_STORE_DB_PORT         = "5432"
-    DRAFT_STORE_DB_PASSWORD     = "${data.azurerm_key_vault_secret.db_password.value}"
-    DRAFT_STORE_DB_USER_NAME    = "draftstore"
-    DRAFT_STORE_DB_NAME         = "draftstore"
+    DRAFT_STORE_DB_PASSWORD     = "${module.db.postgresql_password}"
+    DRAFT_STORE_DB_USER_NAME    = "${module.db.user_name}"
+    DRAFT_STORE_DB_NAME         = "${module.db.postgresql_database}"
     DRAFT_STORE_DB_CONN_OPTIONS = "${local.db_connection_options}"
 
     IDAM_URL = "${var.idam_api_url}"
@@ -43,29 +37,21 @@ module "api" {
     MAX_STALE_DAYS_DEFAULT = "${var.max_stale_days_default}"
     MAX_STALE_DAYS_CRON    = "${var.max_stale_days_cron}"
 
-    FLYWAY_URL      = "jdbc:postgresql://${var.db_host}:5432/draftstore${local.db_connection_options}"
-    FLYWAY_USER     = "draftstore"
-    FLYWAY_PASSWORD = "${data.azurerm_key_vault_secret.db_password.value}"
-
     RUN_DB_MIGRATION_ON_STARTUP = "${var.run_db_migration_on_startup}"
-
-    LOGBACK_REQUIRE_ALERT_LEVEL = "false"
-    LOGBACK_REQUIRE_ERROR_CODE  = "false"
   }
 }
 
 module "db" {
-  source                = "git@github.com:hmcts/cnp-module-postgres?ref=master"
-  product               = "rpe-${var.product}"
-  location              = "${var.location_api}"
-  env                   = "${var.env}"
-  database_name         = "draftstore"
-  postgresql_user       = "draftstore"
-  postgresql_version    = "10"
-  sku_name              = "GP_Gen5_2"
-  sku_tier              = "GeneralPurpose"
-  common_tags           = "${var.common_tags}"
-  backup_retention_days = "35"
+  source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
+  product            = "rpe-${var.product}"
+  location           = "${var.location_api}"
+  env                = "${var.env}"
+  database_name      = "draftstore"
+  postgresql_user    = "draftstore"
+  postgresql_version = "10"
+  sku_name           = "GP_Gen5_2"
+  sku_tier           = "GeneralPurpose"
+  common_tags        = "${var.common_tags}"
 }
 
 # region save DB details to Azure Key Vault
@@ -86,19 +72,19 @@ module "key-vault" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   name      = "${var.component}-POSTGRES-USER"
-  value     = "draftstore"
+  value     = "${module.db.user_name}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name      = "${var.component}-POSTGRES-PASS"
-  value     = "${data.azurerm_key_vault_secret.db_password.value}"
+  value     = "${module.db.postgresql_password}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   name      = "${var.component}-POSTGRES-HOST"
-  value     = "${var.db_host}"
+  value     = "${module.db.host_name}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
@@ -110,7 +96,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name      = "${var.component}-POSTGRES-DATABASE"
-  value     = "draftstore"
+  value     = "${module.db.postgresql_database}"
   vault_uri = "${module.key-vault.key_vault_uri}"
 }
 
