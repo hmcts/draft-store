@@ -3,7 +3,7 @@ module "bad-response-codes-alert" {
   location          = "${var.location_api}"
   app_insights_name = "${var.product}-${var.component}-appinsights-${var.env}"
 
-  alert_name = "Draft store - bad response codes"
+  alert_name = "Draft-store-bad-response-codes"
   alert_desc = "404 for /health and 5xx response codes"
 
   app_insights_query = <<EOF
