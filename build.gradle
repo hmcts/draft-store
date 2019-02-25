@@ -156,7 +156,7 @@ repositories {
 // enforces it's own (older) version which is not recommended.
 def versions = [
   junit: '5.3.2',
-  logging: '4.0.1',
+  logging: '5.0.1',
   springBoot: springBoot.class.package.implementationVersion,
   springfoxSwagger: '2.9.2'
 ]
