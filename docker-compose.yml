@@ -21,6 +21,7 @@ services:
       - IDAM_USE_STUB
       - S2S_USER_STUB
       - RUN_DB_MIGRATION_ON_STARTUP
+      - AZURE_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY
     ports:
       - 8800:8800
     depends_on:
