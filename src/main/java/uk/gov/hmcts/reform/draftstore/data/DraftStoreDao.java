@@ -112,8 +112,8 @@ public class DraftStoreDao {
 
     public List<DocumentTypeCount> getDraftTypeCountsByUser(String userId) {
         try {
-            return jdbcTemplate.query("SELECT document_type, COUNT(id) AS amount " +
-                    "FROM draft_document WHERE user_id = :id GROUP BY document_type",
+            return jdbcTemplate.query("SELECT document_type, COUNT(id) AS amount "
+                    + "FROM draft_document WHERE user_id = :id GROUP BY document_type",
                 new MapSqlParameterSource("id", userId),
                 (ResultSet rs, int rowNum) -> new DocumentTypeCount(rs.getString("document_type"), rs.getInt("amount")));
         } catch (EmptyResultDataAccessException e) {
