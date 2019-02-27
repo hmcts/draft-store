@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import uk.gov.hmcts.reform.draftstore.data.model.CreateDraft;
+import uk.gov.hmcts.reform.draftstore.data.model.DocumentTypeCount;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 import uk.gov.hmcts.reform.draftstore.data.model.UpdateDraft;
 
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.ZoneOffset;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -58,7 +60,7 @@ public class DraftStoreDao {
                 .addValue("created", now)
                 .addValue("updated", now),
             keyHolder,
-            new String[] {"id"}
+            new String[]{"id"}
         );
         return keyHolder.getKey().intValue();
     }
@@ -108,6 +110,17 @@ public class DraftStoreDao {
         }
     }
 
+    public List<DocumentTypeCount> getDraftTypeCountsByUser(String userId) {
+        try {
+            return jdbcTemplate.query("SELECT document_type, COUNT(id) AS amount " +
+                    "FROM draft_document WHERE user_id = :id GROUP BY document_type",
+                new MapSqlParameterSource("id", userId),
+                (ResultSet rs, int rowNum) -> new DocumentTypeCount(rs.getString("document_type"), rs.getInt("amount")));
+        } catch (EmptyResultDataAccessException e) {
+            return Collections.emptyList();
+        }
+    }
+
     public void delete(int id) {
         jdbcTemplate.update(
             "DELETE FROM draft_document WHERE id = :id",
@@ -126,6 +139,7 @@ public class DraftStoreDao {
 
     /**
      * Deletes drafts that were not updated for a specific time.
+     *
      * @return number of deleted drafts
      */
     public int deleteStaleDrafts() {
