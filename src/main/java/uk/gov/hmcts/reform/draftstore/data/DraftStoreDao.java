@@ -60,7 +60,7 @@ public class DraftStoreDao {
                 .addValue("created", now)
                 .addValue("updated", now),
             keyHolder,
-            new String[]{"id"}
+            new String[] {"id"}
         );
         return keyHolder.getKey().intValue();
     }
@@ -139,7 +139,6 @@ public class DraftStoreDao {
 
     /**
      * Deletes drafts that were not updated for a specific time.
-     *
      * @return number of deleted drafts
      */
     public int deleteStaleDrafts() {
