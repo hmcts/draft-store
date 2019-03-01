@@ -10,11 +10,13 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.draftstore.data.model.CreateDraft;
+import uk.gov.hmcts.reform.draftstore.data.model.DocumentTypeCount;
 import uk.gov.hmcts.reform.draftstore.data.model.Draft;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -114,5 +116,39 @@ public class DraftStoreDaoTest {
 
         assertThat(result.get(1).get("service")).isEqualTo(service2);
         assertThat(result.get(1).get("count")).isEqualTo(2L);
+    }
+
+    @Test
+    public void getDraftTypeCountsByUser_should_return_empty_map_when_no_tuples() {
+        // given no tuples
+        // when
+        List<DocumentTypeCount> result = underTest.getDraftTypeCountsByUser(USER_ID);
+
+        // then
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void getDraftTypeCountsByUser_should_return_all_counts() {
+        // given
+        underTest.insert(USER_ID, "service_1", new CreateDraft("{}", null, "some_type", 123));
+        underTest.insert(USER_ID, "service_1", new CreateDraft("{}", null, "some_type", 123));
+        underTest.insert(USER_ID, "service_1", new CreateDraft("{}", null, "another_type", 123));
+
+        // when
+        List<DocumentTypeCount> results = underTest.getDraftTypeCountsByUser(USER_ID);
+
+        // then
+        assertThat(results).hasSize(2);
+        assertThat(results.stream()
+            .filter(result -> Objects.equals(result.getDocumentType(), "some_type"))
+            .filter(result -> Objects.equals(result.getCount(), 2))
+            .count())
+            .isEqualTo(1);
+        assertThat(results.stream()
+            .filter(result -> Objects.equals(result.getDocumentType(), "another_type"))
+            .filter(result -> Objects.equals(result.getCount(), 1))
+            .count())
+            .isEqualTo(1);
     }
 }

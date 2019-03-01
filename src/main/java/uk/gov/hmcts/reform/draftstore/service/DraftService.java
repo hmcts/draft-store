@@ -11,7 +11,9 @@ import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -48,6 +50,11 @@ public class DraftService {
                 .collect(toList());
 
         return new DraftList(drafts);
+    }
+
+    public Map<String, Integer> userReport(String userId) {
+        return draftRepo.getDraftTypeCountsByUser(userId).stream()
+            .collect(HashMap::new, (map, count) -> map.put(count.getDocumentType(), count.getCount()), Map::putAll);
     }
 
     public int create(CreateDraft newDraft, UserAndService userAndService) {
