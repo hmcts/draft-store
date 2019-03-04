@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
@@ -16,7 +15,10 @@ import uk.gov.hmcts.reform.draftstore.service.idam.InvalidIdamTokenException;
 import java.util.Collections;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReportControllerTest {
@@ -37,7 +39,7 @@ public class ReportControllerTest {
     @Test
     public void shouldThrowExceptionIfUserNotAuthenticated() {
         // given
-        Mockito.when(authService.authenticate(Mockito.anyString()))
+        when(authService.authenticate(anyString()))
             .thenThrow(getAuthenticationFailedException());
 
         // when
@@ -48,7 +50,7 @@ public class ReportControllerTest {
     @Test
     public void shouldReturnEmptyMapIfNoResults() {
         // given
-        Mockito.when(draftService.userReport(Mockito.anyString()))
+        when(draftService.userReport(anyString()))
             .thenReturn(Collections.emptyMap());
 
         // when
@@ -61,7 +63,7 @@ public class ReportControllerTest {
     @Test
     public void shouldPassThroughResults() {
         // given
-        Mockito.when(draftService.userReport(Mockito.anyString()))
+        when(draftService.userReport(anyString()))
             .thenReturn(ImmutableMap.of("some_type", 2, "another_type", 3));
 
         // when
