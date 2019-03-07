@@ -184,6 +184,7 @@ dependencies {
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.logging
 
   compile group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.4.0'
+  compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter' version:'0.0.4'
 
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
