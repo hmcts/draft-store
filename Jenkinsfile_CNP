@@ -36,7 +36,7 @@ withPipeline(type, product, app) {
 
   env.USE_IDAM_TESTING_SUPPORT = "true"
   env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
-  env.IDAM_URL_FOR_TESTS = "https://preprod-idamapi.reform.hmcts.net:3511"
+  env.IDAM_URL_FOR_TESTS = "https://idam-api.aat.platform.hmcts.net"
   env.S2S_NAME_FOR_TESTS = "draft_store_tests"
   env.IDAM_USER_EMAIL_FOR_TESTS = "reformplatformengineering+tests@gmail.com"
   env.IDAM_CLIENT_ID_FOR_TESTS = "cmc_citizen" // TODO change this
