@@ -37,4 +37,12 @@
     <cve>CVE-2014-3488</cve>
     <cve>CVE-2015-2156</cve>
   </suppress>
+
+  <suppress>
+   <notes><![CDATA[
+   false positive and only affects old postgres versions 8.x and below
+   ]]></notes>
+   <sha1>cd2dc98053b50e743fb0e3a1aac2b069d77da066</sha1>
+   <cve>CVE-2007-2138</cve>
+ </suppress>
 </suppressions>
