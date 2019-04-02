@@ -1,7 +1,7 @@
 java:
   applicationPort: 8800
   environment:
-    DRAFT_STORE_DB_HOST: ${SERVICE_NAME}-postgresql  # do not modify
+    DRAFT_STORE_DB_HOST: draft-store-service-postgresql  # do not modify
     DRAFT_STORE_DB_NAME: hmcts
     DRAFT_STORE_DB_USER_NAME: hmcts
     DRAFT_STORE_DB_PASSWORD: hmcts
@@ -9,8 +9,7 @@ java:
     LOGBACK_REQUIRE_ALERT_LEVEL: 'false'
     LOGBACK_REQUIRE_ERROR_CODE: 'false'
   # Don't modify below here
-  image: ${IMAGE_NAME}
-  ingressHost: ${SERVICE_FQDN}
+  image: 'https://hmcts.azurecr.io/hmcts/draft-store-service:latest'
 
 postgresql:
   postgresqlUsername: hmcts
