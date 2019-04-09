@@ -46,4 +46,11 @@
     <cpe>cpe:/a:pivotal_software:spring_security</cpe>
     <cve>CVE-2018-1258</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive, https://pivotal.io/security/cve-2018-1258
+   ]]></notes>
+    <gav regex="true">^org\.springframework\.security:spring-security-crypto:.*$</gav>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
 </suppressions>
