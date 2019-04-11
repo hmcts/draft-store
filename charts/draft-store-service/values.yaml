@@ -1,0 +1,18 @@
+java:
+  applicationPort: 8800
+  environment:
+    DRAFT_STORE_DB_HOST: "{{ .Release.Name }}-postgresql"
+    DRAFT_STORE_DB_NAME: "{{ .Values.postgresql.postgresqlDatabase}}"
+    DRAFT_STORE_DB_USER_NAME: "{{ .Values.postgresql.postgresqlUsername}}"
+    DRAFT_STORE_DB_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
+    IDAM_URL: https://idam-api.aat.platform.hmcts.net
+    S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    LOGBACK_REQUIRE_ALERT_LEVEL: 'false'
+    LOGBACK_REQUIRE_ERROR_CODE: 'false'
+  image: 'https://hmcts.azurecr.io/hmcts/draft-store-service:latest'
+  postgresql:
+    postgresqlUsername: hmcts
+    postgresqlPassword: hmcts
+    postgresqlDatabase: hmcts
+    service:
+      port: 5432
