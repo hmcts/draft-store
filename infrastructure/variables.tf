@@ -15,10 +15,6 @@ variable "location_api" {
   default = "UK South"
 }
 
-variable "db_host" {
-  default = "test-data-lb.moneyclaim.reform.hmcts.net"
-}
-
 variable "env" {
   type = "string"
 }
@@ -42,10 +38,6 @@ variable "jenkins_AAD_objectId" {
 }
 
 variable "subscription" {}
-
-variable "vault_section" {
-  default = "test"
-}
 
 variable "capacity" {
   default = "1"
