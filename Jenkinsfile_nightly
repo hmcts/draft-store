@@ -35,9 +35,9 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 withNightlyPipeline(type, product, app) {
 
   env.DRAFT_STORE_BASE_URL = "http://draft-store-service-aat.service.core-compute-aat.internal/drafts"
-  env.S2S_URL = "https://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+  env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
   env.S2S_TESTING = "false"
-  env.IDAM_URL = "http://idam-api-idam-aat.service.core-compute-idam-aat.internal"
+  env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
   env.IDAM_REDIRECT_URI = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
   env.TEST_USERS = "10"
   env.TEST_RAMP_UP_SECS = "20"
