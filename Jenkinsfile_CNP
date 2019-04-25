@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@gatling-builder")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
@@ -14,7 +14,14 @@ def secrets = [
     [
       secret('s2s-secret-for-tests', 'S2S_SECRET_FOR_TESTS'),
       secret('idam-password-for-tests', 'IDAM_PASSWORD_FOR_TESTS'),
-      secret('idam-client-secret-for-tests', 'IDAM_CLIENT_SECRET_FOR_TESTS')
+      secret('idam-client-secret-for-tests', 'IDAM_CLIENT_SECRET_FOR_TESTS'),
+      // performance test environment
+      secret('idam-client-secret-for-tests', 'IDAM_CLIENT_SECRET')
+    ],
+  's2s-${env}':
+    [
+      // performance test environment
+      secret('microservicekey-draftStoreTests', 'S2S_SECRET'),
     ]
 ]
 
@@ -42,9 +49,21 @@ withPipeline(type, product, app) {
   env.IDAM_CLIENT_ID_FOR_TESTS = "cmc_citizen" // TODO change this
   env.IDAM_REDIRECT_URI_FOR_TESTS = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
 
+  // performance test environment
+  env.DRAFT_STORE_BASE_URL = "http://draft-store-service-aat.service.core-compute-aat.internal/drafts"
+  env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+  env.S2S_TESTING = "false"
+  env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
+  env.IDAM_REDIRECT_URI = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
+  env.TEST_USERS = "10"
+  env.TEST_RAMP_UP_SECS = "20"
+  env.TEST_CLEAN_UP_DELAY_SECS = "140"
+
   enableSlackNotifications(channel)
   enableDbMigration()
   enableDockerBuild()
   installCharts()
   loadVaultSecrets(secrets)
+
+  enablePerformanceTest()
 }
