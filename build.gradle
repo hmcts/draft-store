@@ -60,12 +60,18 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
   testClassesDirs = sourceSets.functionalTest.output.classesDirs
   classpath = sourceSets.functionalTest.runtimeClasspath
   useJUnitPlatform()
+  testLogging {
+    exceptionFormat = 'full'
+  }
 }
 
 task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
   useJUnitPlatform()
+  testLogging {
+    exceptionFormat = 'full'
+  }
 }
 
 task smoke(type: Test) {
