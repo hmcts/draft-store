@@ -43,6 +43,7 @@ withPipeline(type, product, app) {
   env.IDAM_REDIRECT_URI_FOR_TESTS = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
 
   // performance test environment
+  env.DRAFT_STORE_BASE_URL = "http://draft-store-service-aat.service.core-compute-aat.internal/drafts"
   env.USE_S2S_TESTING_SUPPORT = "false"
   env.TEST_USERS = "10"
   env.TEST_RAMP_UP_SECS = "20"
