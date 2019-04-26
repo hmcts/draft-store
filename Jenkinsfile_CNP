@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@perf-test-method")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
@@ -41,6 +41,16 @@ withPipeline(type, product, app) {
   env.IDAM_USER_EMAIL_FOR_TESTS = "reformplatformengineering+tests@gmail.com"
   env.IDAM_CLIENT_ID_FOR_TESTS = "cmc_citizen" // TODO change this
   env.IDAM_REDIRECT_URI_FOR_TESTS = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
+
+
+  env.DRAFT_STORE_BASE_URL = "http://draft-store-service-aat.service.core-compute-aat.internal/drafts"
+  env.USE_S2S_TESTING_SUPPORT = "false"
+  env.TEST_USERS = "10"
+  env.TEST_RAMP_UP_SECS = "20"
+  env.TEST_CLEAN_UP_DELAY_SECS = "140"
+
+  enablePerformanceTest()
+
 
   enableSlackNotifications(channel)
   enableDbMigration()
