@@ -46,5 +46,6 @@ withPipeline(type, product, app) {
   enableDbMigration()
   enableDockerBuild()
   installCharts()
+  enableAksStagingDeployment()
   loadVaultSecrets(secrets)
 }
