@@ -4,7 +4,7 @@ provider "azurerm" {
 
 locals {
   db_connection_options = "?sslmode=require"
-  ase_name              = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+  ase_name              = "core-compute-${var.env}"
 
   s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"
   sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
