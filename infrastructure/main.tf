@@ -68,37 +68,37 @@ module "key-vault" {
 
   # dcd_cc-dev group object ID
   product_group_object_id = "38f9dea6-e861-4a50-9e73-21e64f563537"
-  common_tags         = "${var.common_tags}"
+  common_tags             = "${var.common_tags}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name      = "${var.component}-POSTGRES-USER"
-  value     = "${module.db.user_name}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-USER"
+  value        = "${module.db.user_name}"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name      = "${var.component}-POSTGRES-PASS"
-  value     = "${module.db.postgresql_password}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-PASS"
+  value        = "${module.db.postgresql_password}"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name      = "${var.component}-POSTGRES-HOST"
-  value     = "${module.db.host_name}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-HOST"
+  value        = "${module.db.host_name}"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name      = "${var.component}-POSTGRES-PORT"
-  value     = "5432"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-PORT"
+  value        = "5432"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name      = "${var.component}-POSTGRES-DATABASE"
-  value     = "${module.db.postgresql_database}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-DATABASE"
+  value        = "${module.db.postgresql_database}"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 # endregion
