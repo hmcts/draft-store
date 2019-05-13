@@ -62,7 +62,7 @@ public class HandleUnknownExceptionTest {
             .then()
             .statusCode(SC_INTERNAL_SERVER_ERROR)
             .contentType("application/json;charset=UTF-8")
-            .content("errorCode", is("SERVER_ERROR"))
-            .content("errors", IsNull.nullValue());
+            .body("errorCode", is("SERVER_ERROR"))
+            .body("errors", IsNull.nullValue());
     }
 }
