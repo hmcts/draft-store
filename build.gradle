@@ -173,6 +173,8 @@ def versions = [
   springfoxSwagger: '2.9.2'
 ]
 
+ext["rest-assured.version"] = '4.0.0'
+
 dependencies {
   compile(
     "org.springframework.boot:spring-boot-starter-web",
@@ -198,10 +200,7 @@ dependencies {
   compile group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.4.0'
   compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.0.4'
 
-  testCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.0.0'
-  testCompile group: 'io.rest-assured', name: 'rest-assured-common', version: '4.0.0'
-  testCompile group: 'io.rest-assured', name: 'json-path', version: '4.0.0'
-  testCompile group: 'io.rest-assured', name: 'xml-path', version: '4.0.0'
+  testCompile group: 'io.rest-assured', name: 'rest-assured'
 
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
