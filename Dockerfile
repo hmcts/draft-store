@@ -1,4 +1,4 @@
-FROM hmcts/cnp-java-base:openjdk-8u191-jre-alpine3.9-1.0
+FROM hmcts/cnp-java-base:openjdk-8u191-jre-alpine3.9-2.0.1
 
 COPY build/libs/draft-store.jar /opt/app/
 

@@ -4,7 +4,7 @@ provider "azurerm" {
 
 locals {
   db_connection_options = "?sslmode=require"
-  ase_name              = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+  ase_name              = "core-compute-${var.env}"
 
   s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"
   sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
@@ -68,38 +68,39 @@ module "key-vault" {
   resource_group_name = "${module.api.resource_group_name}"
 
   # dcd_cc-dev group object ID
-  product_group_object_id = "38f9dea6-e861-4a50-9e73-21e64f563537"
-  common_tags         = "${var.common_tags}"
+  product_group_object_id    = "38f9dea6-e861-4a50-9e73-21e64f563537"
+  common_tags                = "${var.common_tags}"
+  managed_identity_object_id = "${var.managed_identity_object_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name      = "${var.component}-POSTGRES-USER"
-  value     = "${module.db.user_name}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-USER"
+  value        = "${module.db.user_name}"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name      = "${var.component}-POSTGRES-PASS"
-  value     = "${module.db.postgresql_password}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-PASS"
+  value        = "${module.db.postgresql_password}"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name      = "${var.component}-POSTGRES-HOST"
-  value     = "${module.db.host_name}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-HOST"
+  value        = "${module.db.host_name}"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name      = "${var.component}-POSTGRES-PORT"
-  value     = "5432"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-PORT"
+  value        = "5432"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name      = "${var.component}-POSTGRES-DATABASE"
-  value     = "${module.db.postgresql_database}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  name         = "${var.component}-POSTGRES-DATABASE"
+  value        = "${module.db.postgresql_database}"
+  key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
 # endregion

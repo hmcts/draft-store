@@ -12,6 +12,34 @@ def product = "draft-store"
 def app = "service"
 def channel = '#rpe-build-notices'
 
+def secrets = [
+  'draft-store-${env}':
+    [
+      secret('s2s-secret-for-tests', 'S2S_SECRET_FOR_TESTS'),
+      secret('idam-client-secret-for-tests', 'IDAM_CLIENT_SECRET_FOR_TESTS')
+    ]
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+  [$class     : 'AzureKeyVaultSecret',
+   secretType : 'Secret',
+   name       : secretName,
+   version    : '',
+   envVariable: envVar
+  ]
+}
+
 withNightlyPipeline(type, product, app) {
+
+  env.DRAFT_STORE_BASE_URL = "http://draft-store-service-aat.service.core-compute-aat.internal/drafts"
+  env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+  env.USE_S2S_TESTING_SUPPORT = "false"
+  env.IDAM_URL_FOR_TESTS = "https://idam-api.aat.platform.hmcts.net"
+  env.IDAM_REDIRECT_URI_FOR_TESTS = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
+  env.TEST_USERS = "10"
+  env.TEST_RAMP_UP_SECS = "20"
+  env.TEST_CLEAN_UP_DELAY_SECS = "140"
+
   enableSlackNotifications(channel)
+  enablePerformanceTest()
 }

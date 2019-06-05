@@ -31,6 +31,6 @@ properties([
 
 withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
   // migrations disabled temporarily, sandbox jenkins does not have access to tactical envs.
-  // enableDbMigration()
+  enableDbMigration()
   loadVaultSecrets(secrets)
 }
