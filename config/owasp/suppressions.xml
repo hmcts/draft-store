@@ -9,7 +9,7 @@
 
   <suppress>
     <notes><![CDATA[Used only for testing not used in prod]]></notes>
-    <filePath regex="true">.*scala-[a-zA-Z]*:2\.10\.6\.jar</filePath>
+    <filePath regex="true">^org\.scala-lang:scala-(library|reflect|compiler):.*$</filePath>
     <cpe>cpe:/a:scala-lang:scala</cpe>
   </suppress>
 
