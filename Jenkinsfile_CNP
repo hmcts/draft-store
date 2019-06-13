@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@owasp-4-disable")
+@Library("Infrastructure")
 
 
 import uk.gov.hmcts.contino.GradleBuilder
