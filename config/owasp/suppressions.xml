@@ -2,14 +2,15 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
 
   <suppress>
-    <gav regex="true">^com\.google\.guava:guava:.*$</gav>
-    <cpe>cpe:/a:google:guava</cpe>
+    <notes><![CDATA[Used only for testing not used in prod]]></notes>
+    <filePath regex="true">.*postgresql-1\.(10\.6|11\.3)\.jar</filePath>
+    <cpe regex="true">cpe:/a:postgresql:postgresql:1\.(10\.6|11\.3)</cpe>
   </suppress>
 
   <suppress>
     <notes><![CDATA[Used only for testing not used in prod]]></notes>
-    <filePath regex="true">.*postgresql-1\.10\.6\.jar</filePath>
-    <cpe>cpe:/a:postgresql:postgresql:1.10.6</cpe>
+    <filePath regex="true">.*scala-[a-zA-Z]*:2\.10\.6\.jar</filePath>
+    <cpe>cpe:/a:scala-lang:scala</cpe>
   </suppress>
 
   <suppress>

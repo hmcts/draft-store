@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@dependencycheck-v5")
+@Library("Infrastructure")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
