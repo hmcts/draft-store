@@ -2,14 +2,26 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
 
   <suppress>
-    <gav regex="true">^com\.google\.guava:guava:.*$</gav>
-    <cpe>cpe:/a:google:guava</cpe>
+    <notes><![CDATA[Used only for testing not used in prod]]></notes>
+    <filePath regex="true">.*postgresql-1\.(10\.6|11\.3)\.jar</filePath>
+    <cpe regex="true">cpe:/a:postgresql:postgresql:1\.(10\.6|11\.3)</cpe>
   </suppress>
 
   <suppress>
     <notes><![CDATA[Used only for testing not used in prod]]></notes>
-    <filePath regex="true">.*postgresql-1\.10\.6\.jar</filePath>
-    <cpe>cpe:/a:postgresql:postgresql:1.10.6</cpe>
+    <filePath regex="true">^org\.scala-lang:scala-(library|reflect|compiler):.*$</filePath>
+    <cpe>cpe:/a:scala-lang:scala</cpe>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[Used only for testing not used in prod]]></notes>
+    <gav regex="true">^org\.scala-lang:scala-(compiler|reflect|library):.*$</gav>
+    <cve>CVE-2017-15288</cve>
+    <cve>CVE-2010-5312</cve>
+    <cve>CVE-2016-7103</cve>
+    <cve>CVE-2012-6708</cve>
+    <cve>CVE-2015-9251</cve>
+    <cve>CVE-2019-11358</cve>
   </suppress>
 
   <suppress>
