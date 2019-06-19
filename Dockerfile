@@ -1,8 +1,7 @@
 FROM hmcts/cnp-java-base:openjdk-8-distroless-1.0
 
+COPY lib/applicationinsights-agent-2.3.1.jar lib/AI-Agent.xml /opt/app/
 COPY build/libs/draft-store.jar /opt/app/
-
-HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" wget -q --spider http://localhost:8800/health || exit 1
 
 EXPOSE 8800
 
