@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/hmcts/draft-store.svg?branch=master)](https://travis-ci.org/hmcts/draft-store)
+[![Build Status](https://travis-ci.com/hmcts/draft-store.svg?branch=master)](https://travis-ci.com/hmcts/draft-store)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/35eb37f39906421387cfd120c35a538d)](https://www.codacy.com/app/HMCTS/draft-store)
 [![codecov](https://codecov.io/gh/hmcts/draft-store/branch/master/graph/badge.svg)](https://codecov.io/gh/hmcts/draft-store)
 
