@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@add-retry-to-helm-commands")
 
 
 import uk.gov.hmcts.contino.GradleBuilder
