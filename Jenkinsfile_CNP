@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@AB#95-prod-registry-change")
 
 
 import uk.gov.hmcts.contino.GradleBuilder
