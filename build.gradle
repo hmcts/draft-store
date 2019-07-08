@@ -221,7 +221,7 @@ dependencies {
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.2.0'
-  testCompile 'org.testcontainers:postgresql:1.11.3'
+  testCompile 'org.testcontainers:postgresql:1.11.4'
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
