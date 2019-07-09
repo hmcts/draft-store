@@ -2,7 +2,7 @@
 
 @Library("Infrastructure@new-prod-registry")
 
-
+ 
 import uk.gov.hmcts.contino.GradleBuilder
 
 def type = "java"
