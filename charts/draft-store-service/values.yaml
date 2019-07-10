@@ -10,12 +10,3 @@ java:
     LOGBACK_REQUIRE_ALERT_LEVEL: 'false'
     LOGBACK_REQUIRE_ERROR_CODE: 'false'
   image: 'https://hmcts.azurecr.io/hmcts/draft-store-service:latest'
-  postgresql:
-    postgresqlUsername: hmcts
-    postgresqlPassword: hmcts
-    postgresqlDatabase: hmcts
-    extraEnv:
-    - name: POSTGRESQL_DATABASE
-      value: hmcts
-    service:
-      port: 5432
