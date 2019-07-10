@@ -14,5 +14,8 @@ java:
     postgresqlUsername: hmcts
     postgresqlPassword: hmcts
     postgresqlDatabase: hmcts
+    extraEnv:
+    - name: POSTGRESQL_DATABASE
+      value: hmcts
     service:
       port: 5432
