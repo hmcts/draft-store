@@ -3,8 +3,7 @@
 
   <suppress>
     <notes><![CDATA[Used only for testing not used in prod]]></notes>
-    <filePath regex="true">.*postgresql-1\.(10\.6|11\.3)\.jar</filePath>
-    <cpe regex="true">cpe:/a:postgresql:postgresql:1\.(10\.6|11\.4)</cpe>
+    <cpe regex="true">cpe:/a:postgresql:postgresql:1.11.4</cpe>
   </suppress>
 
   <suppress>
