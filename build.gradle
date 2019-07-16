@@ -169,6 +169,7 @@ repositories {
 // enforces it's own (older) version which is not recommended.
 def versions = [
   junit: '5.5.0',
+  junitPlatform: '1.5.0',
   logging: '5.0.1',
   springBoot: springBoot.class.package.implementationVersion,
   springfoxSwagger: '2.9.2'
@@ -222,6 +223,8 @@ dependencies {
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
   testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
+  testCompile group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+  testCompile group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.2.0'
