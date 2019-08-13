@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@add-prod-dns")
+@Library("Infrastructure")
 
 
 import uk.gov.hmcts.contino.GradleBuilder
