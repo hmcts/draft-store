@@ -9,10 +9,4 @@ java:
     S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     LOGBACK_REQUIRE_ALERT_LEVEL: 'false'
     LOGBACK_REQUIRE_ERROR_CODE: 'false'
-  image: 'https://hmcts.azurecr.io/hmcts/draft-store-service:latest'
-  postgresql:
-    postgresqlUsername: hmcts
-    postgresqlPassword: hmcts
-    postgresqlDatabase: hmcts
-    service:
-      port: 5432
+  image: 'https://hmctspublic.azurecr.io/draft-store/service:latest'
