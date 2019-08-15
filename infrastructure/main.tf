@@ -30,6 +30,7 @@ module "api" {
     DRAFT_STORE_DB_USER_NAME    = "${module.db.user_name}"
     DRAFT_STORE_DB_NAME         = "${module.db.postgresql_database}"
     DRAFT_STORE_DB_CONN_OPTIONS = "${local.db_connection_options}"
+    FORCE_RUN = "run"
 
     IDAM_URL = "${var.idam_api_url}"
     S2S_URL  = "${local.s2s_url}"
