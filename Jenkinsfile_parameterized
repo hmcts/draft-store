@@ -1,11 +1,14 @@
 #!groovy
 
-@Library("Infrastructure") _
+@Library("Infrastructure")
 
-List<LinkedHashMap<String, Object>> secrets = [
-  secret('s2s-secret-for-tests', 'S2S_SECRET_FOR_TESTS'),
-  secret('idam-password-for-tests', 'IDAM_PASSWORD_FOR_TESTS'),
-  secret('idam-client-secret-for-tests', 'IDAM_CLIENT_SECRET_FOR_TESTS')
+def secrets = [
+  'draft-store-${env}':
+    [
+      secret('s2s-secret-for-tests', 'S2S_SECRET_FOR_TESTS'),
+      secret('idam-password-for-tests', 'IDAM_PASSWORD_FOR_TESTS'),
+      secret('idam-client-secret-for-tests', 'IDAM_CLIENT_SECRET_FOR_TESTS'),
+    ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
