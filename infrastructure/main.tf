@@ -12,7 +12,7 @@ locals {
 
 module "api" {
   source        = "git@github.com:hmcts/cnp-module-webapp"
-  disable_ase   = "${var.enable_ase}"
+  enable_ase    = "${var.enable_ase}"
   product       = "${var.product}-${var.component}"
   location      = "${var.location_api}"
   env           = "${var.env}"
