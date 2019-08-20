@@ -1,8 +1,8 @@
 variable "product" {
   type = "string"
 }
-variable "disable_ase" {
-  default = false
+variable "enable_ase" {
+  default = true
 }
 
 variable "raw_product" {
