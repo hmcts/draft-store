@@ -2,7 +2,7 @@ variable "product" {
   type = "string"
 }
 variable "disable_ase" {
-  default = "false"
+  default = false
 }
 
 variable "raw_product" {
