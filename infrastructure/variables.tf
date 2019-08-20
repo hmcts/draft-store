@@ -1,6 +1,9 @@
 variable "product" {
   type = "string"
 }
+variable "disable_ase" {
+  default = "false"
+}
 
 variable "raw_product" {
   default = "draft-store" // jenkins-library overrides product for PRs and adds e.g. pr-118-bulk-scan
