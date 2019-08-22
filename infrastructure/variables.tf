@@ -85,12 +85,6 @@ variable "managed_identity_object_id" {
   default = ""
 }
 
-variable deployment_target {
-  type        = "string"
-  default     = ""
-  description = "Name of the Deployment Target"
-}
-
 variable "appinsights_location" {
   type        = "string"
   default     = "West Europe"
