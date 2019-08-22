@@ -90,3 +90,9 @@ variable deployment_target {
   default     = ""
   description = "Name of the Deployment Target"
 }
+
+variable "appinsights_location" {
+  type        = "string"
+  default     = "West Europe"
+  description = "Location for Application Insights"
+}
