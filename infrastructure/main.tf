@@ -2,6 +2,13 @@ provider "azurerm" {
   version = "1.22.1"
 }
 
+resource "azurerm_resource_group" "rg" {
+  name     = "${var.product}-${var.component}-${var.env}"
+  location = "${var.location}"
+
+  tags = "${var.common_tags}"
+}
+
 locals {
   db_connection_options = "?sslmode=require"
   ase_name              = "core-compute-${var.env}"
@@ -11,18 +18,19 @@ locals {
 }
 
 module "api" {
-  source        = "git@github.com:hmcts/cnp-module-webapp"
-  enable_ase    = "${var.enable_ase}"
-  product       = "${var.product}-${var.component}"
-  location      = "${var.location_api}"
-  env           = "${var.env}"
-  ilbIp         = "${var.ilbIp}"
-  subscription  = "${var.subscription}"
-  capacity      = "${var.capacity}"
-  common_tags   = "${var.common_tags}"
-  asp_name      = "${var.product}-${var.component}-${var.env}"
-  asp_rg        = "${var.product}-${var.component}-${var.env}"
-  instance_size = "${local.sku_size}"
+  source              = "git@github.com:hmcts/cnp-module-webapp?ref=master"
+  enable_ase          = "${var.enable_ase}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  product             = "${var.product}-${var.component}"
+  location            = "${var.location}"
+  env                 = "${var.env}"
+  ilbIp               = "${var.ilbIp}"
+  subscription        = "${var.subscription}"
+  capacity            = "${var.capacity}"
+  common_tags         = "${var.common_tags}"
+  asp_name            = "${var.product}-${var.component}-${var.env}"
+  asp_rg              = "${var.product}-${var.component}-${var.env}"
+  instance_size       = "${local.sku_size}"
 
   app_settings = {
     DRAFT_STORE_DB_HOST         = "${module.db.host_name}"
@@ -45,7 +53,7 @@ module "api" {
 module "db" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
   product            = "rpe-${var.product}"
-  location           = "${var.location_api}"
+  location           = "${var.location}"
   env                = "${var.env}"
   database_name      = "draftstore"
   postgresql_user    = "draftstore"
@@ -66,7 +74,7 @@ module "key-vault" {
   env                 = "${var.env}"
   tenant_id           = "${var.tenant_id}"
   object_id           = "${var.jenkins_AAD_objectId}"
-  resource_group_name = "${module.api.resource_group_name}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
 
   # dcd_cc-dev group object ID
   product_group_object_id    = "38f9dea6-e861-4a50-9e73-21e64f563537"

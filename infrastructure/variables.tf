@@ -1,6 +1,7 @@
 variable "product" {
   type = "string"
 }
+
 variable "enable_ase" {
   default = true
 }
@@ -13,8 +14,7 @@ variable "component" {
   type = "string"
 }
 
-variable "location_api" {
-  type    = "string"
+variable "location" {
   default = "UK South"
 }
 
@@ -83,4 +83,10 @@ variable "idam_redirect_uri_for_tests" {
 
 variable "managed_identity_object_id" {
   default = ""
+}
+
+variable deployment_target {
+  type        = "string"
+  default     = ""
+  description = "Name of the Deployment Target"
 }
