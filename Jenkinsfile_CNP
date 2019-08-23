@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@restore-compat")
 
 
 import uk.gov.hmcts.contino.GradleBuilder
