@@ -180,7 +180,7 @@ def versions = [
 ext["rest-assured.version"] = '4.0.0'
 
 configurations.all {
-  resolutionStrategy {  
+  resolutionStrategy {
     eachDependency { DependencyResolveDetails details ->
       if (details.requested.group in ['com.fasterxml.jackson.core', 'com.fasterxml.jackson.module', 'com.fasterxml.jackson.datatype']) {
         details.useVersion '2.9.9'
@@ -211,7 +211,7 @@ dependencies {
   compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
 
   compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
-  
+
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.logging
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: versions.logging
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.logging
@@ -232,18 +232,19 @@ dependencies {
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.2.0'
-  testCompile 'org.testcontainers:postgresql:1.12.0'
+  testCompile 'org.testcontainers:postgresql:1.12.0' //Remove explicit common-compress dependency when bumping this version.
+  integrationTestCompile group: 'org.apache.commons', name: 'commons-compress', version: '1.19'
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
-  
+
   functionalTestCompile sourceSets.main.runtimeClasspath
   functionalTestCompile sourceSets.test.runtimeClasspath
   functionalTestCompile sourceSets.smokeTest.runtimeClasspath
-  
+
   smokeTestCompile sourceSets.main.runtimeClasspath
   smokeTestCompile sourceSets.test.runtimeClasspath
-  
+
   gatlingCompile 'org.scala-lang:scala-library:2.12.8'
   gatlingCompile 'com.warrenstrange:googleauth:1.2.0'
 }
