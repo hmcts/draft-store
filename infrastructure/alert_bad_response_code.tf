@@ -1,6 +1,6 @@
 module "bad-response-codes-alert" {
   source            = "git@github.com:hmcts/cnp-module-metric-alert"
-  location          = "${var.location_api}"
+  location          = "${var.location}"
   app_insights_name = "${var.product}-${var.component}-appinsights-${var.env}"
 
   alert_name = "Draft-store-bad-response-codes"
