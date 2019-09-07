@@ -44,7 +44,7 @@ withPipeline(type, product, app) {
   env.IDAM_REDIRECT_URI_FOR_TESTS = "https://cmc-citizen-frontend-aat-staging.service.core-compute-aat.internal/receiver"
 
   enableSlackNotifications(channel)
-  enableDbMigration()
+  enableDbMigration('draft-store')
   enableDockerBuild()
   installCharts()
   disableLegacyDeployment()

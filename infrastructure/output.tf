@@ -1,15 +1,3 @@
-output "vaultUri" {
-  value = "${module.key-vault.key_vault_uri}"
-}
-
-output "vaultName" {
-  value = "${module.key-vault.key_vault_name}"
-}
-
-output "microserviceName" {
-  value = "${var.component}"
-}
-
 # region configuration for end-to-end tests
 
 output "s2s_url_for_tests" {
