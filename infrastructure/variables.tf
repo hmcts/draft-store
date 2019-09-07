@@ -2,6 +2,10 @@ variable "product" {
   type = "string"
 }
 
+variable "enable_ase" {
+  default = true
+}
+
 variable "raw_product" {
   default = "draft-store" // jenkins-library overrides product for PRs and adds e.g. pr-118-bulk-scan
 }
@@ -10,8 +14,7 @@ variable "component" {
   type = "string"
 }
 
-variable "location_api" {
-  type    = "string"
+variable "location" {
   default = "UK South"
 }
 
@@ -80,4 +83,10 @@ variable "idam_redirect_uri_for_tests" {
 
 variable "managed_identity_object_id" {
   default = ""
+}
+
+variable "appinsights_location" {
+  type        = "string"
+  default     = "West Europe"
+  description = "Location for Application Insights"
 }
