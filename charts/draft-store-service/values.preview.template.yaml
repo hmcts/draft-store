@@ -2,5 +2,13 @@ java:
   # Don't modify below here
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+  environment:
+    DRAFT_STORE_DB_HOST: "{{ .Release.Name }}-postgresql"
+    DRAFT_STORE_DB_NAME: "{{ .Values.postgresql.postgresqlDatabase}}"
+    DRAFT_STORE_DB_USER_NAME: "{{ .Values.postgresql.postgresqlUsername}}"
+    DRAFT_STORE_DB_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
+    RUN_DB_MIGRATION_ON_STARTUP: true
+    DRAFT_STORE_DB_CONN_OPTIONS: ""
+    SPRING_CLOUD_PROPERTIESVOLUME_ENABLED: false
 postgresql:
   enabled: true
