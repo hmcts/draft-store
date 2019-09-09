@@ -1,6 +1,6 @@
 java:
   applicationPort: 8800
-  ingressHost: draft-store-service-{{ .Values.global.environment }}.service.core-compute-aat.internal
+  ingressHost: draft-store-service-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   environment:
     DRAFT_STORE_DB_CONN_OPTIONS: ?sslmode=require
     DRAFT_STORE_DB_HOST: rpe-draft-store-{{ .Values.global.environment }}.postgres.database.azure.com
