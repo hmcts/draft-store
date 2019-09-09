@@ -9,47 +9,6 @@ resource "azurerm_resource_group" "rg" {
   tags = "${var.common_tags}"
 }
 
-locals {
-  db_connection_options = "?sslmode=require"
-  ase_name              = "core-compute-${var.env}"
-
-  s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"
-  sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
-}
-
-module "api" {
-  source              = "git@github.com:hmcts/cnp-module-webapp?ref=master"
-  enable_ase          = "${var.enable_ase}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  product             = "${var.product}-${var.component}"
-  location            = "${var.location}"
-  env                 = "${var.env}"
-  ilbIp               = "${var.ilbIp}"
-  subscription        = "${var.subscription}"
-  capacity            = "${var.capacity}"
-  common_tags         = "${var.common_tags}"
-  asp_name            = "${var.product}-${var.component}-${var.env}"
-  asp_rg              = "${var.product}-${var.component}-${var.env}"
-  instance_size       = "${local.sku_size}"
-
-  app_settings = {
-    DRAFT_STORE_DB_HOST         = "${module.db.host_name}"
-    DRAFT_STORE_DB_PORT         = "5432"
-    DRAFT_STORE_DB_PASSWORD     = "${module.db.postgresql_password}"
-    DRAFT_STORE_DB_USER_NAME    = "${module.db.user_name}"
-    DRAFT_STORE_DB_NAME         = "${module.db.postgresql_database}"
-    DRAFT_STORE_DB_CONN_OPTIONS = "${local.db_connection_options}"
-
-    IDAM_URL = "${var.idam_api_url}"
-    S2S_URL  = "${local.s2s_url}"
-
-    MAX_STALE_DAYS_DEFAULT = "${var.max_stale_days_default}"
-    MAX_STALE_DAYS_CRON    = "${var.max_stale_days_cron}"
-
-    RUN_DB_MIGRATION_ON_STARTUP = "${var.run_db_migration_on_startup}"
-  }
-}
-
 module "db" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
   product            = "rpe-${var.product}"
