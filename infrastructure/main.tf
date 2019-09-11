@@ -2,6 +2,10 @@ provider "azurerm" {
   version = "1.22.1"
 }
 
+locals {
+  s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"  
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = "${var.product}-${var.component}-${var.env}"
   location = "${var.location}"
