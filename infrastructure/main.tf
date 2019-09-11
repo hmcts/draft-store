@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 locals {
-  s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"  
+  s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"  
 }
 
 resource "azurerm_resource_group" "rg" {
