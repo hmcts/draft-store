@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@app-service-cleanup")
+@Library("Infrastructure")
 
 
 import uk.gov.hmcts.contino.GradleBuilder

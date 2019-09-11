@@ -200,7 +200,7 @@ dependencies {
     "org.springframework.boot:spring-boot-starter-validation",
     "uk.gov.hmcts.reform:health-spring-boot-starter:0.0.4"
   )
-  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.6'
+  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.7'
 
   compile group: 'org.flywaydb', name: 'flyway-core', version: '5.2.4'
 
@@ -232,8 +232,7 @@ dependencies {
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.2.0'
-  testCompile 'org.testcontainers:postgresql:1.12.0' //Remove explicit common-compress dependency when bumping this version.
-  testCompile group: 'org.apache.commons', name: 'commons-compress', version: '1.19'
+  testCompile 'org.testcontainers:postgresql:1.12.1'
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
