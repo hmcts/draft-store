@@ -35,4 +35,8 @@ properties([
 withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
   enableDbMigration('draft-store')
   loadVaultSecrets(secrets)
+  enableDockerBuild()
+  installCharts()
+  disableLegacyDeployment()
+  enableAksStagingDeployment()
 }
