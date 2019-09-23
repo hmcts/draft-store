@@ -12,7 +12,7 @@ java:
     S2S_URL: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     LOGBACK_REQUIRE_ALERT_LEVEL: 'false'
     LOGBACK_REQUIRE_ERROR_CODE: 'false'
-  image: 'https://hmctspublic.azurecr.io/draft-store/service:latest'
+  image: 'hmctspublic.azurecr.io/draft-store/service:latest'
   keyVaults:
     "draft-store":
       resourceGroup: draft-store-service
