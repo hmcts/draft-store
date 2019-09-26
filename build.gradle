@@ -186,7 +186,7 @@ configurations.all {
         details.useVersion '2.9.9'
       }
       if (details.requested.name == 'jackson-databind') {
-        details.useVersion '2.9.9.3'
+        details.useVersion '2.9.10'
       }
     }
   }
