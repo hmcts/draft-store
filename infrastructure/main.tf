@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 locals {
-  s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"  
+  s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -72,6 +72,12 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name         = "${var.component}-POSTGRES-DATABASE"
   value        = "${module.db.postgresql_database}"
+  key_vault_id = "${module.key-vault.key_vault_id}"
+}
+
+resource "azurerm_key_vault_secret" "AZURE_APPINSGHTS_KEY" {
+  name         = "AppInsightsInstrumentationKey"
+  value        = "${azurerm_application_insights.appinsights.instrumentation_key}"
   key_vault_id = "${module.key-vault.key_vault_id}"
 }
 
