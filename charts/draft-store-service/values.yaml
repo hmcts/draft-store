@@ -18,3 +18,4 @@ java:
     "draft-store":
       secrets:
         - service-POSTGRES-PASS
+        - AppInsightsInstrumentationKey
