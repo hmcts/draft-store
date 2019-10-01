@@ -5,4 +5,4 @@ spring:
       paths: /mnt/secrets/draft-store
       aliases:
         service-POSTGRES-PASS: DRAFT_STORE_DB_PASSWORD
-        AppInsightsInstrumentationKey: AZURE_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY
+        AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
