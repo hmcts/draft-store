@@ -188,6 +188,9 @@ configurations.all {
       if (details.requested.name == 'jackson-databind') {
         details.useVersion '2.9.10'
       }
+      if (details.requested.name in ['applicationinsights-core', 'applicationinsights-web', 'applicationinsights-logging-logback']) {
+        details.useVersion '2.4.1'
+      }
     }
   }
 }
