@@ -172,7 +172,7 @@ repositories {
 def versions = [
   junit: '5.5.0',
   junitPlatform: '1.5.0',
-  logging: '5.0.1',
+  logging: '5.1.0',
   springBoot: springBoot.class.package.implementationVersion,
   springfoxSwagger: '2.9.2'
 ]
@@ -187,9 +187,6 @@ configurations.all {
       }
       if (details.requested.name == 'jackson-databind') {
         details.useVersion '2.9.10'
-      }
-      if (details.requested.name in ['applicationinsights-core', 'applicationinsights-web', 'applicationinsights-logging-logback']) {
-        details.useVersion '2.4.1'
       }
     }
   }
@@ -215,9 +212,9 @@ dependencies {
 
   compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
 
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.logging
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: versions.logging
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.logging
+  compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
+  compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
+  compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
 
   compile group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.4.0'
   compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.0.4'
