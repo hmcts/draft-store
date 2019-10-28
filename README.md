@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/hmcts/draft-store.svg?branch=master)](https://travis-ci.com/hmcts/draft-store)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/35eb37f39906421387cfd120c35a538d)](https://www.codacy.com/app/HMCTS/draft-store)
 [![codecov](https://codecov.io/gh/hmcts/draft-store/branch/master/graph/badge.svg)](https://codecov.io/gh/hmcts/draft-store)
-
+ 
 # Draft store
 The Draft store micro-service provides a ’save and resume’ feature for reform applications via an internal API. 
 It stores a draft json document against the userId provided.
