@@ -11,18 +11,6 @@ spring:
     password: ${DRAFT_STORE_DB_PASSWORD:}
     properties:
       charSet: UTF-8
-    maxWaitForConnection: 1
-    minSize: 8
-    maxSize: 32
-    evictionInterval: 10
-    minIdleTime: 1 minute
-    checkConnectionWhileIdle: true
-    checkConnectionOnReturn: true
-    removeAbandoned: true
-    removeAbandonedTimeout: 60
-    abandonWhenPercentageFull: 0
-    testOnBorrow: true
-    validationQuery: SELECT 1
   mvc:
     throw-exception-if-no-handler-found: true
 
