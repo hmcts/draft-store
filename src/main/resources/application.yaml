@@ -28,7 +28,9 @@ management:
         include: health, info, prometheus
   security:
     enabled: false
-
+  metrics:
+    tags:
+      application: ${spring.application.name}
 info:
   app:
     name: ${spring.application.name}
