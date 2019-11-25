@@ -11,5 +11,5 @@ java:
     RUN_DB_MIGRATION_ON_STARTUP: true
     DRAFT_STORE_DB_CONN_OPTIONS: ""
     SPRING_CLOUD_PROPERTIESVOLUME_ENABLED: false
-postgresql:
-  enabled: true
+  postgresql:
+    enabled: true
