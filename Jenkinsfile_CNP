@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@docker-test-vm-config")
 
 
 import uk.gov.hmcts.contino.GradleBuilder
