@@ -3,7 +3,7 @@
 
   <suppress>
     <notes><![CDATA[Used only for testing not used in prod]]></notes>
-    <cpe regex="true">cpe:/a:postgresql:postgresql:1.12.1</cpe>
+    <cpe regex="true">cpe:/a:postgresql:postgresql:1.*$</cpe>
   </suppress>
 
   <suppress>
