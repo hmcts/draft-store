@@ -189,7 +189,7 @@ dependencies {
   )
   compile group: 'org.postgresql', name: 'postgresql', version: '42.2.9'
 
-  compile group: 'org.flywaydb', name: 'flyway-core', version: '6.1.0'
+  compile group: 'org.flywaydb', name: 'flyway-core', version: '6.1.1'
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
