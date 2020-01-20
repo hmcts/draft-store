@@ -50,5 +50,4 @@ withPipeline(type, product, app) {
   disableLegacyDeployment()
   enableAksStagingDeployment()
   loadVaultSecrets(secrets) 
-  
 }
