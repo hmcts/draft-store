@@ -45,7 +45,6 @@ withPipeline(type, product, app) {
 
   enableSlackNotifications(channel)
   enableDbMigration('draft-store')
-  enableDockerBuild()
   installCharts()
   disableLegacyDeployment()
   enableAksStagingDeployment()
