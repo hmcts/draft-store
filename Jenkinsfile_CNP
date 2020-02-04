@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@fail-build-if-chart-changed-no-bump")
 
 
 import uk.gov.hmcts.contino.GradleBuilder
