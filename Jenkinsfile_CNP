@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@test-slack-notify-success")
 
 
 import uk.gov.hmcts.contino.GradleBuilder
