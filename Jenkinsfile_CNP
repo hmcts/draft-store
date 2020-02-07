@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@warn-about-aadidentity-hack")
 
 
 import uk.gov.hmcts.contino.GradleBuilder
