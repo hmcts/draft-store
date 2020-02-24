@@ -7,3 +7,4 @@ COPY build/libs/draft-store.jar /opt/app/
 EXPOSE 8800
 
 CMD ["draft-store.jar"]
+ 
