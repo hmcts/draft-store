@@ -187,7 +187,7 @@ dependencies {
     "org.springframework.boot:spring-boot-starter-validation",
     "uk.gov.hmcts.reform:health-spring-boot-starter:0.0.5"
   )
-  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
+  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.12'
 
   compile group: 'org.flywaydb', name: 'flyway-core', version: '6.3.3'
 
