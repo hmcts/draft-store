@@ -232,7 +232,7 @@ dependencies {
   smokeTestCompile sourceSets.test.runtimeClasspath
 
   gatlingCompile 'org.scala-lang:scala-library:2.13.1'
-  gatlingCompile 'com.warrenstrange:googleauth:1.4.0'
+  gatlingCompile 'com.warrenstrange:googleauth:1.5.0'
 }
 
 gatling {
