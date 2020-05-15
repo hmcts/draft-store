@@ -44,8 +44,7 @@ withPipeline(type, product, app) {
 
   enableSlackNotifications(channel)
   enableDbMigration('draft-store')
-  installCharts()
   disableLegacyDeployment()
   enableAksStagingDeployment()
-  loadVaultSecrets(secrets)   
+  loadVaultSecrets(secrets)
 }
