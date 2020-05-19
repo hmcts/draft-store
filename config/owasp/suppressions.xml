@@ -76,33 +76,27 @@
   <!-- Used in perf test only, not in prod -->
   <suppress>
     <notes><![CDATA[
-    file name: gatling-app-3.1.1.jar
-    ]]></notes>
-    <filePath regex="true">.*gatling-app-3.1.1.jar</filePath>
-    <cve>CVE-2018-13661</cve>
+   file name: gatling-charts-3.3.1.jar: jquery.min.js
+   ]]></notes>
+    <packageUrl regex="true">^pkg:javascript/jquery@.*$</packageUrl>
+    <cve>CVE-2015-9251</cve>
+    <cve>CVE-2012-6708</cve>
+    <cve>CVE-2019-11358</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: gatling-charts-3.3.1.jar: moment.min.js
+   ]]></notes>
+    <packageUrl regex="true">^pkg:javascript/moment\.js@.*$</packageUrl>
+    <vulnerabilityName>reDOS - regular expression denial of service</vulnerabilityName>
   </suppress>
 
   <suppress>
     <notes><![CDATA[
-   file name: gatling-netty-util-3.1.3.jar
+   file name: scala-compiler-2.12.10.jar: jquery.min.js
    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/io\.gatling/gatling\-netty\-util@.*$</packageUrl>
-    <cpe>cpe:/a:netty:netty</cpe>
+    <packageUrl regex="true">^pkg:javascript/jquery@.*$</packageUrl>
+    <vulnerabilityName>Regex in its jQuery.htmlPrefilter  sometimes may introduce XSS</vulnerabilityName>
   </suppress>
 
-  <suppress>
-    <notes><![CDATA[
-   file name: netty-tcnative-boringssl-static-2.0.25.Final.jar
-   ]]></notes>
-    <packageUrl regex="true">^pkg:maven/io\.netty/netty\-tcnative\-boringssl\-static@.*$</packageUrl>
-    <cpe>cpe:/a:netty:netty</cpe>
-  </suppress>
-
-  <suppress>
-    <notes><![CDATA[
-   relates to form based authentication, not relevant to us, fix will be picked up in next spring boot update
-   ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed.*$</packageUrl>
-    <cve>CVE-2019-17563</cve>
-  </suppress>
 </suppressions>
