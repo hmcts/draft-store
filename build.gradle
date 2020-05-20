@@ -186,7 +186,6 @@ dependencies {
     "org.springframework.boot:spring-boot-starter-actuator",
     "org.springframework.boot:spring-boot-starter-jdbc",
     "org.springframework.boot:spring-boot-starter-validation",
-    "uk.gov.hmcts.reform:health-spring-boot-starter:0.0.5"
   )
   compile group: 'org.postgresql', name: 'postgresql', version: '42.2.12'
 
