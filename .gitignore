@@ -8,3 +8,4 @@ out/
 
 application-default.yaml
 *.tgz
+*.lock
