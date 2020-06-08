@@ -1,5 +1,7 @@
 {
-  "enabledManagers": ["helm-requirements"]
+  "extends": [
+    "config:base"
+  ],
   "helm-requirements":
     {
       "fileMatch": ["\\Chart.yaml|requirements.yaml$"],
