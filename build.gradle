@@ -234,7 +234,7 @@ dependencies {
   smokeTestCompile sourceSets.main.runtimeClasspath
   smokeTestCompile sourceSets.test.runtimeClasspath
 
-  gatlingCompile 'org.scala-lang:scala-library:2.13.1'
+  gatlingCompile 'org.scala-lang:scala-library:2.13.2'
   gatlingCompile 'com.warrenstrange:googleauth:1.5.0'
 }
 
