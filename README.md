@@ -8,7 +8,7 @@ It stores a draft json document against the userId provided.
 
 ![Low Level Design](/doc/design.png)
 
-## Getting Started 
+## Getting Started  
 
 ### Prerequisites
 - [JDK 8](https://java.com)
