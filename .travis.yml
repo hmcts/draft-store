@@ -10,7 +10,7 @@ branches:
     - master
 
 jdk:
-  - openjdk8
+  - openjdk11
 
 os:
   - linux
