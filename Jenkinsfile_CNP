@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@java-version-nagger")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
