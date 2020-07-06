@@ -174,7 +174,7 @@ configurations.all {
         details.useVersion '2.12.10'
       }
       if (details.requested.group in ['org.apache.tomcat.embed']) {
-        details.useVersion '9.0.35'
+        details.useVersion '9.0.37'
       }
     }
   }
