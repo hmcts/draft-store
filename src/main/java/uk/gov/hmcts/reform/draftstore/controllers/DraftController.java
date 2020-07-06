@@ -3,6 +3,9 @@ package uk.gov.hmcts.reform.draftstore.controllers;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -48,6 +51,7 @@ import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_
 public class DraftController {
 
     static final String MEDIA_TYPE = "application/vnd.uk.gov.hmcts.draft-store.v3+json";
+    private static final Logger LOG = LoggerFactory.getLogger(DraftController.class);
 
     private final AuthService authService;
     private final DraftService draftService;
@@ -67,8 +71,11 @@ public class DraftController {
         @PathVariable String id,
         @RequestHeader(AUTHORIZATION) String authHeader,
         @RequestHeader(SERVICE_HEADER) String serviceHeader,
-        @RequestHeader(SECRET_HEADER) String secretHeader
+        @RequestHeader(SECRET_HEADER) String secretHeader,
+        @RequestHeader Map<String, String> headers
     ) {
+        headers.forEach((key, value) -> LOG.info(String.format("Header '%s' = %s", key, value)));
+
         Secrets secrets = SecretsBuilder.fromHeader(secretHeader);
         UserAndService userAndService = authService.authenticate(authHeader, serviceHeader);
 
