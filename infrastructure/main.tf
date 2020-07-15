@@ -27,6 +27,11 @@ module "db" {
   subscription       = "${var.subscription}"
 }
 
+data "azurerm_user_assigned_identity" "rpe-shared-identity" {
+  name                = "rpe-shared-${var.env}-mi"
+  resource_group_name = "managed-identities-${var.env}-rg"
+}
+
 # region save DB details to Azure Key Vault
 
 # this key vault is created in every environment, but preview, being short-lived,
@@ -42,7 +47,7 @@ module "key-vault" {
   # dcd_cc-dev group object ID
   product_group_object_id    = "38f9dea6-e861-4a50-9e73-21e64f563537"
   common_tags                = "${var.common_tags}"
-  managed_identity_object_id = "${var.managed_identity_object_id}"
+  managed_identity_object_ids = ["${data.azurerm_user_assigned_identity.rpe-shared-identity.principal_id}","${var.managed_identity_object_id}"]
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
