@@ -46,10 +46,6 @@ variable "idam_redirect_uri_for_tests" {
 
 # endregion
 
-variable "managed_identity_object_id" {
-  default = ""
-}
-
 variable "appinsights_location" {
   type        = "string"
   default     = "West Europe"
