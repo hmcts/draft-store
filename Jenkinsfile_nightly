@@ -5,7 +5,7 @@ properties([
     pipelineTriggers([cron('H 05 * * *')])
 ])
 
-@Library("Infrastructure@jenkins-docker-agent-nightly")
+@Library("Infrastructure")
 
 def type = "java"
 def product = "draft-store"

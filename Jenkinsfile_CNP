@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@jenkins-docker-agent-nightly")
+@Library("Infrastructure")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
