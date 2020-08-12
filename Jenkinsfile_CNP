@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@parallel-docker-agent-build-test-for-real")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
