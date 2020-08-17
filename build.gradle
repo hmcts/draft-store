@@ -187,7 +187,7 @@ dependencies {
     "org.springframework.boot:spring-boot-starter-jdbc",
     "org.springframework.boot:spring-boot-starter-validation",
   )
-  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
+  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.15'
 
   compile group: 'org.flywaydb', name: 'flyway-core', version: '6.5.3'
 
