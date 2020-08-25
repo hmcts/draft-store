@@ -3,7 +3,7 @@ java:
   ingressHost: draft-store-service-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: rpe
   environment:
-    DRAFT_STORE_DB_CONN_OPTIONS: ?sslmode=require
+    DRAFT_STORE_DB_CONN_OPTIONS: ?sslmode=require&gssEncMode=disable
     DRAFT_STORE_DB_HOST: rpe-draft-store-{{ .Values.global.environment }}.postgres.database.azure.com
     DRAFT_STORE_DB_NAME: draftstore
     DRAFT_STORE_DB_PORT: '5432'
