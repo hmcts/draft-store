@@ -13,8 +13,8 @@ data "azurerm_key_vault_secret" "source_s2s-secret-for-tests" {
 
 resource "azurerm_key_vault_secret" "s2s-secret-for-tests" {
   name         = "s2s-secret-for-tests"
-  value        = "${data.azurerm_key_vault_secret.source_s2s-secret-for-tests.value}"
-  key_vault_id = "${module.key-vault.key_vault_id}"
+  value        = data.azurerm_key_vault_secret.source_s2s-secret-for-tests.value
+  key_vault_id = module.key-vault.key_vault_id
 }
 
 #endregion
@@ -25,7 +25,7 @@ resource "azurerm_key_vault_secret" "s2s-secret-for-tests" {
 # that's what the code below does.
 data "azurerm_key_vault_secret" "source_idam-client-secret-for-tests" {
   name         = "idam-client-secret-for-tests"
-  key_vault_id = "${module.key-vault.key_vault_id}"
+  key_vault_id = module.key-vault.key_vault_id
 }
 
 #region IdAM test user's password
@@ -39,9 +39,9 @@ resource "random_string" "idam_password" {
 # In other environments (e.g. prod) real IdAM password has to be manually set in Azure Vault
 resource "azurerm_key_vault_secret" "idam_password_for_tests" {
   name         = "idam-password-for-tests"
-  value        = "${random_string.idam_password.result}"
-  key_vault_id = "${module.key-vault.key_vault_id}"
-  count        = "${var.use_idam_testing_support == "true" ? 1 : 0}"
+  value        = random_string.idam_password.result
+  key_vault_id = module.key-vault.key_vault_id
+  count        = var.use_idam_testing_support == "true" ? 1 : 0
 }
 
 #endregion
