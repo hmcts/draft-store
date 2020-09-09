@@ -1,6 +1,6 @@
 module "bad-response-codes-alert" {
   source            = "git@github.com:hmcts/cnp-module-metric-alert"
-  location          = "${var.location}"
+  location          = var.location
   app_insights_name = "${var.product}-${var.component}-appinsights-${var.env}"
 
   alert_name = "Draft-store-bad-response-codes"
@@ -20,5 +20,5 @@ EOF
   custom_email_subject       = "Draft store - bad response codes detected"
   trigger_threshold_operator = "GreaterThan"
   trigger_threshold          = 0
-  resourcegroup_name         = "${azurerm_resource_group.rg.name}"
+  resourcegroup_name         = azurerm_resource_group.rg.name
 }

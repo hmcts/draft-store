@@ -1,9 +1,7 @@
 variable "product" {
-  type = "string"
 }
 
 variable "component" {
-  type = "string"
 }
 
 variable "location" {
@@ -11,20 +9,18 @@ variable "location" {
 }
 
 variable "env" {
-  type = "string"
 }
 
 variable "tenant_id" {}
 
 variable "jenkins_AAD_objectId" {
-  type        = "string"
   description = "(Required) The Azure AD object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
 }
 
 variable "subscription" {}
 
 variable "common_tags" {
-  type = "map"
+  type = map(string)
 }
 
 # region app config
@@ -32,7 +28,7 @@ variable "common_tags" {
 variable "idam_api_url" {}
 
 variable "use_idam_testing_support" {
-  default = "true"
+  default = true
 }
 
 # endregion
@@ -47,7 +43,6 @@ variable "idam_redirect_uri_for_tests" {
 # endregion
 
 variable "appinsights_location" {
-  type        = "string"
   default     = "West Europe"
   description = "Location for Application Insights"
 }
