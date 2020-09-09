@@ -63,10 +63,11 @@ public class DraftStoreDao {
             keyHolder,
             new String[] {"id"}
         );
-        if (keyHolder.getKey() != null) {
-            return keyHolder.getKey().intValue();
+        Number key = keyHolder.getKey();
+        if (key == null) {
+            throw new DataRetrievalFailureException("Unable to retrieve the generated key [null] or key not generated.");
         }
-        throw new DataRetrievalFailureException("Unable to retrieve the generated key [null] or key not generated.");
+        return key.intValue();
     }
 
     public void update(int id, UpdateDraft draft) {
