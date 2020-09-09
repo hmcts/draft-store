@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.draftstore.data;
 
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -62,6 +63,9 @@ public class DraftStoreDao {
             keyHolder,
             new String[] {"id"}
         );
+        if (keyHolder.getKey() == null) {
+            throw new DataRetrievalFailureException("Unable to retrieve the generated key [null] or key not generated.");
+        }
         return keyHolder.getKey().intValue();
     }
 
