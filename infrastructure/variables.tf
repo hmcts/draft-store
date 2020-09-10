@@ -28,7 +28,7 @@ variable "common_tags" {
 variable "idam_api_url" {}
 
 variable "use_idam_testing_support" {
-  default = true
+  default = "true"
 }
 
 # endregion
