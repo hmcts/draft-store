@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@rewordowasp")
+@Library("Infrastructure")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
