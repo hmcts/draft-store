@@ -48,3 +48,4 @@ withPipeline(type, product, app) {
   enableAksStagingDeployment()
   loadVaultSecrets(secrets)
 }
+
