@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@staging-helm-uninstall")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
