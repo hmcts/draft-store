@@ -1,11 +1,11 @@
 apiVersion: v2
 name: draft-store-service
 home: https://github.com/hmcts/draft-store
-version: 2.0.9
+version: 2.0.10
 description: Draft store
 maintainers:
   - name: HMCTS Platform engineering team
 dependencies:
   - name: java
-    version: 3.4.1
+    version: 3.4.2
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
