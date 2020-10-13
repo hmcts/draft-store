@@ -1,5 +1,6 @@
 {
   "enabledManagers": ["helm-requirements","gradle-wrapper","terraform"],
+  "labels": ["dependencies"],
   "helm-requirements":
   {
     "fileMatch": ["\\Chart.yaml$"],
