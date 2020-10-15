@@ -32,8 +32,8 @@ module "db-v11" {
   product            = "rpe-${var.product}-v11"
   location           = var.location
   env                = var.env
-  database_name      = "draftstore"
-  postgresql_user    = "draftstore"
+  database_name      = "draftstore-v11"
+  postgresql_user    = "draftstore-v11"
   postgresql_version = "11"
   sku_name           = "GP_Gen5_2"
   sku_tier           = "GeneralPurpose"
@@ -96,19 +96,19 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-v11" {
   name         = "${var.component}-POSTGRES-USER-v11"
-  value        = module.db.user_name
+  value        = module.db-v11.user_name
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-v11" {
   name         = "${var.component}-POSTGRES-PASS-v11"
-  value        = module.db.postgresql_password
+  value        = module.db-v11.postgresql_password
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST-v11" {
   name         = "${var.component}-POSTGRES-HOST-v11"
-  value        = module.db.host_name
+  value        = module.db-v11.host_name
   key_vault_id = module.key-vault.key_vault_id
 }
 
@@ -120,7 +120,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT-v11" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-v11" {
   name         = "${var.component}-POSTGRES-DATABASE-v11"
-  value        = module.db.postgresql_database
+  value        = module.db-v11.postgresql_database
   key_vault_id = module.key-vault.key_vault_id
 }
 
