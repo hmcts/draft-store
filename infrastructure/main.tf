@@ -27,6 +27,20 @@ module "db" {
   subscription       = var.subscription
 }
 
+module "db-v11" {
+  source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
+  product            = "rpe-${var.product}-v11"
+  location           = var.location
+  env                = var.env
+  database_name      = "draftstore"
+  postgresql_user    = "draftstore"
+  postgresql_version = "11"
+  sku_name           = "GP_Gen5_2"
+  sku_tier           = "GeneralPurpose"
+  common_tags        = var.common_tags
+  subscription       = var.subscription
+}
+
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
   name                = "rpe-shared-${var.env}-mi"
   resource_group_name = "managed-identities-${var.env}-rg"
@@ -76,6 +90,36 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name         = "${var.component}-POSTGRES-DATABASE"
+  value        = module.db.postgresql_database
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-USER-v11" {
+  name         = "${var.component}-POSTGRES-USER-v11"
+  value        = module.db.user_name
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-PASS-v11" {
+  name         = "${var.component}-POSTGRES-PASS-v11"
+  value        = module.db.postgresql_password
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_HOST-v11" {
+  name         = "${var.component}-POSTGRES-HOST-v11"
+  value        = module.db.host_name
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_PORT-v11" {
+  name         = "${var.component}-POSTGRES-PORT-v11"
+  value        = "5432"
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-v11" {
+  name         = "${var.component}-POSTGRES-DATABASE-v11"
   value        = module.db.postgresql_database
   key_vault_id = module.key-vault.key_vault_id
 }
