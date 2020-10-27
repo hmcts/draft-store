@@ -34,7 +34,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @Provider("draftStore_draft")
-@PactBroker(scheme = "${PACT_BROKER_SCHEME:http}", host = "${PACT_BROKER_URL:localhost}", port = "${PACT_BROKER_PORT:80}", consumerVersionSelectors = {
+@PactBroker(scheme = "${PACT_BROKER_SCHEME:http}",
+    host = "${PACT_BROKER_URL:localhost}",
+    port = "${PACT_BROKER_PORT:80}",
+    consumerVersionSelectors = {
     @VersionSelector(tag = "${PACT_BRANCH_NAME:Dev}")})
 @Import(DraftControllerProviderTestConfiguration.class)
 public class DivorceDraftControllerProviderTest {
@@ -71,7 +74,8 @@ public class DivorceDraftControllerProviderTest {
     }
 
     @State({"A draft exists after a given page for a logged in user"})
-    public void toRetreiveDraftsAfterPageForLoggedInUser(Map<String, Object> draftMap) throws IOException, JSONException {
+    public void toRetreiveDraftsAfterPageForLoggedInUser(Map<String, Object> draftMap)
+        throws IOException, JSONException {
         setUpMockInteractions(draftMap, 1);
     }
 
@@ -106,7 +110,8 @@ public class DivorceDraftControllerProviderTest {
             ZonedDateTime.now(),
             ZonedDateTime.now()
         );
-        when(draftStoreDaoMock.readAll(userAndService.userId, userAndService.service, after, 10)).thenReturn(Arrays.asList(draft));
+        when(draftStoreDaoMock.readAll(userAndService.userId, userAndService.service, after, 10))
+            .thenReturn(Arrays.asList(draft));
         when(draftStoreDaoMock.insert(anyString(), anyString(), any(CreateDraft.class))).thenReturn(10001);
 
         when(draftStoreDaoMock.read(12345)).thenReturn(java.util.Optional.of(draft));
