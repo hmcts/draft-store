@@ -10,6 +10,7 @@ plugins {
   id 'org.sonarqube' version '3.0'
   id 'scala'
   id 'com.github.lkishalmi.gatling' version '3.3.0'
+  id 'au.com.dius.pact' version '4.1.7'
 }
 
 group 'uk.gov.hmcts.reform'
@@ -45,6 +46,15 @@ sourceSets {
     }
     resources.srcDir file('src/functionalTest/resources')
   }
+
+  contractTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/contractTest/java')
+    }
+    resources.srcDir file('src/contractTest/resources')
+  }
 }
 
 tasks.withType(JavaCompile) {
@@ -79,6 +89,15 @@ task smoke(type: Test) {
   testClassesDirs = sourceSets.smokeTest.output.classesDirs
   classpath = sourceSets.smokeTest.runtimeClasspath
   useJUnitPlatform()
+}
+
+task contract(type: Test) {
+  description = 'Runs the consumer Pact tests'
+  useJUnitPlatform()
+  testClassesDirs = sourceSets.contractTest.output.classesDirs
+  classpath = sourceSets.contractTest.runtimeClasspath
+  include "uk/gov/hmcts/reform/draftstore/**"
+  systemProperty 'pact.rootDir', "pacts"
 }
 
 flyway {
@@ -159,7 +178,8 @@ def versions = [
   junitPlatform: '1.6.2',
   logging: '5.1.5',
   springBoot: springBoot.class.package.implementationVersion,
-  springfoxSwagger: '2.9.2'
+  springfoxSwagger: '2.9.2',
+  pact_version: '4.1.7'
 ]
 
 ext["rest-assured.version"] = '4.0.0'
@@ -234,8 +254,27 @@ dependencies {
   smokeTestCompile sourceSets.main.runtimeClasspath
   smokeTestCompile sourceSets.test.runtimeClasspath
 
+  contractTestCompile sourceSets.main.runtimeClasspath
+  contractTestCompile sourceSets.test.runtimeClasspath
+
   gatlingCompile 'org.scala-lang:scala-library:2.13.3'
   gatlingCompile 'com.warrenstrange:googleauth:1.5.0'
+
+  contractTestCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+  contractTestCompile group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
+  contractTestRuntime group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+  contractTestRuntime group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
+
+  contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
+  contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
+  contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
+  contractTestCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
+  contractTestCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
+  contractTestCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
+  contractTestCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
+  contractTestCompile group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+  contractTestCompile group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
+
 }
 
 gatling {
