@@ -14,7 +14,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "db" {
-  source             = "git@github.com:hmcts/cnp-module-postgres?ref=aad-auth"
+  source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
   product            = "rpe-${var.product}"
   location           = var.location
   env                = var.env
