@@ -27,6 +27,21 @@ module "db" {
   subscription       = var.subscription
 }
 
+module "db-v11" {
+  source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
+  product            = "rpe-${var.product}-v11"
+  location           = var.location
+  env                = var.env
+  database_name      = "draftstore-v11"
+  postgresql_user    = "draftstore-v11"
+  postgresql_version = "11"
+  sku_name           = "GP_Gen5_2"
+  sku_tier           = "GeneralPurpose"
+  common_tags        = var.common_tags
+  subscription       = var.subscription
+}
+
+
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
   name                = "rpe-shared-${var.env}-mi"
   resource_group_name = "managed-identities-${var.env}-rg"
