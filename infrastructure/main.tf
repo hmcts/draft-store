@@ -15,9 +15,13 @@ resource "azurerm_resource_group" "rg" {
 
 module "db" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
+<<<<<<< HEAD
   product            = var.product
   component          = var.component
   name               = "rpe-${var.product}-v11"
+=======
+  product            = "rpe-${var.product}"
+>>>>>>> master
   location           = var.location
   env                = var.env
   database_name      = "draftstore"
