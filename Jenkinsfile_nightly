@@ -10,7 +10,7 @@ properties([
 def type = "java"
 def product = "draft-store"
 def app = "service"
-def channel = '#rpe-build-notices'
+def channel = '#platops-build-notices'
 
 def secrets = [
   'draft-store-${env}':
