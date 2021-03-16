@@ -54,14 +54,18 @@ dbMigration:
 
 ---
 spring:
-  profiles: test
+  config:
+    activate:
+      on-profile: test
   datasource:
     url: jdbc:postgresql://localhost:${DRAFT_STORE_DB_PORT:5432}/draftstore
     password: ${DRAFT_STORE_DB_PASSWORD:}
 
 ---
 spring:
-  profiles: test-unhandled-exception
+  config:
+    activate:
+      on-profile: test-unhandled-exception
   datasource:
     url: jdbc:postgresql://localhost:${DRAFT_STORE_DB_PORT:5432}/draftstore
     password: ${DRAFT_STORE_DB_PASSWORD:}
