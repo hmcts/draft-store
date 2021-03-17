@@ -17,5 +17,7 @@ java:
   keyVaults:
     "draft-store":
       secrets:
-        - service-POSTGRES-PASS
-        - AppInsightsInstrumentationKey
+        - name: service-POSTGRES-PASS
+          alias: DRAFT_STORE_DB_PASSWORD
+        - name: AppInsightsInstrumentationKey
+          alias: azure.application-insights.instrumentation-key
