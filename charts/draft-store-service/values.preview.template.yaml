@@ -9,6 +9,6 @@ java:
     DRAFT_STORE_DB_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
     RUN_DB_MIGRATION_ON_STARTUP: true
     DRAFT_STORE_DB_CONN_OPTIONS: ""
-    SPRING_CLOUD_PROPERTIESVOLUME_ENABLED: false
+  disableKeyVaults: true
   postgresql:
     enabled: true
