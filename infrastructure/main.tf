@@ -20,6 +20,22 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "db" {
+  source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
+  product            = var.product
+  component          = var.component
+  name               = "rpe-${var.product}"
+  location           = var.location
+  env                = var.env
+  database_name      = "draftstore"
+  postgresql_user    = "draftstore"
+  postgresql_version = "10"
+  sku_name           = "GP_Gen5_2"
+  sku_tier           = "GeneralPurpose"
+  common_tags        = var.common_tags
+  subscription       = var.subscription
+}
+
+module "db-v11" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=postgresql_tf"
   product            = var.product
   component          = var.component
