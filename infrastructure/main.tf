@@ -34,7 +34,7 @@ module "db" {
   common_tags        = var.common_tags
   subscription       = var.subscription
 }
-
+## PostgreSQL v11
 module "db-v11" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=postgresql_tf"
   product            = var.product
