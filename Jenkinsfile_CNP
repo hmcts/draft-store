@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@dockerbuildandtestsonlyonptl")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
