@@ -18,7 +18,7 @@ To build the project execute the following command:
 ```bash
 ./gradlew build
 ```
- 
+   
 ### Running
 Before you run the application you have to define database connection.  
 You can do this be either setting environment variables or creating `application-default.yaml` file.  
