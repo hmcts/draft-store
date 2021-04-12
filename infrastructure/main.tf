@@ -43,8 +43,8 @@ module "db-v11" {
   name               = "rpe-${var.product}-v11"
   location           = var.location
   env                = var.env
-  database_name      = "draftstore"
-  postgresql_user    = "draftstore-v11"
+  database_name      = "draftstore-v11"
+  postgresql_user    = "draftstore"
   postgresql_version = "11"
   sku_name           = "GP_Gen5_2"
   sku_tier           = "GeneralPurpose"
