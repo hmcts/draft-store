@@ -34,6 +34,13 @@ module "db" {
   common_tags        = var.common_tags
   subscription       = var.subscription
 }
+
+data "azurerm_subnet" "postgres" {
+  name                 = "core-infra-subnet-0-${var.env}"
+  resource_group_name  = "core-infra-${var.env}"
+  virtual_network_name = "core-infra-vnet-${var.env}"
+}
+
 ## PostgreSQL v11
 module "db-v11" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=postgresql_tf"
@@ -49,6 +56,7 @@ module "db-v11" {
   sku_tier           = "GeneralPurpose"
   common_tags        = var.common_tags
   subscription       = var.subscription
+  subnet_id          = data.azurerm_subnet.postgres.id
 }
 
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
