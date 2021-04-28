@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.draftstore.controllers;
 
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
+import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
@@ -38,8 +39,9 @@ import static org.mockito.Mockito.when;
     host = "${PACT_BROKER_URL:localhost}",
     port = "${PACT_BROKER_PORT:80}",
     consumerVersionSelectors = {
-    @VersionSelector(tag = "${PACT_BRANCH_NAME:Dev}")})
+        @VersionSelector(tag = "master")})
 @Import(DraftControllerProviderTestConfiguration.class)
+@IgnoreNoPactsToVerify
 public class DivorceDraftControllerProviderTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -56,15 +58,18 @@ public class DivorceDraftControllerProviderTest {
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
-        context.verifyInteraction();
+        if (context != null) {
+            context.verifyInteraction();
+        }
     }
 
     @BeforeEach
     void before(PactVerificationContext context) {
-        System.getProperties().setProperty("pact.verifier.publishResults", "true");
         MockMvcTestTarget testTarget = new MockMvcTestTarget();
         testTarget.setControllers(draftController);
-        context.setTarget(testTarget);
+        if (context != null) {
+            context.setTarget(testTarget);
+        }
     }
 
     @State({"A draft exists for a logged in user"})
