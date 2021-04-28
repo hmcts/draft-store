@@ -92,7 +92,7 @@ task smoke(type: Test) {
 }
 
 task contract(type: Test) {
-  description = 'Runs the consumer Pact tests'
+  description = 'Runs the  Pact tests'
   useJUnitPlatform()
   testClassesDirs = sourceSets.contractTest.output.classesDirs
   classpath = sourceSets.contractTest.runtimeClasspath
@@ -301,6 +301,8 @@ task runProviderPactVerification(type: Test) {
   logger.lifecycle("Runs pact Tests")
   testClassesDirs = sourceSets.contractTest.output.classesDirs
   classpath = sourceSets.contractTest.runtimeClasspath
+  systemProperty 'pact.verifier.publishResults', System.getProperty('pact.verifier.publishResults')
+  systemProperty 'pact.provider.version', System.getProperty('pact.provider.version')
 }
 
 runProviderPactVerification.dependsOn contract
