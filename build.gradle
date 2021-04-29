@@ -10,7 +10,7 @@ plugins {
   id 'org.sonarqube' version '3.1.1'
   id 'scala'
   id 'com.github.lkishalmi.gatling' version '3.3.4'
-  id 'au.com.dius.pact' version '4.2.2'
+  id 'au.com.dius.pact' version '4.2.4'
 }
 
 group 'uk.gov.hmcts.reform'
