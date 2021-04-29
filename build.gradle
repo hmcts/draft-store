@@ -256,7 +256,7 @@ dependencies {
   contractTestCompile sourceSets.main.runtimeClasspath
   contractTestCompile sourceSets.test.runtimeClasspath
 
-  gatlingCompile 'org.scala-lang:scala-library:2.13.4'
+  gatlingCompile 'org.scala-lang:scala-library:2.13.5'
   gatlingCompile 'com.warrenstrange:googleauth:1.5.0'
 
   contractTestCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
