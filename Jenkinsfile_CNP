@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@tf_plan_only")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
