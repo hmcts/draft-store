@@ -1,7 +1,7 @@
 #!groovy
 import uk.gov.hmcts.contino.AppPipelineDsl
 
-@Library("Infrastructure@archive-pact-results")
+@Library("Infrastructure")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
@@ -62,4 +62,3 @@ withPipeline(type, product, app) {
     enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
   }
 }
-
