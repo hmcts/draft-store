@@ -1,7 +1,7 @@
 #!groovy
 import uk.gov.hmcts.contino.AppPipelineDsl
 
-@Library("Infrastructure")
+@Library("Infrastructure@archive-pact-results")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
@@ -54,5 +54,12 @@ withPipeline(type, product, app) {
   disableLegacyDeployment()
   enableAksStagingDeployment()
   loadVaultSecrets(secrets)
+
+  onMaster() {
+    enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
+  }
+  onPR() {
+    enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
+  }
 }
 
