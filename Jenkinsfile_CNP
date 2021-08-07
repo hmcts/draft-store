@@ -55,11 +55,5 @@ withPipeline(type, product, app) {
   enableAksStagingDeployment()
   loadVaultSecrets(secrets)
 
-  onMaster() {
-    enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
-  }
-  onPR() {
-    enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
-  }
 }
 
