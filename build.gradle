@@ -3,14 +3,15 @@ plugins {
   id 'jacoco'
   id 'pmd'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-  id 'org.flywaydb.flyway' version '6.5.7'
-  id 'org.springframework.boot' version '2.4.9'
-  id 'uk.gov.hmcts.java' version '0.12.6'
-  id 'com.github.ben-manes.versions' version '0.38.0'
-  id 'org.sonarqube' version '3.1.1'
+  id 'org.flywaydb.flyway' version '8.0.4'
+  id 'org.springframework.boot' version '2.5.6'
+  id 'uk.gov.hmcts.java' version '0.12.16'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.18'
+  id 'com.github.ben-manes.versions' version '0.39.0'
+  id 'org.sonarqube' version '3.3'
   id 'scala'
   id 'com.github.lkishalmi.gatling' version '3.3.4'
-  id 'au.com.dius.pact' version '4.2.2'
+  id 'au.com.dius.pact' version '4.3.0'
 }
 
 group 'uk.gov.hmcts.reform'
@@ -116,7 +117,7 @@ task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
 }
 
 pmd {
-  toolVersion = "6.9.0"
+  toolVersion = "6.40.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   ruleSets = []
@@ -142,14 +143,15 @@ sonarqube {
   }
 }
 
+def isNonStable = { String version ->
+  def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+    def regex = /^[0-9,.v-]+(-r)?$/
+      return !stableKeyword && !(version ==~ regex)
+}
+
 dependencyUpdates.resolutionStrategy {
   componentSelection { rules ->
     rules.all {
-      def isNonStable = { String version ->
-        ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
-          version ==~ /(?i).*[.-]\$qualifier[.\\d-+]*/
-        }
-      }
       if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
         selection.reject('Release candidate')
       }
@@ -165,7 +167,7 @@ dependencyCheck {
 repositories {
   mavenLocal()
   maven {
-    url "https://jitpack.io" 
+    url "https://jitpack.io"
   }
   jcenter()
   mavenCentral()
@@ -179,10 +181,11 @@ def versions = [
   logging: '5.1.7',
   springBoot: springBoot.class.package.implementationVersion,
   springfoxSwagger: '2.9.2',
-  pact_version: '4.1.7'
+  pact_version: '4.3.0',
+  pactVersionJava8: '4.1.29'
 ]
 
-ext["rest-assured.version"] = '4.0.0'
+ext["rest-assured.version"] = '4.3.0'
 
 configurations.all {
   resolutionStrategy {
@@ -194,85 +197,85 @@ configurations.all {
         details.useVersion '2.12.10'
       }
       if (details.requested.group in ['org.apache.tomcat.embed']) {
-        details.useVersion '9.0.50'
+        details.useVersion '9.0.54'
       }
     }
   }
 }
 
 dependencies {
-  compile(
+  implementation(
     "org.springframework.boot:spring-boot-starter-web",
     "org.springframework.boot:spring-boot-starter-actuator",
     "org.springframework.boot:spring-boot-starter-jdbc",
     "org.springframework.boot:spring-boot-starter-validation",
   )
-  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.20'
+  implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.1'
 
-  compile group: 'org.flywaydb', name: 'flyway-core', version: '6.5.7'
+  implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.0.4'
 
-  compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
-  compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
+  implementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+  implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
 
-  compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
-  compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
+  implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
 
-  compile group: 'com.google.guava', name: 'guava', version: '30.1-jre'
+  implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
 
-  compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
-  compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
-  compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
+  implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
+  implementation group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
+  implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
 
-  compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
-  compile group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: '2.14.1'
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: '2.14.1'
 
-  compile group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.4.0'
+  implementation group: 'uk.gov.hmcts.reform', name: 'reform-api-standards', version: '0.4.0'
 
-  compile group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.6.4'
+  implementation group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.8.0'
 
-  testCompile group: 'io.rest-assured', name: 'rest-assured'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured'
 
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-  testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
-  testCompile group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
-  testCompile group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
+  testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
+  testImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+  testImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
 
-  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
-    testCompile 'org.testcontainers:postgresql:1.15.2'
+  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+  testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
+  testImplementation 'org.testcontainers:postgresql:1.16.2'
 
-  integrationTestCompile sourceSets.main.runtimeClasspath
-  integrationTestCompile sourceSets.test.runtimeClasspath
+  integrationTestImplementation sourceSets.main.runtimeClasspath
+  integrationTestImplementation sourceSets.test.runtimeClasspath
 
-  functionalTestCompile sourceSets.main.runtimeClasspath
-  functionalTestCompile sourceSets.test.runtimeClasspath
-  functionalTestCompile sourceSets.smokeTest.runtimeClasspath
+  functionalTestImplementation sourceSets.main.runtimeClasspath
+  functionalTestImplementation sourceSets.test.runtimeClasspath
+  functionalTestImplementation sourceSets.smokeTest.runtimeClasspath
 
-  smokeTestCompile sourceSets.main.runtimeClasspath
-  smokeTestCompile sourceSets.test.runtimeClasspath
+  smokeTestImplementation sourceSets.main.runtimeClasspath
+  smokeTestImplementation sourceSets.test.runtimeClasspath
 
-  contractTestCompile sourceSets.main.runtimeClasspath
-  contractTestCompile sourceSets.test.runtimeClasspath
+  contractTestImplementation sourceSets.main.runtimeClasspath
+  contractTestImplementation sourceSets.test.runtimeClasspath
 
-  gatlingCompile 'org.scala-lang:scala-library:2.13.4'
-  gatlingCompile 'com.warrenstrange:googleauth:1.5.0'
+  gatlingImplementation 'org.scala-lang:scala-library:2.13.4'
+  gatlingImplementation 'com.warrenstrange:googleauth:1.5.0'
 
-  contractTestCompile group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
-  contractTestCompile group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
-  contractTestRuntime group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
-  contractTestRuntime group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pact_version
+  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+  contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pactVersionJava8
+  contractTestRuntimeOnly group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
+  contractTestRuntimeOnly group: 'au.com.dius.pact.consumer', name: 'java8', version: versions.pactVersionJava8
 
-  contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
-  contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
-  contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
-  contractTestCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
-  contractTestCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
-  contractTestCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-  contractTestCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
-  contractTestCompile group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
-  contractTestCompile group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
+  contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
+  contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
+  contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
+  contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
+  contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
+  contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
+  contractTestImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
+  contractTestImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+  contractTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
 
 }
 
@@ -303,6 +306,11 @@ task runProviderPactVerification(type: Test) {
   classpath = sourceSets.contractTest.runtimeClasspath
   systemProperty 'pact.verifier.publishResults', System.getProperty('pact.verifier.publishResults')
   systemProperty 'pact.provider.version', System.getProperty('pact.provider.version')
+}
+
+// Gradle 7.x issue, workaround from: https://github.com/gradle/gradle/issues/17236#issuecomment-894768083
+tasks.withType(Copy).all {
+    duplicatesStrategy 'exclude'
 }
 
 runProviderPactVerification.dependsOn contract
