@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@DTSPO-6149_flyway_vars")
 
 def secrets = [
   'draft-store-${env}':
