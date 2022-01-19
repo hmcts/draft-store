@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@DTSPO-6149_cleanup_vault_secrets_fetch")
 
 def secrets = [
   'draft-store-${env}':
