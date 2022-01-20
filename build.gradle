@@ -244,7 +244,7 @@ dependencies {
 
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
-  testImplementation 'org.testcontainers:postgresql:1.16.2'
+  testImplementation 'org.testcontainers:postgresql:1.16.3'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
