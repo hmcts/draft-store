@@ -1,7 +1,7 @@
 #!groovy
 
 // @Library("Infrastructure@DTSPO-6149_cleanup_vault_secrets_fetch")
-@Library("Infrastructure@DTSPO-6149_sp_login")
+@Library("Infrastructure@DTSPO-6149_appInsightsInstrumentationKey_keyvault")
 
 def secrets = [
   'draft-store-${env}':
