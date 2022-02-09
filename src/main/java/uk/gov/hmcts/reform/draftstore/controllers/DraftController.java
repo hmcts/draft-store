@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.draftstore.controllers;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.Draft;
 import uk.gov.hmcts.reform.draftstore.domain.DraftList;
-import uk.gov.hmcts.reform.draftstore.domain.ErrorResult;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
 import uk.gov.hmcts.reform.draftstore.service.AuthService;
 import uk.gov.hmcts.reform.draftstore.service.DraftService;
@@ -48,6 +47,7 @@ import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_
 public class DraftController {
 
     static final String MEDIA_TYPE = "application/vnd.uk.gov.hmcts.draft-store.v3+json";
+    private static final String PATH = "/{id}";
 
     private final AuthService authService;
     private final DraftService draftService;
@@ -57,11 +57,11 @@ public class DraftController {
         this.draftService = draftService;
     }
 
-    @GetMapping(path = "/{id}")
-    @ApiOperation("Find draft by ID")
+    @GetMapping(path = PATH)
+    @Operation(summary = "Find draft by ID")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "Success"),
-        @ApiResponse(code = 404, message = "Not found", response = ErrorResult.class),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "404", description = "Not found"),
     })
     public Draft read(
         @PathVariable String id,
@@ -76,9 +76,9 @@ public class DraftController {
     }
 
     @GetMapping
-    @ApiOperation(value = "Find all your drafts", notes = "Returns an empty array when no drafts were found")
+    @Operation(summary = "Find all your drafts", description = "Returns an empty array when no drafts were found")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "Success"),
+        @ApiResponse(responseCode = "200", description = "Success"),
     })
     public DraftList readAll(
         @RequestHeader(AUTHORIZATION) String authHeader,
@@ -94,10 +94,10 @@ public class DraftController {
     }
 
     @PostMapping(consumes = { MEDIA_TYPE, MediaType.APPLICATION_JSON_VALUE })
-    @ApiOperation("Create a new draft")
+    @Operation(summary = "Create a new draft")
     @ApiResponses({
-        @ApiResponse(code = 201, message = "Draft successfully created"),
-        @ApiResponse(code = 400, message = "Bad request", response = ErrorResult.class),
+        @ApiResponse(responseCode = "201", description = "Draft successfully created"),
+        @ApiResponse(responseCode = "400", description = "Bad request"),
     })
     public ResponseEntity<Void> create(
         @RequestHeader(AUTHORIZATION) String authHeader,
@@ -110,17 +110,17 @@ public class DraftController {
 
         int id = draftService.create(newDraft, userAndService.withSecrets(secrets));
 
-        URI newClaimUri = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+        URI newClaimUri = fromCurrentRequest().path(PATH).buildAndExpand(id).toUri();
 
         return created(newClaimUri).build();
     }
 
-    @PutMapping(path = "/{id}", consumes = { MEDIA_TYPE, MediaType.APPLICATION_JSON_VALUE })
-    @ApiOperation("Update existing draft")
+    @PutMapping(path = PATH, consumes = { MEDIA_TYPE, MediaType.APPLICATION_JSON_VALUE })
+    @Operation(summary = "Update existing draft")
     @ApiResponses({
-        @ApiResponse(code = 204, message = "Draft updated"),
-        @ApiResponse(code = 400, message = "Bad request", response = ErrorResult.class),
-        @ApiResponse(code = 404, message = "Not found", response = ErrorResult.class),
+        @ApiResponse(responseCode = "204", description = "Draft updated"),
+        @ApiResponse(responseCode = "400", description = "Bad request"),
+        @ApiResponse(responseCode = "404", description = "Not found"),
     })
     public ResponseEntity<Void> update(
         @PathVariable String id,
@@ -137,10 +137,10 @@ public class DraftController {
         return noContent().build();
     }
 
-    @DeleteMapping(path = "/{id}")
-    @ApiOperation("Delete draft")
+    @DeleteMapping(path = PATH)
+    @Operation(summary = "Delete draft")
     @ApiResponses({
-        @ApiResponse(code = 204, message = "Draft deleted")
+        @ApiResponse(responseCode = "204", description = "Draft deleted")
     })
     public ResponseEntity<Void> delete(
         @PathVariable String id,
@@ -154,9 +154,9 @@ public class DraftController {
     }
 
     @DeleteMapping
-    @ApiOperation("Delete all drafts")
+    @Operation(summary = "Delete all drafts")
     @ApiResponses({
-        @ApiResponse(code = 204, message = "Drafts deleted")
+        @ApiResponse(responseCode = "204", description = "Drafts deleted")
     })
     public ResponseEntity<Void> deleteAll(
         @RequestHeader(AUTHORIZATION) String authHeader,

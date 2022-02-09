@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.draftstore.controllers;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +33,8 @@ public class ReportController {
     }
 
     @GetMapping(path = "/{userId}")
-    @ApiOperation("Report draft document type counts for a user")
-    @ApiResponse(code = 200, message = "Success")
+    @Operation(summary = "Report draft document type counts for a user")
+    @ApiResponse(responseCode = "200", description = "Success")
     public Map<String, Integer> getDocumentTypeCounts(
         @PathVariable String userId,
         @RequestHeader(AUTHORIZATION) String authHeader

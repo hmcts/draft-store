@@ -12,6 +12,7 @@ import static uk.gov.hmcts.reform.draftstore.service.secrets.Secrets.MIN_SECRET_
 public final class SecretsBuilder {
 
     public static final String SEPARATOR = ",";
+    private static final int MAX_SECRETS = 2;
 
     public static Secrets fromHeader(String header) {
 
@@ -21,11 +22,11 @@ public final class SecretsBuilder {
             List<String> secrets =
                 Arrays
                     .stream(header.split(SEPARATOR))
-                    .map(s -> s.trim())
+                    .map(String::trim)
                     .collect(toList());
 
-            if (secrets.size() > 2) {
-                throw new SecretsException("Too many secrets. Max number is 2");
+            if (secrets.size() > MAX_SECRETS) {
+                throw new SecretsException("Too many secrets. Max number is " + MAX_SECRETS);
             } else if (!secrets.stream().allMatch(s -> s.length() >= MIN_SECRET_LENGTH)) {
                 throw new SecretsException("Min length for secret is " + MIN_SECRET_LENGTH);
             } else {
