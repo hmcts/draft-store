@@ -141,7 +141,7 @@ jacocoTestReport {
   }
 }
 
-project.tasks['sonarqube'].dependsOn test, integration
+project.tasks['sonarqube'].dependsOn jacocoTestReport
 sonarqube {
   properties {
     property "sonar.projectName", "Reform :: Draft Store"
