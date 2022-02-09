@@ -6,26 +6,22 @@
   <description>
     Ruleset for Draft Store
   </description>
-  <rule ref="rulesets/java/basic.xml"/>
-  <rule ref="rulesets/java/braces.xml"/>
-  <rule ref="rulesets/java/design.xml">
-    <exclude name="UseUtilityClass"/>
-    <exclude name="ConfusingTernary"/>
+  <rule ref="category/java/bestpractices.xml">
+    <exclude name="ArrayIsStoredDirectly"/>
+    <exclude name="GuardLogStatement"/>
+    <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+    <!-- Doesn't handle rest assured -->
+    <exclude name="JUnitTestsShouldIncludeAssert"/>
   </rule>
-  <rule ref="rulesets/java/empty.xml"/>
-  <rule ref="rulesets/java/imports.xml">
-    <exclude name="TooManyStaticImports"/>
-  </rule>
-  <rule ref="rulesets/java/optimizations.xml">
-    <exclude name="MethodArgumentCouldBeFinal"/>
-    <exclude name="LocalVariableCouldBeFinal"/>
-  </rule>
-  <rule ref="rulesets/java/typeresolution.xml"/>
-  <rule ref="rulesets/java/typeresolution.xml/SignatureDeclareThrowsException">
+  <rule ref="category/java/bestpractices.xml/JUnitTestContainsTooManyAsserts">
     <properties>
-      <property name="IgnoreJUnitCompletely" value="true"/>
+      <property name="maximumAsserts" value="6" />
     </properties>
   </rule>
-  <rule ref="rulesets/java/unnecessary.xml"/>
-  <rule ref="rulesets/java/unusedcode.xml"/>
+  <rule ref="category/java/errorprone.xml">
+    <exclude name="AvoidDuplicateLiterals"/>
+    <exclude name="BeanMembersShouldSerialize"/>
+    <exclude name="MissingSerialVersionUID"/>
+    <exclude name="NullAssignment"/>
+  </rule>
 </ruleset>

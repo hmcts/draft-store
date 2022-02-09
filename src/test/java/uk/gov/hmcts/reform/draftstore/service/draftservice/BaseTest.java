@@ -11,7 +11,7 @@ import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 
 public class BaseTest {
 

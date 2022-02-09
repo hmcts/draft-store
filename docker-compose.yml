@@ -32,6 +32,7 @@ services:
       context: docker/database
     image: hmcts/draft-store-database
     environment:
+      - POSTGRES_PASSWORD=postgres
       - DRAFT_STORE_DB_PASSWORD=draftstore
     ports:
       - 5429:5432

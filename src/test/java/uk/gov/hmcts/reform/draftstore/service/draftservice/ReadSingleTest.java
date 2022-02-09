@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.draftstore.service.draftservice;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.draftstore.exception.NoDraftFoundException;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 public class ReadSingleTest extends BaseTest {
 
     @Test
-    public void should_throw_exception_if_draft_with_given_id_does_not_exist() throws Exception {
+    public void should_throw_exception_if_draft_with_given_id_does_not_exist() {
         // given
         thereExists(null);
 

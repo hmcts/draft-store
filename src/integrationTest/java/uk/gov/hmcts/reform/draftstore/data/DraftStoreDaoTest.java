@@ -28,6 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DraftStoreDaoTest {
     private static final String USER_ID = "a user";
     private static final String ANOTHER_USER_ID = "another user";
+    private static final String DRAFT_TYPE = "some_type";
+    private static final String SERVICE_1 = "service_1";
 
     @Autowired
     private DraftStoreDao underTest;
@@ -42,8 +44,7 @@ public class DraftStoreDaoTest {
 
     @Test
     public void deleteAll_should_delete_all_drafts_for_given_user_and_service() {
-        String draftType = "some_type";
-        CreateDraft draft = new CreateDraft("{ \"a\": 123 }", null, draftType, 123);
+        CreateDraft draft = new CreateDraft("{ \"a\": 123 }", null, DRAFT_TYPE, 123);
         String service1 = "some_service";
         String service2 = "a different service";
 
@@ -92,8 +93,8 @@ public class DraftStoreDaoTest {
     @Test
     public void getDraftCountPerService_should_return_number_of_drafts_per_service() {
 
-        CreateDraft draft = new CreateDraft("{ \"a\": 123 }", null, "some_type", 123);
-        String service1 = "service_1";
+        CreateDraft draft = new CreateDraft("{ \"a\": 123 }", null, DRAFT_TYPE, 123);
+        String service1 = SERVICE_1;
         String service2 = "service_2";
 
         // given
@@ -131,9 +132,9 @@ public class DraftStoreDaoTest {
     @Test
     public void getDraftTypeCountsByUser_should_return_all_counts() {
         // given
-        underTest.insert(USER_ID, "service_1", new CreateDraft("{}", null, "some_type", 123));
-        underTest.insert(USER_ID, "service_1", new CreateDraft("{}", null, "some_type", 123));
-        underTest.insert(USER_ID, "service_1", new CreateDraft("{}", null, "another_type", 123));
+        underTest.insert(USER_ID, SERVICE_1, new CreateDraft("{}", null, DRAFT_TYPE, 123));
+        underTest.insert(USER_ID, SERVICE_1, new CreateDraft("{}", null, DRAFT_TYPE, 123));
+        underTest.insert(USER_ID, SERVICE_1, new CreateDraft("{}", null, "another_type", 123));
 
         // when
         List<DocumentTypeCount> results = underTest.getDraftTypeCountsByUser(USER_ID);
@@ -141,7 +142,7 @@ public class DraftStoreDaoTest {
         // then
         assertThat(results).hasSize(2);
         assertThat(results.stream()
-            .filter(result -> Objects.equals(result.getDocumentType(), "some_type"))
+            .filter(result -> Objects.equals(result.getDocumentType(), DRAFT_TYPE))
             .filter(result -> Objects.equals(result.getCount(), 2))
             .count())
             .isEqualTo(1);

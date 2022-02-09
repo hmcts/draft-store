@@ -25,6 +25,7 @@ import java.util.Optional;
 @SuppressWarnings("checkstyle:LineLength")
 public class DraftStoreDao {
 
+    private static final String SERVICE = "service";
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final int defaultMaxStaleDays;
     private final Clock clock;
@@ -53,7 +54,7 @@ public class DraftStoreDao {
                 + "VALUES (:userId, :service, :doc::JSON, :encDoc, :type, :maxStaleDays, :created, :updated)",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
-                .addValue("service", service)
+                .addValue(SERVICE, service)
                 .addValue("doc", newDraft.document)
                 .addValue("encDoc", newDraft.encryptedDocument)
                 .addValue("type", newDraft.type)
@@ -94,7 +95,7 @@ public class DraftStoreDao {
                 + "LIMIT :limit",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
-                .addValue("service", service)
+                .addValue(SERVICE, service)
                 .addValue("after", after)
                 .addValue("limit", limit),
             new DraftMapper()
@@ -138,7 +139,7 @@ public class DraftStoreDao {
             "DELETE FROM draft_document WHERE user_id = :userId AND service = :service",
             new MapSqlParameterSource()
                 .addValue("userId", userId)
-                .addValue("service", service)
+                .addValue(SERVICE, service)
         );
     }
 
@@ -182,7 +183,7 @@ public class DraftStoreDao {
             return new Draft(
                 rs.getString("id"),
                 rs.getString("user_id"),
-                rs.getString("service"),
+                rs.getString(SERVICE),
                 rs.getString("document"),
                 rs.getBytes("encrypted_document"),
                 rs.getString("document_type"),

@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.draftstore.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import uk.gov.hmcts.reform.draftstore.service.validation.JsonObject;
 
 import javax.validation.constraints.Min;
@@ -16,9 +16,9 @@ public class CreateDraft {
     @NotNull
     public final String type;
 
-    @ApiModelProperty(
+    @Schema(
         name = "max_stale_days",
-        notes = "Number of days before removing a draft that hasn't been updated"
+        description = "Number of days before removing a draft that hasn't been updated"
     )
     @Min(value = 1L)
     public final Integer maxStaleDays;

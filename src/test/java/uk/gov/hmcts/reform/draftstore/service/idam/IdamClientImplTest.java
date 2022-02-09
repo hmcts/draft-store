@@ -1,15 +1,16 @@
 package uk.gov.hmcts.reform.draftstore.service.idam;
 
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -25,7 +26,7 @@ public class IdamClientImplTest {
                 anyString(),
                 any(),
                 any(HttpEntity.class),
-                any(Class.class)
+                ArgumentMatchers.<Class<Object>>any()
             )
         ).willThrow(exceptionThrownByRestTemplate);
 
