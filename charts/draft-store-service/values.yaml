@@ -19,5 +19,5 @@ java:
       secrets:
         - name: service-POSTGRES-PASS
           alias: DRAFT_STORE_DB_PASSWORD
-        - name: AppInsightsInstrumentationKey
-          alias: azure.application-insights.instrumentation-key
+        - name: app-insights-connection-string
+          alias: app-insights-connection-string

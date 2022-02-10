@@ -9,3 +9,5 @@ out/
 application-default.yaml
 *.tgz
 *.lock
+lib/applicationinsights-agent-*.jar
+lib/applicationinsights.log
