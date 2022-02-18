@@ -36,6 +36,8 @@ env.PACT_BROKER_URL = "pact-broker.platform.hmcts.net"
 env.PACT_BROKER_PORT = "443"
 env.PACT_BROKER_SCHEME = "https"
 
+def branchesToSync = ['demo', 'perftest', 'ithc']
+
 withPipeline(type, product, app) {
   after('test') {
     builder.gradle('integration')
@@ -54,6 +56,7 @@ withPipeline(type, product, app) {
   disableLegacyDeployment()
   enableAksStagingDeployment()
   loadVaultSecrets(secrets)
+  syncBranchesWithMaster(branchesToSync)
 
 }
 
