@@ -220,7 +220,7 @@ dependencies {
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.12'
 
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.10'
 
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
   implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
