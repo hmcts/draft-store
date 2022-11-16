@@ -1,7 +1,7 @@
 #!groovy
 import uk.gov.hmcts.contino.AppPipelineDsl
 
-@Library("Infrastructure")
+@Library("Infrastructure@fix-metrics")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
@@ -39,8 +39,32 @@ env.PACT_BROKER_SCHEME = "https"
 def branchesToSync = ['demo', 'perftest', 'ithc']
 
 withPipeline(type, product, app) {
+  afterSuccess('checkout') {
+    echo 'success checkout' 
+  }
+  
+  afterFailure('checkout') {
+    echo 'failed checkout' 
+  }
+  
+  afterAlways('checkout') {
+    echo 'failed checkout' 
+  }
+  
   after('test') {
     builder.gradle('integration')
+  }
+  
+  afterFailure('securitychecks') {
+    echo 'failed securitychecks' 
+  }
+  
+  afterSuccess('securitychecks') {
+    echo 'success securitychecks' 
+  }
+  
+  afterAlways('securitychecks') {
+    echo 'always securitychecks' 
   }
 
   env.USE_IDAM_TESTING_SUPPORT = "true"
