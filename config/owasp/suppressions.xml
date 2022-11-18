@@ -95,4 +95,10 @@
     <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-websocket@.*$</packageUrl>
     <cve>CVE-2020-13943</cve>
   </suppress>
+  
+   <suppress>
+     <notes><![CDATA[Ignored since we are not vulnerable as per https://github.com/spring-projects/spring-framework/issues/24434]]></notes>
+     <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*$</packageUrl>
+     <cve>CVE-2016-1000027</cve>
+    </suppress>
 </suppressions>
