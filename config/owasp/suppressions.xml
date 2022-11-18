@@ -101,4 +101,16 @@
      <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*$</packageUrl>
      <cve>CVE-2016-1000027</cve>
     </suppress>
+    
+    <suppress>
+      <cve>CVE-2022-42003</cve>
+      <cve>CVE-2022-42004</cve>
+      <cve>CVE-2022-38752</cve>
+      <cve>CVE-2022-38751</cve>
+      <cve>CVE-2022-38750</cve>
+      <cve>CVE-2022-41854</cve>
+      <cve>CVE-2022-25857</cve>
+      <cve>CVE-2022-38749</cve>
+      <cve>CVE-2022-42252</cve>
+    </suppress>
 </suppressions>
