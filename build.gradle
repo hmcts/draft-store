@@ -28,6 +28,16 @@ tasks.withType(JavaExec).configureEach {
   javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
+dependencyManagement {
+    dependencies {
+
+        //CVE-2022-25857, CVE-2022-38749, CVE-2022-38750, CVE-2022-38751, CVE-2022-38752, CVE-2022-41854
+        dependencySet(group: 'org.yaml', version: '1.33') {
+            entry 'snakeyaml'
+        }
+    }
+}
+
 sourceSets {
   integrationTest {
     java {
@@ -125,7 +135,7 @@ task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
 }
 
 pmd {
-  toolVersion = "6.40.0"
+  toolVersion = "6.51.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   ruleSets = []
@@ -190,7 +200,7 @@ def versions = [
   pactVersionJava8: '4.1.29'
 ]
 
-ext["rest-assured.version"] = '4.3.0'
+ext["rest-assured.version"] = '4.5.0'
 
 configurations.all {
   resolutionStrategy {
@@ -220,14 +230,14 @@ dependencies {
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.12'
 
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.11'
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.12'
 
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
   implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
 
   implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '5.1.9'
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.0.1'
 
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
   implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
@@ -247,7 +257,7 @@ dependencies {
 
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
-  testImplementation 'org.testcontainers:postgresql:1.17.3'
+  testImplementation 'org.testcontainers:postgresql:1.17.6'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
