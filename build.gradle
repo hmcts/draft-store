@@ -3,8 +3,8 @@ plugins {
   id 'jacoco'
   id 'pmd'
   id 'io.spring.dependency-management' version '1.0.13.RELEASE'
-  id 'org.flywaydb.flyway' version '9.1.3'
-  id 'org.springframework.boot' version '2.7.2'
+  id 'org.flywaydb.flyway' version '9.8.2'
+  id 'org.springframework.boot' version '2.7.5'
   id 'uk.gov.hmcts.java' version '0.12.28'
   id 'se.patrikerdes.use-latest-versions' version '0.2.18'
   id 'com.github.ben-manes.versions' version '0.42.0'
@@ -26,6 +26,16 @@ java {
 // https://github.com/gradle/gradle/issues/16791
 tasks.withType(JavaExec).configureEach {
   javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
+}
+
+dependencyManagement {
+    dependencies {
+
+        //CVE-2022-25857, CVE-2022-38749, CVE-2022-38750, CVE-2022-38751, CVE-2022-38752, CVE-2022-41854
+        dependencySet(group: 'org.yaml', version: '1.33') {
+            entry 'snakeyaml'
+        }
+    }
 }
 
 sourceSets {
@@ -190,7 +200,7 @@ def versions = [
   pactVersionJava8: '4.1.29'
 ]
 
-ext["rest-assured.version"] = '4.3.0'
+ext["rest-assured.version"] = '4.5.0'
 
 configurations.all {
   resolutionStrategy {
@@ -199,7 +209,7 @@ configurations.all {
         details.useVersion '2.12.10'
       }
       if (details.requested.group in ['org.apache.tomcat.embed']) {
-        details.useVersion '9.0.65'
+        details.useVersion '9.0.68'
       }
     }
   }
@@ -220,14 +230,14 @@ dependencies {
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.8.2'
 
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.11'
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.12'
 
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
   implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
 
   implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '5.1.9'
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.0.1'
 
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
   implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
@@ -247,7 +257,7 @@ dependencies {
 
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
-  testImplementation 'org.testcontainers:postgresql:1.17.3'
+  testImplementation 'org.testcontainers:postgresql:1.17.6'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
