@@ -48,7 +48,7 @@ withPipeline(type, product, app) {
   }
   
   afterAlways('checkout') {
-    echo 'failed checkout' 
+    echo 'always checkout' 
   }
   
   after('test') {
