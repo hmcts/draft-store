@@ -53,6 +53,9 @@ withPipeline(type, product, app) {
   
   afterAlways('checkout') {
     echo 'after always checkout' 
+  }
+  
+  before('build') {
     error "end pipeline"
   }
   
