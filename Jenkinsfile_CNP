@@ -39,6 +39,10 @@ env.PACT_BROKER_SCHEME = "https"
 def branchesToSync = ['demo', 'perftest', 'ithc']
 
 withPipeline(type, product, app) {
+  after('checkout') {
+    echo 'this should be deprecated' 
+  }
+
   afterSuccess('checkout') {
     echo 'success checkout' 
   }
@@ -48,7 +52,8 @@ withPipeline(type, product, app) {
   }
   
   afterAlways('checkout') {
-    echo 'always checkout' 
+    echo 'after always checkout' 
+    error "end pipeline"
   }
   
   after('test') {
