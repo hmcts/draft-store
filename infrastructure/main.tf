@@ -6,12 +6,6 @@ locals {
   s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"
 }
 
-data "azurerm_subnet" "postgres" {
-  name                 = "core-infra-subnet-0-${var.env}"
-  resource_group_name  = "core-infra-${var.env}"
-  virtual_network_name = "core-infra-vnet-${var.env}"
-}
-
 resource "azurerm_resource_group" "rg" {
   name     = "${var.product}-${var.component}-${var.env}"
   location = var.location
@@ -35,23 +29,7 @@ module "db" {
   subscription       = var.subscription
 }
 
-## PostgreSQL v11
-module "db-v11" {
-  source             = "git@github.com:hmcts/cnp-module-postgres?ref=postgresql_tf"
-  product            = var.product
-  component          = var.component
-  name               = "rpe-${var.product}-v11"
-  location           = var.location
-  env                = var.env
-  database_name      = "draftstore-v11"
-  postgresql_user    = "draftstore"
-  postgresql_version = "11"
-  sku_name           = "GP_Gen5_2"
-  sku_tier           = "GeneralPurpose"
-  common_tags        = var.common_tags
-  subscription       = var.subscription
-  subnet_id          = data.azurerm_subnet.postgres.id
-}
+
 
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
   name                = "rpe-shared-${var.env}-mi"
@@ -102,38 +80,6 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name         = "${var.component}-POSTGRES-DATABASE"
-  value        = module.db.postgresql_database
-  key_vault_id = module.key-vault.key_vault_id
-}
-
-## PostgreSQL v11 
-
-resource "azurerm_key_vault_secret" "POSTGRES-USER-V11" {
-  name         = "${var.component}-POSTGRES-USER-V11"
-  value        = module.db.user_name
-  key_vault_id = module.key-vault.key_vault_id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-PASS-V11" {
-  name         = "${var.component}-POSTGRES-PASS-V11"
-  value        = module.db.postgresql_password
-  key_vault_id = module.key-vault.key_vault_id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_HOST-V11" {
-  name         = "${var.component}-POSTGRES-HOST-V11"
-  value        = module.db.host_name
-  key_vault_id = module.key-vault.key_vault_id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_PORT-V11" {
-  name         = "${var.component}-POSTGRES-PORT-V11"
-  value        = "5432"
-  key_vault_id = module.key-vault.key_vault_id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V11" {
-  name         = "${var.component}-POSTGRES-DATABASE-V11"
   value        = module.db.postgresql_database
   key_vault_id = module.key-vault.key_vault_id
 }
