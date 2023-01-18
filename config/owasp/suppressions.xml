@@ -114,4 +114,9 @@
       <cve>CVE-2022-1471</cve>
       <cve>CVE-2022-3064</cve>
     </suppress>
+
+    <suppress>
+        <notes>LatencyUtils</notes>
+        <cve>CVE-2021-4277</cve>
+    </suppress>
 </suppressions>
