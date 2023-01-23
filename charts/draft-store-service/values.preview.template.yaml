@@ -9,6 +9,10 @@ java:
     DRAFT_STORE_DB_PASSWORD: "{{ .Values.postgresql.auth.password}}"
     RUN_DB_MIGRATION_ON_STARTUP: true
     DRAFT_STORE_DB_CONN_OPTIONS: ""
-  disableKeyVaults: true
   postgresql:
     enabled: true
+  keyVaults:
+    "draft-store":
+      secrets:
+        - name: app-insights-connection-string
+          alias: app-insights-connection-string
