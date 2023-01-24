@@ -39,7 +39,7 @@ env.PACT_BROKER_SCHEME = "https"
 def branchesToSync = ['demo', 'perftest', 'ithc']
 
 withPipeline(type, product, app) {
-  after('test') {
+  afterSuccess('test') {
     builder.gradle('integration')
   }
 
