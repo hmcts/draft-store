@@ -46,7 +46,7 @@ module "postgresql" {
   business_area = "cft"
   common_tags   = var.common_tags
 
-  pgsql_databases = [
+  pg_databases = [
     {
       name : "draftstore"
     }
