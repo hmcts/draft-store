@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 locals {
-  s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"
+  s2s_url = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -44,6 +44,7 @@ module "postgresql" {
   name          = "rpe-${var.product}-v14"
   component     = var.component
   business_area = "cft"
+  common_tags   = var.common_tags
 
   pgsql_databases = [
     {
@@ -55,11 +56,6 @@ module "postgresql" {
 
   pgsql_version = "14"
 
-  module "tags" {
-  source       = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
-  environment  = var.env
-  product      = var.product
-  builtFrom    = "https://github.com/HMCTS/draft-store.git"
 }
 
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
@@ -80,8 +76,8 @@ module "key-vault" {
   resource_group_name = azurerm_resource_group.rg.name
 
   # dcd_cc-dev group object ID
-  product_group_object_id    = "38f9dea6-e861-4a50-9e73-21e64f563537"
-  common_tags                = "${var.common_tags}"
+  product_group_object_id     = "38f9dea6-e861-4a50-9e73-21e64f563537"
+  common_tags                 = var.common_tags
   managed_identity_object_ids = ["${data.azurerm_user_assigned_identity.rpe-shared-identity.principal_id}"]
 }
 
