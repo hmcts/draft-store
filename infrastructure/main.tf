@@ -37,7 +37,7 @@ data "azurerm_subnet" "postgres" {
 }
 
 module "postgresql" {
-  source = "git::https://github.com/hmcts/terraform-module-postgresql-flexible.git?ref=master"
+  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
   env    = var.env
 
   product       = var.product
