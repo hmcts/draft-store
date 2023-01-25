@@ -29,7 +29,38 @@ module "db" {
   subscription       = var.subscription
 }
 
+# FlexibleServer v14
+data "azurerm_subnet" "postgres" {
+  name                 = "postgresql"
+  resource_group_name  = "cft-${var.env}-network-rg"
+  virtual_network_name = "cft-${var.env}-vnet"
+}
 
+module "postgresql" {
+  source = "git::https://github.com/hmcts/terraform-module-postgresql-flexible.git?ref=master"
+  env    = var.env
+
+  product       = var.product
+  name          = "rpe-${var.product}-v14"
+  component     = var.component
+  business_area = "cft"
+
+  pgsql_databases = [
+    {
+      name : "draftstore"
+    }
+  ]
+
+  pgsql_delegated_subnet_id = data.azurerm_subnet.postgres.id
+
+  pgsql_version = "14"
+
+  module "tags" {
+  source       = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
+  environment  = var.env
+  product      = var.product
+  builtFrom    = "https://github.com/HMCTS/draft-store.git"
+}
 
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
   name                = "rpe-shared-${var.env}-mi"
@@ -80,6 +111,38 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name         = "${var.component}-POSTGRES-DATABASE"
+  value        = module.db.postgresql_database
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+# FlexibleServer v14 creds
+
+resource "azurerm_key_vault_secret" "POSTGRES-USER-V14" {
+  name         = "${var.component}-POSTGRES-USER-V14"
+  value        = module.db.user_name
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-PASS-V14" {
+  name         = "${var.component}-POSTGRES-PASS-V14"
+  value        = module.db.postgresql_password
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_HOST-V14" {
+  name         = "${var.component}-POSTGRES-HOST-V14"
+  value        = module.db.host_name
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_PORT-V14" {
+  name         = "${var.component}-POSTGRES-PORT-V14"
+  value        = "5432"
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V14" {
+  name         = "${var.component}-POSTGRES-DATABASE-V14"
   value        = module.db.postgresql_database
   key_vault_id = module.key-vault.key_vault_id
 }
