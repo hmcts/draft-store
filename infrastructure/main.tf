@@ -13,7 +13,7 @@ locals {
   s2s_url = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"
 
   cft_vnet = {
-    sbox = {
+    sandbox = {
       subscription = "b72ab7b7-723f-4b18-b6f6-03b0f2c6a1bb"
     }
     perftest = {
