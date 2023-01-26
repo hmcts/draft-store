@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 provider "azurerm" {
-  subscription_id            = local.cft_vnet[var.env].subscription
+  subscription_id            = local.cft_vnet[local.env].subscription
   skip_provider_registration = "true"
   features {}
   alias = "cft_vnet"
@@ -12,8 +12,10 @@ provider "azurerm" {
 locals {
   s2s_url = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"
 
+  env = var.env == "sandbox" ? "sbox" : var.env
+
   cft_vnet = {
-    sandbox = {
+    sbox = {
       subscription = "b72ab7b7-723f-4b18-b6f6-03b0f2c6a1bb"
     }
     perftest = {
@@ -64,8 +66,8 @@ module "db" {
 data "azurerm_subnet" "postgres" {
   provider             = azurerm.cft_vnet
   name                 = "postgresql"
-  resource_group_name  = "cft-${var.env}-network-rg"
-  virtual_network_name = "cft-${var.env}-vnet"
+  resource_group_name  = "cft-${local.env}-network-rg"
+  virtual_network_name = "cft-${local.env}-vnet"
 }
 
 module "postgresql" {
