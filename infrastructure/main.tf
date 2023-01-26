@@ -44,10 +44,10 @@ module "postgresql" {
   component     = var.component
   business_area = "cft"
 
-    
-  common_tags   = var.common_tags
-  resource_group_name = 
-  name          = "rpe-${var.product}-v14"
+
+  common_tags         = var.common_tags
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "rpe-${var.product}-v14"
   pgsql_databases = [
     {
       name : "draftstore"
@@ -55,9 +55,9 @@ module "postgresql" {
   ]
 
   pgsql_delegated_subnet_id = data.azurerm_subnet.postgres.id
-  pgsql_version = "14"
+  pgsql_version             = "14"
 
-  admin_user_object_id      = var.jenkins_AAD_objectId
+  admin_user_object_id = var.jenkins_AAD_objectId
 }
 
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
