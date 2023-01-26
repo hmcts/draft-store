@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 provider "azurerm" {
-  subscription_id            = local.mi_cft[var.env].subscription
+  subscription_id            = local.cft_vnet[var.env].subscription
   skip_provider_registration = "true"
   features {}
   alias = "cft_vnet"
