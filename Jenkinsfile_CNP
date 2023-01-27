@@ -1,7 +1,7 @@
 #!groovy
 import uk.gov.hmcts.contino.AppPipelineDsl
 
-@Library("Infrastructure")
+@Library("Infrastructure@testhostedsuppressions")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
