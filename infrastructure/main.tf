@@ -164,7 +164,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-PASS-V14" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST-V14" {
   name         = "${var.component}-POSTGRES-HOST-V14"
-  value        = module.postgresql.hostname
+  value        = module.postgresql.server_name
   key_vault_id = module.key-vault.key_vault_id
 }
 
