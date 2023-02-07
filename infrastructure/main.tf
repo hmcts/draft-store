@@ -72,7 +72,7 @@ data "azurerm_subnet" "postgres" {
 }
 
 module "postgresql" {
-  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=db-collation"
+  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=recreate-db-deletion"
   env    = var.env
 
   product       = var.product
