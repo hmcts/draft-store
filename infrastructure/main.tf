@@ -176,7 +176,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT-V14" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V14" {
   name         = "${var.component}-POSTGRES-DATABASE-V14"
-  value        = module.postgresql.pgsql_databases.name
+  value        = "draftstore"
   key_vault_id = module.key-vault.key_vault_id
 }
 
