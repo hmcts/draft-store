@@ -164,7 +164,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-PASS-V14" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST-V14" {
   name         = "${var.component}-POSTGRES-HOST-V14"
-  value        = module.postgresql.instance_id
+  value        = module.postgresql.fqdn
   key_vault_id = module.key-vault.key_vault_id
 }
 
@@ -176,7 +176,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT-V14" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V14" {
   name         = "${var.component}-POSTGRES-DATABASE-V14"
-  value        = module.postgresql.fqdn
+  value        = module.postgresql.pgsql_databases
   key_vault_id = module.key-vault.key_vault_id
 }
 
