@@ -1,5 +1,5 @@
 module "bad-response-codes-alert" {
-  source            = "git@github.com:hmcts/cnp-module-metric-alert"
+  source            = "git@github.com:hmcts/cnp-module-metric-alert?ref=DTSPO-11969/sbox-tags"
   location          = var.location
   app_insights_name = "${var.product}-${var.component}-appinsights-${var.env}"
 
