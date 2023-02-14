@@ -37,13 +37,11 @@ env.PACT_BROKER_PORT = "443"
 env.PACT_BROKER_SCHEME = "https"
 
 def branchesToSync = ['demo', 'perftest', 'ithc']
-def expiresAfter = "3000-01-01"
 
 withPipeline(type, product, app) {
   afterSuccess('test') {
     builder.gradle('integration')
   }
-  expires(expiresAfter)
 
   env.USE_IDAM_TESTING_SUPPORT = "true"
   env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
