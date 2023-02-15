@@ -11,6 +11,8 @@ def secrets = [
     ]
 ]
 
+def expiresAfter = "3000-01-01"
+
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   [ $class: 'AzureKeyVaultSecret',
     secretType: 'Secret',
@@ -37,4 +39,5 @@ withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.E
   loadVaultSecrets(secrets)
   disableLegacyDeployment()
   enableAksStagingDeployment()
+  expires(expiresAfter)
 }
