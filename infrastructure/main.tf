@@ -65,7 +65,7 @@ module "db" {
 
 # FlexibleServer v14
 module "postgresql" {
-  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=db-collation"
+  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
   env    = var.env
 
   product       = var.product
