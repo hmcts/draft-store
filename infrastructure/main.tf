@@ -64,15 +64,8 @@ module "db" {
 }
 
 # FlexibleServer v14
-data "azurerm_subnet" "postgres" {
-  provider             = azurerm.cft_vnet
-  name                 = "postgresql"
-  resource_group_name  = "cft-${local.env}-network-rg"
-  virtual_network_name = "cft-${local.env}-vnet"
-}
-
 module "postgresql" {
-  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=db-collation"
+  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
   env    = var.env
 
   product       = var.product
@@ -89,7 +82,6 @@ module "postgresql" {
     }
   ]
 
-  pgsql_delegated_subnet_id = data.azurerm_subnet.postgres.id
   pgsql_version             = "14"
 
   admin_user_object_id = var.jenkins_AAD_objectId
