@@ -73,7 +73,7 @@
    only affects log appender over SMTP ]]></notes>
   <cve>CVE-2020-9488</cve>
   </suppress>
-  
+
   <suppress>
     <notes><![CDATA[
         CVE is a json vulnerability for Node projects. False positive reported at https://github.com/jeremylong/DependencyCheck/issues/2794
@@ -95,10 +95,36 @@
     <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-websocket@.*$</packageUrl>
     <cve>CVE-2020-13943</cve>
   </suppress>
-  
+
    <suppress>
      <notes><![CDATA[Ignored since we are not vulnerable as per https://github.com/spring-projects/spring-framework/issues/24434]]></notes>
      <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*$</packageUrl>
      <cve>CVE-2016-1000027</cve>
     </suppress>
+
+    <suppress>
+      <notes><![CDATA[snakeyaml that doesn't affect us]]></notes>
+      <cve>CVE-2021-4235</cve>
+      <cve>CVE-2022-25857</cve>
+      <cve>CVE-2022-38749</cve>
+      <cve>CVE-2022-38750</cve>
+      <cve>CVE-2022-38751</cve>
+      <cve>CVE-2022-38752</cve>
+      <cve>CVE-2022-41854</cve>
+      <cve>CVE-2022-1471</cve>
+      <cve>CVE-2022-3064</cve>
+    </suppress>
+
+    <suppress>
+        <notes>LatencyUtils</notes>
+        <cve>CVE-2021-4277</cve>
+    </suppress>
+  <suppress>
+    <notes><![CDATA[
+        Looks like a false positive https://github.com/jeremylong/DependencyCheck/issues/5502.
+        suppress various improper matches to the CPE that belongs only to pkg:maven/org.json/json
+        ]]></notes>
+    <packageUrl regex="true">^(?!pkg:maven/org\.json/json@).+$</packageUrl>
+    <cpe>cpe:/a:json-java_project:json-java</cpe>
+  </suppress>
 </suppressions>

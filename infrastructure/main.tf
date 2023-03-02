@@ -2,15 +2,43 @@ provider "azurerm" {
   features {}
 }
 
-locals {
-  s2s_url  = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"
+provider "azurerm" {
+  subscription_id            = local.cft_vnet[local.env].subscription
+  skip_provider_registration = "true"
+  features {}
+  alias = "cft_vnet"
 }
 
-data "azurerm_subnet" "postgres" {
-  name                 = "core-infra-subnet-0-${var.env}"
-  resource_group_name  = "core-infra-${var.env}"
-  virtual_network_name = "core-infra-vnet-${var.env}"
+locals {
+  s2s_url = "http://rpe-service-auth-provider-${var.env}.service.core-compute-${var.env}.internal"
+
+  env = var.env == "sandbox" ? "sbox" : var.env
+
+  cft_vnet = {
+    sbox = {
+      subscription = "b72ab7b7-723f-4b18-b6f6-03b0f2c6a1bb"
+    }
+    perftest = {
+      subscription = "8a07fdcd-6abd-48b3-ad88-ff737a4b9e3c"
+    }
+    aat = {
+      subscription = "96c274ce-846d-4e48-89a7-d528432298a7"
+    }
+    ithc = {
+      subscription = "62864d44-5da9-4ae9-89e7-0cf33942fa09"
+    }
+    preview = {
+      subscription = "8b6ea922-0862-443e-af15-6056e1c9b9a4"
+    }
+    prod = {
+      subscription = "8cbc6f36-7c56-4963-9d36-739db5d00b27"
+    }
+    demo = {
+      subscription = "d025fece-ce99-4df2-b7a9-b649d3ff2060"
+    }
+  }
 }
+
 
 resource "azurerm_resource_group" "rg" {
   name     = "${var.product}-${var.component}-${var.env}"
@@ -35,22 +63,28 @@ module "db" {
   subscription       = var.subscription
 }
 
-## PostgreSQL v11
-module "db-v11" {
-  source             = "git@github.com:hmcts/cnp-module-postgres?ref=postgresql_tf"
-  product            = var.product
-  component          = var.component
-  name               = "rpe-${var.product}-v11"
-  location           = var.location
-  env                = var.env
-  database_name      = "draftstore-v11"
-  postgresql_user    = "draftstore"
-  postgresql_version = "11"
-  sku_name           = "GP_Gen5_2"
-  sku_tier           = "GeneralPurpose"
-  common_tags        = var.common_tags
-  subscription       = var.subscription
-  subnet_id          = data.azurerm_subnet.postgres.id
+# FlexibleServer v14
+module "postgresql" {
+  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
+  env    = var.env
+
+  product       = var.product
+  component     = var.component
+  business_area = "cft"
+
+
+  common_tags         = var.common_tags
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = "rpe-${var.product}-v14"
+  pgsql_databases = [
+    {
+      name : "draftstore"
+    }
+  ]
+
+  pgsql_version             = "14"
+
+  admin_user_object_id = var.jenkins_AAD_objectId
 }
 
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
@@ -71,8 +105,8 @@ module "key-vault" {
   resource_group_name = azurerm_resource_group.rg.name
 
   # dcd_cc-dev group object ID
-  product_group_object_id    = "38f9dea6-e861-4a50-9e73-21e64f563537"
-  common_tags                = "${var.common_tags}"
+  product_group_object_id     = "38f9dea6-e861-4a50-9e73-21e64f563537"
+  common_tags                 = var.common_tags
   managed_identity_object_ids = ["${data.azurerm_user_assigned_identity.rpe-shared-identity.principal_id}"]
 }
 
@@ -106,35 +140,35 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   key_vault_id = module.key-vault.key_vault_id
 }
 
-## PostgreSQL v11 
+# FlexibleServer v14 creds
 
-resource "azurerm_key_vault_secret" "POSTGRES-USER-V11" {
-  name         = "${var.component}-POSTGRES-USER-V11"
-  value        = module.db.user_name
+resource "azurerm_key_vault_secret" "POSTGRES-USER-V14" {
+  name         = "${var.component}-POSTGRES-USER-V14"
+  value        = module.postgresql.username
   key_vault_id = module.key-vault.key_vault_id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-PASS-V11" {
-  name         = "${var.component}-POSTGRES-PASS-V11"
-  value        = module.db.postgresql_password
+resource "azurerm_key_vault_secret" "POSTGRES-PASS-V14" {
+  name         = "${var.component}-POSTGRES-PASS-V14"
+  value        = module.postgresql.password
   key_vault_id = module.key-vault.key_vault_id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES_HOST-V11" {
-  name         = "${var.component}-POSTGRES-HOST-V11"
-  value        = module.db.host_name
+resource "azurerm_key_vault_secret" "POSTGRES_HOST-V14" {
+  name         = "${var.component}-POSTGRES-HOST-V14"
+  value        = module.postgresql.fqdn
   key_vault_id = module.key-vault.key_vault_id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES_PORT-V11" {
-  name         = "${var.component}-POSTGRES-PORT-V11"
+resource "azurerm_key_vault_secret" "POSTGRES_PORT-V14" {
+  name         = "${var.component}-POSTGRES-PORT-V14"
   value        = "5432"
   key_vault_id = module.key-vault.key_vault_id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V11" {
-  name         = "${var.component}-POSTGRES-DATABASE-V11"
-  value        = module.db.postgresql_database
+resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V14" {
+  name         = "${var.component}-POSTGRES-DATABASE-V14"
+  value        = "draftstore"
   key_vault_id = module.key-vault.key_vault_id
 }
 
