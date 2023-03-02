@@ -11,7 +11,7 @@ plugins {
   id 'org.sonarqube' version '3.4.0.2513'
   id 'scala'
   id 'io.gatling.gradle' version '3.9.2'
-  id 'au.com.dius.pact' version '4.4.4'
+  id 'au.com.dius.pact' version '4.5.0'
 }
 
 group 'uk.gov.hmcts.reform'
@@ -244,7 +244,7 @@ dependencies {
 
   implementation 'com.github.hmcts:reform-api-standards:0.5.2'
 
-  implementation group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.10.3'
+  implementation group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.10.4'
 
   testImplementation group: 'io.rest-assured', name: 'rest-assured'
 
