@@ -12,14 +12,14 @@ requests
 | where operation_SyntheticSource !endswith "smoke test"
 EOF
 
-  frequency_in_minutes       = 5
-  time_window_in_minutes     = 5
+  frequency_in_minutes       = "5"
+  time_window_in_minutes     = "5"
   severity_level             = "3"
   action_group_name          = "RPE alerts - ${var.env}"
   action_group_rg            = "rpe-${var.env}"
   custom_email_subject       = "Draft store - bad response codes detected"
   trigger_threshold_operator = "GreaterThan"
-  trigger_threshold          = 0
+  trigger_threshold          = "0"
   resourcegroup_name         = azurerm_resource_group.rg.name
   common_tags                = var.common_tags
 }
