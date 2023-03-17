@@ -3,7 +3,7 @@ plugins {
   id 'jacoco'
   id 'pmd'
   id 'io.spring.dependency-management' version '1.1.0'
-  id 'org.flywaydb.flyway' version '9.15.2'
+  id 'org.flywaydb.flyway' version '9.16.0'
   id 'org.springframework.boot' version '2.7.5'
   id 'uk.gov.hmcts.java' version '0.12.41'
   id 'se.patrikerdes.use-latest-versions' version '0.2.18'
@@ -228,7 +228,7 @@ dependencies {
   )
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.4'
 
-  implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.15.2'
+  implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.16.0'
 
   implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.14'
 
