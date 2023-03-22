@@ -15,5 +15,12 @@
       "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\sARG .*?_VERSION=(?<currentValue>.*)\\s"
     ]
    }
-  ]
+  ],
+  "packageRules": [
+    {
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ],
+  "platformAutomerge": true
 }
