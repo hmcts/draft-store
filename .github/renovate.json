@@ -16,11 +16,7 @@
     ]
    }
   ],
-  "packageRules": [
-    {
-      "automerge": true,
-      "automergeType": "pr"
-    }
-  ],
+  "automerge": true,
+  "automergeType": "pr",
   "platformAutomerge": true
 }
