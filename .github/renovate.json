@@ -1,6 +1,8 @@
 {
   "enabledManagers": ["helm-requirements","gradle-wrapper","terraform","regex"],
   "labels": ["dependencies"],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "schedule": "after 7am and before 11am every weekday",
   "helm-requirements":
   {
     "fileMatch": ["\\Chart.yaml$"],
