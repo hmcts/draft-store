@@ -4,7 +4,7 @@ plugins {
   id 'pmd'
   id 'io.spring.dependency-management' version '1.1.0'
   id 'org.flywaydb.flyway' version '9.16.1'
-  id 'org.springframework.boot' version '2.7.5'
+  id 'org.springframework.boot' version '2.7.10'
   id 'uk.gov.hmcts.java' version '0.12.42'
   id 'se.patrikerdes.use-latest-versions' version '0.2.18'
   id 'com.github.ben-manes.versions' version '0.46.0'
