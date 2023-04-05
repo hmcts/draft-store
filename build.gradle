@@ -197,7 +197,7 @@ def versions = [
   logging: '5.1.7',
   springBoot: springBoot.class.package.implementationVersion,
   pact_version: '4.3.0',
-  pactVersionJava8: '4.1.29'
+  pactVersionJava8: '4.1.41'
 ]
 
 ext["rest-assured.version"] = '4.5.0'
