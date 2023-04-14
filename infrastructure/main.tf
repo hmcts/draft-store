@@ -65,7 +65,11 @@ module "db" {
 
 # FlexibleServer v14
 module "postgresql" {
-  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
+  providers = {
+    azurerm.postgres_network = azurerm.cft_vnet
+  }
+
+  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=postgres-vnet-provider"
   env    = var.env
 
   product       = var.product
