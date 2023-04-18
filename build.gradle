@@ -196,7 +196,7 @@ def versions = [
   junitPlatform: '1.9.2',
   logging: '5.1.7',
   springBoot: springBoot.class.package.implementationVersion,
-  pact_version: '4.3.0',
+  pact_version: '4.5.6',
   pactVersionJava8: '4.1.41'
 ]
 
