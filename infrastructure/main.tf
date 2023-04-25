@@ -93,7 +93,6 @@ module "postgresql" {
 
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
   name                = "rpe-shared-${var.env}-mi"
-  resource_group_name = "managed-identities-${var.env}-rg"
 }
 
 # region save DB details to Azure Key Vault
