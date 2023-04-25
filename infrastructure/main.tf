@@ -78,7 +78,7 @@ module "postgresql" {
 
 
   common_tags         = var.common_tags
-  resource_group_name = "rpe-draft-store-flexible-data-${env}"
+  resource_group_name = "rpe-draft-store-flexible-data-${var.env}"
   name                = "rpe-${var.product}-v14"
   pgsql_databases = [
     {
