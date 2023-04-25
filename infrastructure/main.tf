@@ -78,7 +78,7 @@ module "postgresql" {
 
 
   common_tags         = var.common_tags
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = rpe-draft-store-data-${env}
   name                = "rpe-${var.product}-v14"
   pgsql_databases = [
     {
