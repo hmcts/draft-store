@@ -96,6 +96,9 @@ module "postgresql" {
   pgsql_version             = "14"
 
   admin_user_object_id = var.jenkins_AAD_objectId
+  depends_on = [
+    azurerm_resource_group.flex-rg
+  ]
 }
 
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
