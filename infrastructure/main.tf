@@ -94,7 +94,6 @@ module "postgresql" {
   ]
 
   pgsql_version             = "14"
-  resource_group_name       =
 
   admin_user_object_id = var.jenkins_AAD_objectId
 }
