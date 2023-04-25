@@ -47,13 +47,6 @@ resource "azurerm_resource_group" "rg" {
   tags = var.common_tags
 }
 
-resource "azurerm_resource_group" "flex-rg" {
-  name     = "rpe-${var.product}-flexible-data-${var.env}"
-  location = var.location
-
-  tags = var.common_tags
-}
-
 module "db" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
   product            = var.product
@@ -85,7 +78,6 @@ module "postgresql" {
 
 
   common_tags         = var.common_tags
-  resource_group_name = azurerm_resource_group.flex-rg.name
   name                = "rpe-${var.product}-v14"
   pgsql_databases = [
     {
@@ -96,13 +88,11 @@ module "postgresql" {
   pgsql_version             = "14"
 
   admin_user_object_id = var.jenkins_AAD_objectId
-  depends_on = [
-    azurerm_resource_group.flex-rg
-  ]
 }
 
 data "azurerm_user_assigned_identity" "rpe-shared-identity" {
   name                = "rpe-shared-${var.env}-mi"
+  resource_group_name = "managed-identities-${var.env}-rg"
 }
 
 # region save DB details to Azure Key Vault
