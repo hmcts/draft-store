@@ -47,6 +47,13 @@ resource "azurerm_resource_group" "rg" {
   tags = var.common_tags
 }
 
+resource "azurerm_resource_group" "flex-rg" {
+  name     = "rpe-${var.product}-flexible-data-${var.env}"
+  location = var.location
+
+  tags = var.common_tags
+}
+
 module "db" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
   product            = var.product
@@ -78,7 +85,7 @@ module "postgresql" {
 
 
   common_tags         = var.common_tags
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = azurerm_resource_group.flex-rg.name
   name                = "rpe-${var.product}-v14"
   pgsql_databases = [
     {
