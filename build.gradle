@@ -244,7 +244,7 @@ dependencies {
 
   implementation 'com.github.hmcts:reform-api-standards:0.5.2'
 
-  implementation group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.10.6'
+  implementation group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.11.0'
 
   testImplementation group: 'io.rest-assured', name: 'rest-assured'
 
