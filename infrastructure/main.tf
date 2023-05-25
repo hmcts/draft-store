@@ -98,6 +98,38 @@ module "key-vault" {
 }
 
 # FlexibleServer v14 creds
+resource "azurerm_key_vault_secret" "POSTGRES-USER" {
+  name         = "${var.component}-POSTGRES-USER"
+  value        = module.postgresql.username
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
+  name         = "${var.component}-POSTGRES-PASS"
+  value        = module.postgresql.password
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
+  name         = "${var.component}-POSTGRES-HOST"
+  value        = module.postgresql.fqdn
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
+  name         = "${var.component}-POSTGRES-PORT"
+  value        = "5432"
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
+  name         = "${var.component}-POSTGRES-DATABASE"
+  value        = "draftstore"
+  key_vault_id = module.key-vault.key_vault_id
+}
+
+
+
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V14" {
   name         = "${var.component}-POSTGRES-USER-V14"
