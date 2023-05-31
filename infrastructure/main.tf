@@ -1,5 +1,9 @@
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 provider "azurerm" {
@@ -61,15 +65,15 @@ module "postgresql" {
   business_area = "cft"
 
 
-  common_tags         = var.common_tags
-  name                = "rpe-${var.product}-v14"
+  common_tags = var.common_tags
+  name        = "rpe-${var.product}-v14"
   pgsql_databases = [
     {
       name : "draftstore"
     }
   ]
 
-  pgsql_version             = "14"
+  pgsql_version = "14"
 
   admin_user_object_id = var.jenkins_AAD_objectId
 }
