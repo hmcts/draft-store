@@ -4,10 +4,10 @@ java:
   aadIdentityName: rpe
   environment:
     DRAFT_STORE_DB_CONN_OPTIONS: ?sslmode=require&gssEncMode=disable
-    DRAFT_STORE_DB_HOST: rpe-draft-store-{{ .Values.global.environment }}.postgres.database.azure.com
+    DRAFT_STORE_DB_HOST: rpe-draft-store-v14-{{ .Values.global.environment }}.postgres.database.azure.com
     DRAFT_STORE_DB_NAME: draftstore
     DRAFT_STORE_DB_PORT: '5432'
-    DRAFT_STORE_DB_USER_NAME: draftstore@rpe-draft-store-v14-{{ .Values.global.environment }}
+    DRAFT_STORE_DB_USER_NAME: pgadmin
     RUN_DB_MIGRATION_ON_STARTUP: 'false'
     IDAM_URL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
     S2S_URL: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
@@ -17,7 +17,7 @@ java:
   keyVaults:
     "draft-store":
       secrets:
-        - name: service-POSTGRES-PASS
+        - name: service-POSTGRES-PASS-v14
           alias: DRAFT_STORE_DB_PASSWORD
         - name: app-insights-connection-string
           alias: app-insights-connection-string
