@@ -23,5 +23,4 @@ EOF
   resourcegroup_name         = azurerm_resource_group.rg.name
   common_tags                = var.common_tags
 
-  depends_on = [ azurerm_application_insights.appinsights ]
 }
