@@ -41,8 +41,3 @@ variable "idam_redirect_uri_for_tests" {
 }
 
 # endregion
-
-variable "appinsights_location" {
-  default     = "West Europe"
-  description = "Location for Application Insights"
-}
