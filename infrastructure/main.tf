@@ -94,7 +94,7 @@ module "key-vault" {
   # dcd_cc-dev group object ID
   product_group_object_id     = "38f9dea6-e861-4a50-9e73-21e64f563537"
   common_tags                 = var.common_tags
-  managed_identity_object_ids = ["${data.azurerm_user_assigned_identity.rpe-shared-identity.principal_id}"]
+  managed_identity_object_ids = [data.azurerm_user_assigned_identity.rpe-shared-identity.principal_id]
 }
 
 # FlexibleServer v14 creds
@@ -161,27 +161,4 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V14" {
   key_vault_id = module.key-vault.key_vault_id
 }
 
-resource "azurerm_key_vault_secret" "AZURE_APPINSGHTS_KEY" {
-  name         = "AppInsightsInstrumentationKey"
-  value        = azurerm_application_insights.appinsights.instrumentation_key
-  key_vault_id = module.key-vault.key_vault_id
-}
-
 # endregion
-
-module "application_insights" {
-  source = "git@github.com:hmcts/terraform-module-application-insights?ref=main"
-
-  env     = var.env
-  product = var.product
-  name    = "${var.product}-${var.component}-appinsights"
-
-  resource_group_name = azurerm_resource_group.rg.name
-
-  common_tags = var.common_tags
-}
-
-moved {
-  from = azurerm_application_insights.appinsights
-  to   = module.application_insights.azurerm_application_insights.this
-}
