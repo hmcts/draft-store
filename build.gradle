@@ -194,7 +194,6 @@ repositories {
 def versions = [
   junit: '5.9.3',
   junitPlatform: '1.9.3',
-  logging: '5.1.7',
   springBoot: springBoot.class.package.implementationVersion,
   pact_version: '4.6.1',
   pactVersionJava8: '4.1.41'
