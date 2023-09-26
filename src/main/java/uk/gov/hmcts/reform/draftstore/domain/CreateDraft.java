@@ -3,10 +3,9 @@ package uk.gov.hmcts.reform.draftstore.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import uk.gov.hmcts.reform.draftstore.service.validation.JsonObject;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 public class CreateDraft {
 
