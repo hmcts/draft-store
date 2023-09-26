@@ -156,7 +156,6 @@ sonarqube {
   properties {
     property "sonar.projectName", "Reform :: Draft Store"
     property "sonar.projectKey", "uk.gov.hmcts.reform:draft-store"
-    property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
   }
 }
 
