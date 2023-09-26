@@ -151,11 +151,16 @@ jacocoTestReport {
   }
 }
 
+def sonarExclusions = [
+  '**/uk/gov/hmcts/reform/draftstore/service/s2s/S2sClientStub.java',
+]
+
 project.tasks['sonarqube'].dependsOn jacocoTestReport
 sonarqube {
   properties {
     property "sonar.projectName", "Reform :: Draft Store"
     property "sonar.projectKey", "uk.gov.hmcts.reform:draft-store"
+    property "sonar.exclusions", sonarExclusions.join(', ')
   }
 }
 
