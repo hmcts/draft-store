@@ -6,14 +6,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 import uk.gov.hmcts.reform.draftstore.service.UserAndService;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DeleteTest extends BaseTest {
 
     @Test
-    public void should_throw_an_exception_when_trying_to_remove_draft_assigned_to_a_different_user() throws Exception {
+    public void should_throw_an_exception_when_trying_to_remove_draft_assigned_to_a_different_user() {
         // given
         thereExists(
             draftCreatedBy(new UserAndService("john", "service"))
@@ -31,7 +31,7 @@ public class DeleteTest extends BaseTest {
 
     @Test
     @SuppressWarnings("checkstyle:LineLength")
-    public void should_throw_an_exception_when_trying_to_remove_draft_assigned_to_a_different_service() throws Exception {
+    public void should_throw_an_exception_when_trying_to_remove_draft_assigned_to_a_different_service() {
         // given
         thereExists(
             draftCreatedBy(new UserAndService("john", "serviceA"))

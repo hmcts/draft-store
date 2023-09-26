@@ -1,9 +1,8 @@
 package uk.gov.hmcts.reform.draftstore.service.validation;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class JsonObjectValidator implements ConstraintValidator<JsonObject, JsonNode> {
 

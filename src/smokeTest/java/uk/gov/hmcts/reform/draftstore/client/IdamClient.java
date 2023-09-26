@@ -8,7 +8,8 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.isOneOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.oneOf;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -68,7 +69,7 @@ public class IdamClient {
             .baseUri(this.idamUrl)
             .delete("/testing-support/accounts/{email}", email)
             .then()
-            .statusCode(isOneOf(NO_CONTENT.value(), NOT_FOUND.value()));
+            .statusCode(is(oneOf(NO_CONTENT.value(), NOT_FOUND.value())));
     }
 
     public Optional<String> getAuthorisationCode(boolean failIfUnauthorised) {

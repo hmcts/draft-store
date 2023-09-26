@@ -1,9 +1,11 @@
 package uk.gov.hmcts.reform.draftstore.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -20,8 +22,6 @@ import uk.gov.hmcts.reform.draftstore.service.s2s.InvalidServiceTokenException;
 import uk.gov.hmcts.reform.draftstore.service.secrets.SecretsException;
 
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -47,9 +47,8 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleServletRequestBindingException(
         ServletRequestBindingException ex,
         HttpHeaders headers,
-        HttpStatus status,
-        WebRequest request
-    ) {
+        HttpStatusCode status,
+        WebRequest request) {
         log.error(ex.getMessage(), ex);
 
         return new ResponseEntity<>(
@@ -62,7 +61,7 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
         HttpMessageNotReadableException ex,
         HttpHeaders headers,
-        HttpStatus status,
+        HttpStatusCode status,
         WebRequest request
     ) {
         log.error(ex.getMessage(), ex);
@@ -78,7 +77,7 @@ public class EndpointExceptionHandler extends ResponseEntityExceptionHandler {
         Exception ex,
         Object body,
         HttpHeaders headers,
-        HttpStatus status,
+        HttpStatusCode status,
         WebRequest request
     ) {
         log.error(ex.getMessage(), ex);
