@@ -46,7 +46,7 @@ public class ReadingDraftTest extends SmokeTestSuite {
         Draft returnedDraftB = responseB.get();
 
         DraftList draftList = draftStoreClient.readDraftPage();
-        assertThat(draftList.data).usingFieldByFieldElementComparator()
+        assertThat(draftList.data).usingRecursiveFieldByFieldElementComparator()
             .containsExactlyInAnyOrder(returnedDraftA, returnedDraftB);
     }
 }

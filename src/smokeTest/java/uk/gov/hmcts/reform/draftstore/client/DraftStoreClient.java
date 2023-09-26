@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.json.JSONException;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.reform.draftstore.domain.CreateDraft;
 import uk.gov.hmcts.reform.draftstore.domain.UpdateDraft;
@@ -16,7 +15,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.isOneOf;
+import static org.hamcrest.Matchers.oneOf;
+import static org.hamcrest.core.Is.is;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -53,7 +53,7 @@ public class DraftStoreClient {
      * @param documentJson JSON document to store inside the draft
      * @return Draft ID
      */
-    public String createDraft(String documentJson) throws JSONException, IOException {
+    public String createDraft(String documentJson) throws IOException {
         Response response = withAuthenticatedRequest()
             .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .header(SECRET_HEADER, encryptionSecret)
@@ -107,7 +107,7 @@ public class DraftStoreClient {
 
         response
             .then()
-            .statusCode(isOneOf(OK.value(), NOT_FOUND.value()));
+            .statusCode(is(oneOf(OK.value(), NOT_FOUND.value())));
 
         return response.statusCode() == OK.value()
             ? Optional.of(response.as(Draft.class))

@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.draftstore.service.s2s;
 
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 import uk.gov.hmcts.reform.draftstore.exception.AuthorizationException;
 
 import java.util.Optional;
@@ -13,7 +13,7 @@ public class S2sClientStub implements S2sClient {
     public String getServiceName(String authHeader) {
         return Optional
             .ofNullable(authHeader)
-            .filter(token -> !StringUtils.isEmpty(token))
+            .filter(token -> !ObjectUtils.isEmpty(token))
             .orElseThrow(() -> new AuthorizationException(SERVICE_HEADER + " is required"));
     }
 }
