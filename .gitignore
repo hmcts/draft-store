@@ -11,3 +11,4 @@ application-default.yaml
 *.lock
 lib/applicationinsights-agent-*.jar
 lib/applicationinsights.log
+bin

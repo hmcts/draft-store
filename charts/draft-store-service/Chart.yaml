@@ -9,3 +9,7 @@ dependencies:
   - name: java
     version: 4.1.5
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  - name: postgresql
+    version: 0.0.5
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    condition: postgresql.enabled
