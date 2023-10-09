@@ -18,4 +18,4 @@ postgresql:
   flexibleserver: "rpe-preview"
   setup:
     databases:
-    - name: draftstore
+    - name: "pr-${CHANGE_ID}-draftstore"

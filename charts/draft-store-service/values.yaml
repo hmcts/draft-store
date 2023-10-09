@@ -5,7 +5,7 @@ java:
   environment:
     DRAFT_STORE_DB_CONN_OPTIONS: ?sslmode=require&gssEncMode=disable
     DRAFT_STORE_DB_HOST: rpe-draft-store-v14-{{ .Values.global.environment }}.postgres.database.azure.com
-    DRAFT_STORE_DB_NAME: draftstore
+    DRAFT_STORE_DB_NAME: pr-${CHANGE_ID}-draftstore
     DRAFT_STORE_DB_PORT: '5432'
     DRAFT_STORE_DB_USER_NAME: pgadmin
     RUN_DB_MIGRATION_ON_STARTUP: 'false'
