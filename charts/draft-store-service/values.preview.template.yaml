@@ -3,12 +3,20 @@ java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   environment:
-    DRAFT_STORE_DB_HOST: "{{ .Release.Name }}-postgresql"
-    DRAFT_STORE_DB_NAME: "{{ .Values.postgresql.auth.database}}"
-    DRAFT_STORE_DB_USER_NAME: "{{ .Values.postgresql.auth.username}}"
-    DRAFT_STORE_DB_PASSWORD: "{{ .Values.postgresql.auth.password}}"
+    DRAFT_STORE_DB_HOST: "rpe-preview.postgres.database.azure.com"
+    DRAFT_STORE_DB_USER_NAME: "hmcts"
     RUN_DB_MIGRATION_ON_STARTUP: true
-    DRAFT_STORE_DB_CONN_OPTIONS: ""
+    DRAFT_STORE_DB_NAME: "pr-${CHANGE_ID}-draftstore"
+  secrets:
+    DRAFT_STORE_DB_PASSWORD:
+      secretRef: "postgres"
+      key: PASSWORD
+      disabled: false
   disableKeyVaults: true
-  postgresql:
-    enabled: true
+
+postgresql:
+  enabled: true
+  flexibleserver: "rpe-preview"
+  setup:
+    databases:
+    - name: "pr-${CHANGE_ID}-draftstore"

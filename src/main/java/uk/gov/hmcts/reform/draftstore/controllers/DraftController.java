@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.draftstore.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,8 +29,6 @@ import uk.gov.hmcts.reform.draftstore.service.secrets.Secrets;
 import uk.gov.hmcts.reform.draftstore.service.secrets.SecretsBuilder;
 
 import java.net.URI;
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.ResponseEntity.created;
