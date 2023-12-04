@@ -1,4 +1,4 @@
-FROM postgres:15-bullseye
+FROM postgres:16-bullseye
 
 COPY init-db.sh /docker-entrypoint-initdb.d
 
