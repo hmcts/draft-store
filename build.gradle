@@ -225,6 +225,10 @@ dependencies {
     "org.springframework.boot:spring-boot-starter-validation",
   )
 
+  // TODO remove these next two lines after upgrading to spring boot >=3.2.1
+  implementation("ch.qos.logback:logback-classic:1.4.14")
+  implementation("ch.qos.logback:logback-core:1.4.14")
+
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.1'
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.2.0'
