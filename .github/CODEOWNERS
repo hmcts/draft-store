@@ -1,3 +1,11 @@
 # https://help.github.com/en/articles/about-code-owners
 
-* @hmcts/platform-operations 
+* @hmcts/platform-operations
+
+# Renovate files
+gradle/wrapper/gradle-wrapper.properties
+Dockerfile
+build.gradle
+charts/**/Chart.yaml
+infrastructure/state.tf
+.github/workflows/*.yaml
