@@ -20,7 +20,6 @@
   </rule>
   <rule ref="category/java/errorprone.xml">
     <exclude name="AvoidDuplicateLiterals"/>
-    <exclude name="BeanMembersShouldSerialize"/>
     <exclude name="MissingSerialVersionUID"/>
     <exclude name="NullAssignment"/>
   </rule>
