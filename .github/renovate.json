@@ -4,13 +4,5 @@
     "github>hmcts/.github//renovate/global",
     "github>hmcts/.github//renovate/automerge-all",
     "local>hmcts/.github:renovate-config"
-  ],
-  "packageRules": [
-    {
-      "groupName": "flyway",
-      "matchPackagePatterns": [
-        "flyway"
-      ]
-    }
   ]
 }
