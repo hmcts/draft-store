@@ -213,7 +213,7 @@ repositories {
 // it is important to specify logback classic and core packages explicitly as libraries like spring boot
 
 ext {
-  pactVersion = '4.6.7'
+  pactVersion = '4.6.8'
   pactJava8Version = '4.1.42'
 }
 
