@@ -69,7 +69,8 @@ module "postgresql" {
     }
   ]
 
-  pgsql_version = "14"
+  pgsql_version = var.pgsql_version
+  create_mode   = var.pgsql_create_mode
 
   admin_user_object_id = var.jenkins_AAD_objectId
 }
