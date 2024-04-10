@@ -226,7 +226,7 @@ dependencies {
   )
 
   // TODO remove these next two lines after upgrading to spring boot >=3.2.1
-  implementation("ch.qos.logback:logback-classic:1.5.3")
+  implementation("ch.qos.logback:logback-classic:1.5.4")
   implementation("ch.qos.logback:logback-core:1.5.4")
 
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
