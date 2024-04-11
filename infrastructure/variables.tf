@@ -45,11 +45,11 @@ variable "idam_redirect_uri_for_tests" {
 variable "pgsql_version" {
   description = "The version of PostgreSQL Flexible Server to use."
   type        = string
-  default     = "14"
+  default     = "15"
 }
 
 variable "pgsql_create_mode" {
   description = "The creation mode which can be used to restore or replicate existing servers. Possible values are Default, PointInTimeRestore, Replica and Update."
   type        = string
-  default     = "Default"
+  default     = "Update"
 }
