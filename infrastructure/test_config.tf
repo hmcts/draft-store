@@ -8,7 +8,7 @@ data "azurerm_key_vault" "s2s_vault" {
 
 data "azurerm_key_vault_secret" "source_s2s-secret-for-tests" {
   name         = "microservicekey-draftStoreTests"
-  key_vault_id = "${data.azurerm_key_vault.s2s_vault.id}"
+  key_vault_id = data.azurerm_key_vault.s2s_vault.id
 }
 
 resource "azurerm_key_vault_secret" "s2s-secret-for-tests" {
