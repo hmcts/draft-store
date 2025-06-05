@@ -229,7 +229,7 @@ dependencies {
   implementation("ch.qos.logback:logback-classic:1.5.16")
   implementation("ch.qos.logback:logback-core:1.5.16")
 
-  implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.4'
+  implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.6'
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.1.1'
   implementation group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.1.1'
