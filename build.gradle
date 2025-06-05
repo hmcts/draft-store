@@ -13,7 +13,7 @@ plugins {
   id 'pmd'
   id 'io.spring.dependency-management' version '1.1.7'
   id 'org.flywaydb.flyway' version '11.1.1'
-  id 'org.springframework.boot' version '3.2.0'
+  id 'org.springframework.boot' version '3.5.0'
   id 'uk.gov.hmcts.java' version '0.12.63'
   id 'se.patrikerdes.use-latest-versions' version '0.2.18'
   id 'com.github.ben-manes.versions' version '0.51.0'
@@ -47,7 +47,7 @@ dependencyManagement {
 
         // CVE-2023-28709
         // CVE-2023-42794, CVE-2023-42795, CVE-2023-45648
-        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.34') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.40') {
           entry 'tomcat-embed-core'
           entry 'tomcat-embed-el'
           entry 'tomcat-embed-websocket'
