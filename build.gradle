@@ -47,11 +47,14 @@ dependencyManagement {
 
         // CVE-2023-28709
         // CVE-2023-42794, CVE-2023-42795, CVE-2023-45648
-        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.42') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.43') {
           entry 'tomcat-embed-core'
           entry 'tomcat-embed-el'
           entry 'tomcat-embed-websocket'
         }
+
+        // CVE-2025-48924
+        dependency group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
     }
 }
 
@@ -204,9 +207,7 @@ dependencyCheck {
 
 repositories {
   mavenLocal()
-  maven {
-    url "https://jitpack.io"
-  }
+  maven { url = 'https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1' }
   mavenCentral()
 }
 
