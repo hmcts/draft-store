@@ -52,6 +52,9 @@ dependencyManagement {
           entry 'tomcat-embed-el'
           entry 'tomcat-embed-websocket'
         }
+
+        // CVE-2025-48924
+        dependency group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
     }
 }
 
