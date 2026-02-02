@@ -47,14 +47,22 @@ dependencyManagement {
 
         // CVE-2023-28709
         // CVE-2023-42794, CVE-2023-42795, CVE-2023-45648
-        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.11') {
-          entry 'tomcat-embed-core'
-          entry 'tomcat-embed-el'
-          entry 'tomcat-embed-websocket'
+        // CVE-2025-61795
+        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.18') {
+	          entry 'tomcat-embed-core'
+	          entry 'tomcat-embed-el'
+	          entry 'tomcat-embed-websocket'
+	        }
+
+        // CVE-2025-68161
+        dependencySet(group: 'org.apache.logging.log4j', version: '2.25.3') {
+            entry 'log4j-api'
+            entry 'log4j-core'
+            entry 'log4j-to-slf4j'
         }
 
-        // CVE-2025-48924
-        dependency group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
+	        // CVE-2025-48924
+	        dependency group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
     }
 }
 
@@ -246,8 +254,6 @@ dependencies {
 
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api'
   implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j'
-
-  implementation 'com.github.hmcts:reform-api-standards:0.5.2'
 
   testImplementation group: 'io.rest-assured', name: 'rest-assured'
 
