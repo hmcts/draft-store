@@ -135,10 +135,17 @@
     <packageUrl regex="true">^(?!pkg:maven/org\.json/json@).+$</packageUrl>
     <cpe>cpe:/a:json-java_project:json-java</cpe>
   </suppress>
-  <suppress until="2023-08-04">
-    <notes><![CDATA[
-   ** DISPUTED ** An issue was discovered jackson-databind thru 2.15.2 allows attackers to cause a denial of service or other unspecified impacts via crafted object that uses cyclic dependencies. NOTE: the vendor's perspective is that the product is not intended for use with untrusted input.
-   ]]></notes>
-    <cve>CVE-2023-35116</cve>
-  </suppress>
-</suppressions>
+	  <suppress until="2023-08-04">
+	    <notes><![CDATA[
+	   ** DISPUTED ** An issue was discovered jackson-databind thru 2.15.2 allows attackers to cause a denial of service or other unspecified impacts via crafted object that uses cyclic dependencies. NOTE: the vendor's perspective is that the product is not intended for use with untrusted input.
+	   ]]></notes>
+	    <cve>CVE-2023-35116</cve>
+	  </suppress>
+
+	  <suppress until="2026-06-01">
+	    <notes><![CDATA[
+	    CVE is for "The Nu Html Checker" application. Suppressing pending investigation of the actual matching dependency reported by DependencyCheck.
+	    ]]></notes>
+	    <cve>CVE-2025-15104</cve>
+	  </suppress>
+	</suppressions>
