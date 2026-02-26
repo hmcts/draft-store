@@ -1,5 +1,6 @@
 provider "azurerm" {
   features {}
+  subscription_id = "bf308a5c-0624-4334-8ff8-8dca9fd43783"
 }
 
 provider "azurerm" {
@@ -85,7 +86,7 @@ data "azurerm_user_assigned_identity" "rpe-shared-identity" {
 # this key vault is created in every environment, but preview, being short-lived,
 # will use the aat one instead
 module "key-vault" {
-  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=master"
+  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=DTSPO-29659/env-specific-access-policy"
   product             = var.product
   env                 = var.env
   tenant_id           = var.tenant_id
