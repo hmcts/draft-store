@@ -86,7 +86,7 @@ data "azurerm_user_assigned_identity" "rpe-shared-identity" {
 # this key vault is created in every environment, but preview, being short-lived,
 # will use the aat one instead
 module "key-vault" {
-  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=DTSPO-29659/env-specific-access-policy"
+  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=master"
   product             = var.product
   env                 = var.env
   tenant_id           = var.tenant_id
