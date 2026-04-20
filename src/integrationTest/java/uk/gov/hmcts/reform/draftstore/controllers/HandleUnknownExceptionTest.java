@@ -1,9 +1,12 @@
 package uk.gov.hmcts.reform.draftstore.controllers;
 
 import org.hamcrest.core.IsNull;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.rules.ExternalResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.testcontainers.DockerClientFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,6 +38,18 @@ So, this test demonstrates that for all unhandled exceptions the exception messa
 @TestPropertySource("/database.properties")
 @ActiveProfiles("test-unhandled-exception")
 public class HandleUnknownExceptionTest {
+
+    @ClassRule
+    public static final ExternalResource dockerCheck = new ExternalResource() {
+        @Override
+        protected void before() {
+            org.junit.Assume.assumeTrue(
+                "Docker not available, skipping Testcontainers test",
+                DockerClientFactory.instance().isDockerAvailable()
+            );
+        }
+    };
+
     private static final String DRAFT_URI = "/drafts";
     @Autowired
     private DraftStoreDao dao;
