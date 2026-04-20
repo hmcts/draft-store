@@ -1,9 +1,12 @@
 package uk.gov.hmcts.reform.draftstore.data;
 
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.rules.ExternalResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.testcontainers.DockerClientFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -26,6 +29,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource("/database.properties")
 @Transactional
 public class DraftStoreDaoTest {
+
+    @ClassRule
+    public static final ExternalResource dockerCheck = new ExternalResource() {
+        @Override
+        protected void before() {
+            org.junit.Assume.assumeTrue(
+                "Docker not available, skipping Testcontainers test",
+                DockerClientFactory.instance().isDockerAvailable()
+            );
+        }
+    };
+
     private static final String USER_ID = "a user";
     private static final String ANOTHER_USER_ID = "another user";
     private static final String DRAFT_TYPE = "some_type";
