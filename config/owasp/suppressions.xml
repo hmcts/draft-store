@@ -148,4 +148,38 @@
 	    ]]></notes>
 	    <cve>CVE-2025-15104</cve>
 	  </suppress>
+
+  <suppress until="2026-07-20">
+    <notes><![CDATA[Spring Boot 3.5.5 - CVE-2026-22731. Suppress pending fix/upgrade.]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring\-boot.*@.*$</packageUrl>
+    <cve>CVE-2026-22731</cve>
+  </suppress>
+
+  <suppress until="2026-07-20">
+    <notes><![CDATA[Tomcat 11.0.18 CVEs. Suppress pending upgrade to a patched version.]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-core@.*$</packageUrl>
+    <cve>CVE-2026-29145</cve>
+    <cve>CVE-2026-24880</cve>
+    <cve>CVE-2026-29129</cve>
+    <cve>CVE-2026-29146</cve>
+    <cve>CVE-2026-34483</cve>
+    <cve>CVE-2026-34487</cve>
+    <cve>CVE-2026-34500</cve>
+    <cve>CVE-2026-25854</cve>
+    <cve>CVE-2026-32990</cve>
+  </suppress>
+
+  <suppress until="2026-07-20">
+    <notes><![CDATA[Tomcat 11.0.18 CVEs. Suppress pending upgrade to a patched version.]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-websocket@.*$</packageUrl>
+    <cve>CVE-2026-29145</cve>
+    <cve>CVE-2026-24880</cve>
+    <cve>CVE-2026-29129</cve>
+    <cve>CVE-2026-29146</cve>
+    <cve>CVE-2026-34483</cve>
+    <cve>CVE-2026-34487</cve>
+    <cve>CVE-2026-34500</cve>
+    <cve>CVE-2026-25854</cve>
+    <cve>CVE-2026-32990</cve>
+  </suppress>
 	</suppressions>
