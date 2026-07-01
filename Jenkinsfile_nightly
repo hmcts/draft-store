@@ -5,7 +5,7 @@ properties([
     pipelineTriggers([cron('H 08 * * 1-5')])
 ])
 
-@Library("Infrastructure@nodeSelector-logic")
+@Library("Infrastructure")
 
 def type = "java"
 def product = "draft-store"
