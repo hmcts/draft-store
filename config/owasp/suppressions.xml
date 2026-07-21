@@ -142,44 +142,48 @@
 	    <cve>CVE-2023-35116</cve>
 	  </suppress>
 
-	  <suppress until="2026-06-01">
-	    <notes><![CDATA[
-	    CVE is for "The Nu Html Checker" application. Suppressing pending investigation of the actual matching dependency reported by DependencyCheck.
-	    ]]></notes>
-	    <cve>CVE-2025-15104</cve>
-	  </suppress>
-
-  <suppress until="2026-07-20">
-    <notes><![CDATA[Spring Boot 3.5.5 - CVE-2026-22731. Suppress pending fix/upgrade.]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring\-boot.*@.*$</packageUrl>
-    <cve>CVE-2026-22731</cve>
+  <suppress until="2026-09-01">
+    <notes><![CDATA[CVE-2025-15104 affects hibernate-validator 8.0.3. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.hibernate\.validator/hibernate\-validator@.*$</packageUrl>
+    <cve>CVE-2025-15104</cve>
   </suppress>
 
-  <suppress until="2026-07-20">
-    <notes><![CDATA[Tomcat 11.0.18 CVEs. Suppress pending upgrade to a patched version.]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-core@.*$</packageUrl>
-    <cve>CVE-2026-29145</cve>
-    <cve>CVE-2026-24880</cve>
-    <cve>CVE-2026-29129</cve>
-    <cve>CVE-2026-29146</cve>
-    <cve>CVE-2026-34483</cve>
-    <cve>CVE-2026-34487</cve>
-    <cve>CVE-2026-34500</cve>
-    <cve>CVE-2026-25854</cve>
-    <cve>CVE-2026-32990</cve>
+  <suppress until="2026-09-01">
+    <notes><![CDATA[Spring Framework 6.2.x CVEs. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*@.*$</packageUrl>
+    <cve>CVE-2026-41855</cve>
+    <cve>CVE-2026-41838</cve>
+    <cve>CVE-2026-41842</cve>
+    <cve>CVE-2026-41848</cve>
+    <cve>CVE-2026-41850</cve>
+    <cve>CVE-2026-41851</cve>
+    <cve>CVE-2026-22740</cve>
+    <cve>CVE-2026-41854</cve>
+    <cve>CVE-2026-41844</cve>
+    <cve>CVE-2026-41845</cve>
+    <cve>CVE-2026-41846</cve>
+    <cve>CVE-2026-22737</cve>
+    <cve>CVE-2026-41840</cve>
+    <cve>CVE-2026-41841</cve>
+    <cve>CVE-2026-41843</cve>
+    <cve>CVE-2026-22745</cve>
+    <cve>CVE-2026-41852</cve>
+    <cve>CVE-2026-41853</cve>
+    <cve>CVE-2026-41839</cve>
+    <cve>CVE-2026-22741</cve>
+    <cve>CVE-2026-22735</cve>
   </suppress>
 
-  <suppress until="2026-07-20">
-    <notes><![CDATA[Tomcat 11.0.18 CVEs. Suppress pending upgrade to a patched version.]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-websocket@.*$</packageUrl>
-    <cve>CVE-2026-29145</cve>
-    <cve>CVE-2026-24880</cve>
-    <cve>CVE-2026-29129</cve>
-    <cve>CVE-2026-29146</cve>
-    <cve>CVE-2026-34483</cve>
-    <cve>CVE-2026-34487</cve>
-    <cve>CVE-2026-34500</cve>
-    <cve>CVE-2026-25854</cve>
-    <cve>CVE-2026-32990</cve>
+  <suppress until="2026-09-01">
+    <notes><![CDATA[Jackson CVEs. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson.*@.*$</packageUrl>
+    <cve>CVE-2026-54512</cve>
+    <cve>CVE-2026-54513</cve>
+    <cve>CVE-2026-54514</cve>
+    <cve>CVE-2026-54515</cve>
+    <cve>CVE-2026-54516</cve>
+    <cve>CVE-2026-54517</cve>
+    <cve>CVE-2026-54518</cve>
   </suppress>
+
 	</suppressions>
