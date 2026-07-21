@@ -149,19 +149,6 @@
   </suppress>
 
   <suppress until="2026-09-01">
-    <notes><![CDATA[Spring Boot 3.5.5 CVEs. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring\-boot.*@.*$</packageUrl>
-    <cve>CVE-2026-40974</cve>
-    <cve>CVE-2026-40971</cve>
-    <cve>CVE-2026-40972</cve>
-    <cve>CVE-2026-40975</cve>
-    <cve>CVE-2026-40973</cve>
-    <cve>CVE-2026-40977</cve>
-    <cve>CVE-2026-22731</cve>
-    <cve>CVE-2026-22733</cve>
-  </suppress>
-
-  <suppress until="2026-09-01">
     <notes><![CDATA[Spring Framework 6.2.x CVEs. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*@.*$</packageUrl>
     <cve>CVE-2026-41855</cve>
