@@ -143,6 +143,12 @@
 	  </suppress>
 
   <suppress until="2026-09-01">
+    <notes><![CDATA[CVE-2025-15104 affects hibernate-validator 8.0.3. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.hibernate\.validator/hibernate\-validator@.*$</packageUrl>
+    <cve>CVE-2025-15104</cve>
+  </suppress>
+
+  <suppress until="2026-09-01">
     <notes><![CDATA[Spring Boot 3.5.5 CVEs. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring\-boot.*@.*$</packageUrl>
     <cve>CVE-2026-40974</cve>
