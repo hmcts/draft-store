@@ -90,13 +90,14 @@ data "azurerm_user_assigned_identity" "jenkins" {
 # this key vault is created in every environment, but preview, being short-lived,
 # will use the aat one instead
 module "key-vault" {
-  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=master"
-  product             = var.product
-  env                 = var.env
-  tenant_id           = var.tenant_id
-  object_id           = var.jenkins_AAD_objectId
-  jenkins_object_id   = data.azurerm_user_assigned_identity.jenkins.principal_id
-  resource_group_name = azurerm_resource_group.rg.name
+  source                       = "git@github.com:hmcts/cnp-module-key-vault?ref=DTSPO-31965/remove-jenkins-ptl-access-da"
+  product                      = var.product
+  env                          = var.env
+  tenant_id                    = var.tenant_id
+  object_id                    = var.jenkins_AAD_objectId
+  jenkins_object_id            = data.azurerm_user_assigned_identity.jenkins.principal_id
+  resource_group_name          = azurerm_resource_group.rg.name
+  grant_preview_jenkins_access = var.env == "aat"
 
   # dcd_cc-dev group object ID
   product_group_object_id     = "38f9dea6-e861-4a50-9e73-21e64f563537"
