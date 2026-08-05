@@ -53,7 +53,7 @@ module "postgresql" {
     azurerm.postgres_network = azurerm.cft_vnet
   }
 
-  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
+  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=addwriteaccess"
   env    = var.env
 
   product       = var.product
@@ -71,6 +71,8 @@ module "postgresql" {
 
   pgsql_version = var.pgsql_version
   create_mode   = var.pgsql_create_mode
+
+  enable_write_group_access = true
 
   admin_user_object_id = var.jenkins_AAD_objectId
 }
