@@ -62,7 +62,7 @@ dependencyManagement {
         }
 
 	        // CVE-2025-48924
-	        dependency group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
+	        dependency group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
     }
 }
 
