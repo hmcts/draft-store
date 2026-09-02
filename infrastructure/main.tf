@@ -53,7 +53,7 @@ module "postgresql" {
     azurerm.postgres_network = azurerm.cft_vnet
   }
 
-  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=addwriteaccess"
+  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
   env    = var.env
 
   product       = var.product
