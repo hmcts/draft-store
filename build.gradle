@@ -246,7 +246,7 @@ dependencies {
   implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.9.0'
 
   implementation group: 'tools.jackson.core', name: 'jackson-databind'
-  implementation group: 'tools.jackson.datatype', name: 'jackson-datatype-jsr310'
+  implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
 
   implementation group: 'com.google.guava', name: 'guava', version: '33.4.8-jre'
 
