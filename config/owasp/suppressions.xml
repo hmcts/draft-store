@@ -174,7 +174,7 @@
     <cve>CVE-2026-22735</cve>
   </suppress>
 
-  <suppress until="2026-09-01">
+  <suppress until="2026-09-15">
     <notes><![CDATA[Jackson CVEs. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
     <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson.*@.*$</packageUrl>
     <cve>CVE-2026-54512</cve>
