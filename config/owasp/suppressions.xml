@@ -148,7 +148,7 @@
     <cve>CVE-2025-15104</cve>
   </suppress>
 
-  <suppress until="2026-09-01">
+  <suppress until="2026-09-15">
     <notes><![CDATA[Spring Framework 6.2.x CVEs. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*@.*$</packageUrl>
     <cve>CVE-2026-41855</cve>
@@ -172,18 +172,6 @@
     <cve>CVE-2026-41839</cve>
     <cve>CVE-2026-22741</cve>
     <cve>CVE-2026-22735</cve>
-  </suppress>
-
-  <suppress until="2026-09-15">
-    <notes><![CDATA[Jackson CVEs. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
-    <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson.*@.*$</packageUrl>
-    <cve>CVE-2026-54512</cve>
-    <cve>CVE-2026-54513</cve>
-    <cve>CVE-2026-54514</cve>
-    <cve>CVE-2026-54515</cve>
-    <cve>CVE-2026-54516</cve>
-    <cve>CVE-2026-54517</cve>
-    <cve>CVE-2026-54518</cve>
   </suppress>
 
 	</suppressions>
