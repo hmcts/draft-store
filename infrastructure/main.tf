@@ -92,7 +92,7 @@ data "azurerm_user_assigned_identity" "jenkins" {
 # this key vault is created in every environment, but preview, being short-lived,
 # will use the aat one instead
 module "key-vault" {
-  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=master"
+  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=DTSPO-31965/remove-jenkins-ptl-access"
   product             = var.product
   env                 = var.env
   tenant_id           = var.tenant_id
