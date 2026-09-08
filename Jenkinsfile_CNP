@@ -1,7 +1,7 @@
 #!groovy
 import uk.gov.hmcts.contino.AppPipelineDsl
 
-@Library("Infrastructure@2.5.2")
+@Library("Infrastructure@2.6.0")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
@@ -42,6 +42,7 @@ withPipeline(type, product, app) {
   afterSuccess('test') {
     builder.gradle('integration')
   }
+  alwaysTerraformPlanOnPR()
 
   env.USE_IDAM_TESTING_SUPPORT = "true"
   env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
