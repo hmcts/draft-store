@@ -243,7 +243,7 @@ dependencies {
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.13.0'
   implementation group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.13.0'
 
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.9.0'
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.9.1'
 
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.22.2'
   implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
