@@ -53,7 +53,7 @@ module "postgresql" {
     azurerm.postgres_network = azurerm.cft_vnet
   }
 
-  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=addwriteaccess"
+  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=DTSPO-30107-additional-postgres-admins"
   env    = var.env
 
   product       = var.product
@@ -92,7 +92,7 @@ data "azurerm_user_assigned_identity" "jenkins" {
 # this key vault is created in every environment, but preview, being short-lived,
 # will use the aat one instead
 module "key-vault" {
-  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=master"
+  source              = "git@github.com:hmcts/cnp-module-key-vault?ref=DTSPO-31965/remove-jenkins-ptl-access"
   product             = var.product
   env                 = var.env
   tenant_id           = var.tenant_id

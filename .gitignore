@@ -12,3 +12,5 @@ application-default.yaml
 lib/applicationinsights-agent-*.jar
 lib/applicationinsights.log
 bin
+
+.tool-versions
