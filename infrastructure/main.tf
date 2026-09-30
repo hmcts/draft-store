@@ -14,6 +14,8 @@ locals {
 
   env = var.env == "sandbox" ? "sbox" : var.env
 
+  postgresql_instance_count = local.env == "sbox" ? 0 : 1
+
   cft_vnet = {
     sbox = {
       subscription = "b72ab7b7-723f-4b18-b6f6-03b0f2c6a1bb"
@@ -49,6 +51,7 @@ resource "azurerm_resource_group" "rg" {
 
 # FlexibleServer v14
 module "postgresql" {
+  count = local.postgresql_instance_count
   providers = {
     azurerm.postgres_network = azurerm.cft_vnet
   }
@@ -108,30 +111,35 @@ module "key-vault" {
 
 # FlexibleServer v14 creds
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-USER"
-  value        = module.postgresql.username
+  value        = module.postgresql[0].username
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-PASS"
-  value        = module.postgresql.password
+  value        = module.postgresql[0].password
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-HOST"
-  value        = module.postgresql.fqdn
+  value        = module.postgresql[0].fqdn
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-PORT"
   value        = "5432"
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-DATABASE"
   value        = "draftstore"
   key_vault_id = module.key-vault.key_vault_id
@@ -141,30 +149,35 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
 
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V14" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-USER-V14"
-  value        = module.postgresql.username
+  value        = module.postgresql[0].username
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-V14" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-PASS-V14"
-  value        = module.postgresql.password
+  value        = module.postgresql[0].password
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST-V14" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-HOST-V14"
-  value        = module.postgresql.fqdn
+  value        = module.postgresql[0].fqdn
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT-V14" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-PORT-V14"
   value        = "5432"
   key_vault_id = module.key-vault.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V14" {
+  count        = local.postgresql_instance_count
   name         = "${var.component}-POSTGRES-DATABASE-V14"
   value        = "draftstore"
   key_vault_id = module.key-vault.key_vault_id
