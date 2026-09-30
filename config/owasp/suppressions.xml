@@ -148,41 +148,48 @@
     <cve>CVE-2025-15104</cve>
   </suppress>
 
-  <suppress until="2026-09-15">
-    <notes><![CDATA[Spring Framework 6.2.x CVEs. Suppress pending newer version availability in HMCTS Artifactory mirror.]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*@.*$</packageUrl>
-    <cve>CVE-2026-41855</cve>
-    <cve>CVE-2026-41838</cve>
-    <cve>CVE-2026-41842</cve>
-    <cve>CVE-2026-41848</cve>
-    <cve>CVE-2026-41850</cve>
-    <cve>CVE-2026-41851</cve>
-    <cve>CVE-2026-22740</cve>
-    <cve>CVE-2026-41854</cve>
-    <cve>CVE-2026-41844</cve>
-    <cve>CVE-2026-41845</cve>
-    <cve>CVE-2026-41846</cve>
-    <cve>CVE-2026-22737</cve>
-    <cve>CVE-2026-41840</cve>
-    <cve>CVE-2026-41841</cve>
-    <cve>CVE-2026-41843</cve>
-    <cve>CVE-2026-22745</cve>
-    <cve>CVE-2026-41852</cve>
-    <cve>CVE-2026-41853</cve>
-    <cve>CVE-2026-41839</cve>
-    <cve>CVE-2026-22741</cve>
-    <cve>CVE-2026-22735</cve>
+  <suppress until="2026-11-01">
+    <notes><![CDATA[Reviewed against https://spring.io/security/ on 2026-09-30 for Spring 6.2.19.
+    Draft-store uses annotated MVC JSON endpoints on Tomcat (DraftController,
+    ReportController, RootController) and JSON request bodies, not view rendering.
+    Reassess when upgrading Spring or introducing any of the features below.
+    CVE-2026-47883: no UrlHandlerFilter is registered; the only application filter is ShallowEtagHeaderFilter.
+    CVE-2026-47884: no XsltView or catch-all view mapping.
+    CVE-2026-47885: no WebFlux PartEventHttpMessageReader or Flux request bodies.
+    CVE-2026-47886: no evaluation of user-supplied SpEL expressions.
+    CVE-2026-47887: no UrlFileNameViewController.
+    CVE-2026-47888: no RSocket dependency or listener.
+    CVE-2026-47889: no WebFlux or Jetty reactive adapter; server uses Tomcat.
+    CVE-2026-47890: no SSE view fragments.
+    CVE-2026-47891: no WebFlux or Aalto XML dependency.
+    CVE-2026-47892: no WebFlux functional endpoints.
+    CVE-2026-47893: no WebFlux WebSocket service.
+    CVE-2026-59280: no FreeMarker dependency or template loader.
+    CVE-2026-59281: errors returned as JSON, not HTML-rendered EscapedErrors.
+    CVE-2026-59282: no binding of user property paths to self-populating List implementations;
+    CreateDraft and UpdateDraft use Jackson JsonNode, String and Integer fields.
+    CVE-2026-59283: no SimpleEvaluationContext or SpEL compiler configuration.
+    CVE-2026-59313: no MVC functional SSE endpoints.
+    CVE-2026-59314: no Content-Disposition headers or outbound multipart requests;
+    IdamClientImpl and S2sClientImpl issue GET requests only.]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework/spring[^@]*@6\.2\.19$</packageUrl>
+    <cve>CVE-2026-47883</cve>
+    <cve>CVE-2026-47884</cve>
+    <cve>CVE-2026-47885</cve>
+    <cve>CVE-2026-47886</cve>
+    <cve>CVE-2026-47887</cve>
+    <cve>CVE-2026-47888</cve>
+    <cve>CVE-2026-47889</cve>
     <cve>CVE-2026-47890</cve>
     <cve>CVE-2026-47891</cve>
     <cve>CVE-2026-47892</cve>
-    <cve>CVE-2026-59313</cve>
-    <cve>CVE-2026-59283</cve>
     <cve>CVE-2026-47893</cve>
-    <cve>CVE-2026-59282</cve>
-    <cve>CVE-2026-59281</cve>
     <cve>CVE-2026-59280</cve>
+    <cve>CVE-2026-59281</cve>
+    <cve>CVE-2026-59282</cve>
+    <cve>CVE-2026-59283</cve>
+    <cve>CVE-2026-59313</cve>
     <cve>CVE-2026-59314</cve>
-    <cve>CVE-2026-54515</cve>
   </suppress>
 
 	</suppressions>
